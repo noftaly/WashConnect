@@ -7,9 +7,76 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
-  id       Int    @id @default(autoincrement())
-  name     String @db.VarChar(255)
-  email    String @db.VarChar(255)
-  password String @db.VarChar(255)
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @db.VarChar(255)
+  username    String    @db.VarChar(255)
+  firstName   String    @db.VarChar(255)
+  lastName    String    @db.VarChar(255)
+  password    String    @db.VarChar(255)
+  balance     Decimal   @default(0) @db.Decimal(65, 2)
+  phoneNumber String    @db.VarChar(255)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Address     Address[]
+  Machine     Machine[]
+  Agenda      Agenda[]
+}
+
+model Address {
+  id        Int              @id @default(autoincrement())
+  line1     String           @db.VarChar(255)
+  line2     String?          @db.VarChar(255)
+  city      String           @db.VarChar(255)
+  zip       String           @db.VarChar(255)
+  country   SupportedCountry
+  userId    Int
+  user      User             @relation(fields: [userId], references: [id])
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  Machine   Machine[]
+}
+
+enum SupportedCountry {
+  FRA // France
+  CHE // Switzerland
+}
+
+model Machine {
+  id                 Int      @id @default(autoincrement())
+  adTitle            String   @db.VarChar(255)
+  adDescription      String?  @db.Text
+  priceWashing       Decimal? @db.Decimal(2, 2)
+  priceDrying        Decimal? @db.Decimal(2, 2)
+  priceWashingDrying Decimal? @db.Decimal(2, 2)
+  detergentIncluded  Boolean  @default(false)
+  maxCapacity        Int      @default(0)
+  washDuration       Int?     @default(60)
+  dryDuration        Int?     @default(60)
+  hasWasher          Boolean  @default(true)
+  hasDryer           Boolean  @default(true)
+  addressId          Int
+  address            Address  @relation(fields: [addressId], references: [id])
+  userId             Int
+  user               User     @relation(fields: [userId], references: [id])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  Agenda             Agenda[]
+}
+
+model Agenda {
+  id          Int         @id @default(autoincrement())
+  timeSlot    DateTime
+  machineType MachineType @default(WASHING_MACHINE)
+  userId      Int?
+  user        User?       @relation(fields: [userId], references: [id])
+  machineId   Int
+  machine     Machine     @relation(fields: [machineId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum MachineType {
+  WASHING_MACHINE
+  DRYER
 }
