@@ -1,6 +1,7 @@
-# WashConnect
+# YouPlane website
 
-This template should help get you started developing with Vue 3 in Vite.
+- Yohan Fajerman
+- Elliot Maisl
 
 ## Recommended IDE Setup
 

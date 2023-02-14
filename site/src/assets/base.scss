@@ -1,0 +1,15 @@
+@import "~bootstrap/scss/bootstrap";
+
+.mt-7 {
+  margin-top: ($spacer * 5) !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.sticky {
+  position: sticky;
+  top: 70px;
+  z-index: 1000;
+}
