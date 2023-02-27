@@ -11,7 +11,7 @@ router.get('/', (_req, res) => {
 });
 
 // Authentication
-router.post('/auth/login', auth.logIn);
+router.post('/auth/login', auth.logIn, ensureAuthenticated, auth.me);
 router.post('/auth/register', auth.register)
 router.get('/auth/me', ensureAuthenticated, auth.me);
 router.post('/auth/logout', ensureAuthenticated, auth.logOut);

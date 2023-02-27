@@ -7,10 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String   @db.VarChar(255)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model User {
   id          Int       @id @default(autoincrement())
-  email       String    @db.VarChar(255)
-  username    String    @db.VarChar(255)
+  email       String    @unique @db.VarChar(255)
+  username    String    @unique @db.VarChar(255)
   firstName   String    @db.VarChar(255)
   lastName    String    @db.VarChar(255)
   password    String    @db.VarChar(255)

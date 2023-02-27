@@ -5,15 +5,28 @@ import { db } from './database.js';
 
 passport.use('local', new LocalStrategy(
   { usernameField: 'username', passwordField: 'password' },
-  (emailOrUsername, password, done) => {
-    // 1. Get account by email or username
-    // 2. Check password with bcrypt
-    //   * correct: return user
-    //   * incorrect: return error
+  async (emailOrUsername, password, done) => {
+    const user = await db.user.findFirst({
+      where: {
+        OR: [
+          { email: emailOrUsername },
+          { username: emailOrUsername },
+        ],
+      },
+    });
+
+    if (!user)
+      return done(null, null, { message: 'Unknown user.' });
+
+    if (await bcrypt.compare(password, user.password))
+      return done(null, user);
+    return done(null, null, { message: 'Incorrect username or password.' });
   }));
 
 passport.serializeUser((user, done) => done(null, user.id));
 
 passport.deserializeUser((id, done) => {
-  // Get user by id and return it
+  db.user.findUnique({ where: { id } })
+    .then((user) => done(null, user))
+    .catch((err) => done(err));
 });
