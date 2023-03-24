@@ -5,7 +5,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      alias: "home",
+      alias: "/home",
       name: "home",
       component: () => import("../views/HomeView.vue"),
     },
@@ -23,7 +23,7 @@ const router = createRouter({
     },
 
     {
-      path: "register",
+      path: "/register",
       name: "register",
       component: () => import("../views/RegisterView.vue")
     },

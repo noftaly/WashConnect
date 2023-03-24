@@ -1,10 +1,10 @@
 <template>
   <div>
-    <WelcomeView /> 
+    <RouterView/>
   </div>
 </template>
 
 <script setup>
-import { RouterView } from "vue-router";
-import { WelcomeView } from "./views/WelcomeView.vue"
+import {RouterView}  from "vue-router";
+import WelcomeView from "./views/WelcomeView.vue"
 </script>
