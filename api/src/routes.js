@@ -2,6 +2,7 @@ import { Router } from 'express';
 import ensureAuthenticated from './middlewares/ensureAuthenticated.js';
 import * as users from './controllers/users.js';
 import * as auth from './controllers/auth.js';
+import * as testing from './controllers/testing.js';
 
 export const router = Router();
 
@@ -21,3 +22,5 @@ router.route('/users')
   .get(users.findAll);
 router.route('/users/:userId')
   .get(users.findOne);
+
+router.get('/testing', ensureAuthenticated, testing.find);

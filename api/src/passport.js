@@ -20,7 +20,7 @@ passport.use('local', new LocalStrategy(
 
     if (await bcrypt.compare(password, user.password))
       return done(null, user);
-    return done(null, null, { message: 'Incorrect username or password.' });
+    return done(null, null, { message: 'Unknown user.' });
   }));
 
 passport.serializeUser((user, done) => done(null, user.id));
