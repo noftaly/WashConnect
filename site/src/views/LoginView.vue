@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex ml-4 justify-content-center">
+    <div class="d-flex ml-4 mt-5 justify-content-center">
         <img style="width: 50%" src="../assets/Logo_WashConnect.png" />
     </div>
 

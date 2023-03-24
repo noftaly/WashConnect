@@ -6,5 +6,6 @@
 
 <script setup>
 import {RouterView}  from "vue-router";
-import WelcomeView from "./views/WelcomeView.vue"
+import { useAuthStore } from "./stores/auth";
+const { isAuthenticated } = useAuthStore();
 </script>
