@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex ml-4 mt-5 justify-content-center">
-        <img style="width: 50%" src="../assets/Logo_WashConnect.png" />
+        <img id="logo" class="image-fluid w-15" style="width: 15%" src="../assets/Logo_WashConnect.png" />
     </div>
 
     <br/>
@@ -12,12 +12,9 @@
     </div>
   
         <div class="px-5 py-5">
-            <div class="form-data" v-if="!submitted">
-                
-
-
+            <div class="form-data">
                 <!-- Username -->
-                <div class="col-md-6 forms-inputs mb-4">
+                <div class="forms-inputs mb-4">
                 <span>Username</span>
                 <input
                 autocomplete="off"
@@ -51,7 +48,7 @@
             </div>
         </div>
 
-    <p class="text-center">Don't have an account yet ?<RouterLink to="/register">Sign up here</RouterLink>.</p>
+    <p class="text-center">Don't have an account yet ? <RouterLink to="/register">Sign up here</RouterLink>.</p>
 </template>
   
 
@@ -71,8 +68,6 @@
   const username = ref("");
   const usernameBlured = ref(false);
 
-  const email = ref("");
-  const emailBlured = ref(false);
   const valid = ref(false);
   const submitted = ref(false);
   const password = ref("");
