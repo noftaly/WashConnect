@@ -1,11 +1,11 @@
 <template>
     <div class="d-flex ml-4 mt-5 justify-content-center">
-        <img style="width: 50%" src="../assets/Logo_WashConnect.png" />
+        <img id="logo" class="image-fluid w-15" style="width: 15%" src="../assets/Logo_WashConnect.png" />
     </div>
 
     <br/>
     <h1 id="title" class="d-flex ml-3 justify-content-center">WashConnect</h1>
-    <h2 Class="d-flex ml-3 justify-content-center" style="font-size: 30px;">Hello new washing lover!</h2>
+    <h2 Class="d-flex ml-3 mb-3 justify-content-center" style="font-size: 30px;">Hello new washing lover!</h2>
   
     <div class="alert alert-danger" v-if="error">
         {{ error }}
@@ -16,7 +16,7 @@
                 <!-- Names -->
                 <div class="row">
                     <!-- First Name -->
-                    <div class="col-md-6 forms-inputs mb-4">
+                    <div class="col-md-4 forms-inputs mb-4">
                         <span>First Name</span>
                         <input
                         autocomplete="off"
@@ -30,7 +30,7 @@
                 </div>
 
                 <!-- Last Name -->
-                <div class="col-md-6 forms-inputs mb-4">
+                <div class="col-md-4 forms-inputs mb-4">
                     <span>Last Name</span>
                     <input
                     autocomplete="off"
@@ -44,7 +44,7 @@
                 </div>
 
                 <!-- Username -->
-                <div class="col-md-6 forms-inputs mb-4">
+                <div class="col-md-4 forms-inputs mb-4">
                 <span>Username</span>
                 <input
                 autocomplete="off"
@@ -86,7 +86,7 @@
                 <div class="invalid-feedback">Password must have at least 8 characters!</div>
             </div>
             
-            <div class="mb-3">
+            <div>
                 <button @click.prevent="submit" class="btn btn-dark w-100">Register</button>
             </div>
         </div>
