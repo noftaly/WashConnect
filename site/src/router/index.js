@@ -27,6 +27,16 @@ const router = createRouter({
       name: "register",
       component: () => import("../views/RegisterView.vue")
     },
+    {
+      path: "/machines/:id",
+      name: "machine",
+      component: () => import("../views/machine/MachineView.vue"),
+    },
+    {
+      path: "/new_ad",
+      name: "new_ad",
+      component: () => import("../views/machine/AdCreation.vue"),
+    }
   ],
 });
 

@@ -16,9 +16,9 @@ const props = defineProps({
   },
 });
 
-const formatter = new Intl.NumberFormat("ca-CA", {
+const formatter = new Intl.NumberFormat("fr-FR", {
   style: "currency",
-  currency: "CAD",
+  currency: "EUR",
   notation: props.notation ?? "standard",
 });
 

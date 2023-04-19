@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import AuthService from "../services/AuthService";
+import { useCartStore } from "./cart.js";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -9,9 +10,9 @@ export const useAuthStore = defineStore("auth", {
     isAuthenticated: (state) => {
       return Boolean(state.user);
     },
-    isAdmin: (state) => {
-      return state.user && state.user.role === "admin";
-    },
+    // isAdmin: (state) => {
+    //   return state.user && state.user.role === "admin";
+    // },
   },
   actions: {
     async login(credentials) {
