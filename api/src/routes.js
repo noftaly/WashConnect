@@ -2,9 +2,9 @@ import { Router } from 'express';
 import ensureAuthenticated from './middlewares/ensureAuthenticated.js';
 import * as users from './controllers/users.js';
 import * as auth from './controllers/auth.js';
-import * as testing from './controllers/testing.js';
 import * as addresses from './controllers/addresses.js';
 import * as timeslots from './controllers/timeslots.js';
+import * as machines from './controllers/machines.js';
 
 export const router = Router();
 
@@ -25,7 +25,10 @@ router.route('/users')
 router.route('/users/:userId')
   .get(users.findOne);
 
-router.get('/testing', ensureAuthenticated, testing.find);
+// Machines
+router.route('/machines')
+  .get(machines.findAll)
+  .post(ensureAuthenticated, machines.create);
 
 // Addresses
 router.route('/addresses')
@@ -37,7 +40,7 @@ router.route('/addresses/:addressId')
 
 // Timeslots
 router.route('/timeslots')
-  .get(ensureAuthenticated, timeslots.getCurrentReservations)
+  .get(timeslots.getCurrentReservations)
   .post(ensureAuthenticated, timeslots.makeReservation);
 router.route('/timeslots/:machineId')
   .get(timeslots.getScheduleForMachine);

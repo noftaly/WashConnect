@@ -23,7 +23,7 @@ model User {
   firstName   String    @db.VarChar(255)
   lastName    String    @db.VarChar(255)
   password    String    @db.VarChar(255)
-  balance     Decimal   @default(0) @db.Decimal(65, 2)
+  balance     Float     @default(0)
   phoneNumber String    @db.VarChar(255)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -55,9 +55,9 @@ model Machine {
   id                 Int      @id @default(autoincrement())
   adTitle            String   @db.VarChar(255)
   adDescription      String?  @db.Text
-  priceWashing       Decimal? @db.Decimal(2, 2)
-  priceDrying        Decimal? @db.Decimal(2, 2)
-  priceWashingDrying Decimal? @db.Decimal(2, 2)
+  priceWashing       Float?
+  priceDrying        Float?
+  priceWashingDrying Float?
   detergentIncluded  Boolean  @default(false)
   maxCapacity        Int      @default(0)
   washDuration       Int?     @default(60)
