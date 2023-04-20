@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import AuthService from "../services/AuthService";
+import AuthService from "../services/AuthService.js";
 import { useCartStore } from "./cart.js";
 
 export const useAuthStore = defineStore("auth", {

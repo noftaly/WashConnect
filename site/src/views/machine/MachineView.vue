@@ -10,7 +10,7 @@
             </div>
           </div>
           <div class="col-5">
-            <MachineDetailsHeader :price="machine.price" :description="machine.description" />
+            <MachineDetailsHeader :price="machine.price_wash_dry" :description="machine.description" />
             <hr />
             <h6>About this machine</h6>
             <p>{{ machine.description }}</p>

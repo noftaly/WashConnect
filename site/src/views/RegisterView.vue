@@ -25,7 +25,7 @@
                         :class="{ 'form-control': true, 'is-invalid': !validName(firstName) && firstNameBlured }"
                         @blur="firstNameBlured = true"
                         @keyup.enter="submit"
-                    />
+                      />
                     <div class="invalid-feedback">A valid first name is required!</div>
                 </div>
 

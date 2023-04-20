@@ -40,7 +40,7 @@
           </div>
         </div>
   
-        <div class="my-4">
+        <!-- <div class="my-4">
           <div class="d-flex justify-content-between align-items-baseline mb-2">Category</div>
           <div v-for="category in Object.keys(categories)" :key="category">
             <div class="form-check">
@@ -56,10 +56,10 @@
               </label>
             </div>
           </div>
-        </div>
-        <!-- <RouterLink :to="`/admin/machines/new`" class="text-decoration-none">
-          <button v-if="isAdmin" type="button" class="btn btn-outline-primary w-100">Add a new machine</button>
-        </RouterLink> -->
+        </div> -->
+        <RouterLink :to="`/new_ad`" class="text-decoration-none">
+          <button type="button" class="btn btn-outline-primary w-100">Add a new machine</button>
+        </RouterLink> 
       </div>
     </div>
   </template>
@@ -97,17 +97,17 @@
     manufacturers.value = Object.fromEntries(
       machines.value.map((machine) => [machine.characteristic.manufacturer, true])
     );
-    categories.value = Object.fromEntries(
-      machines.value.map((machine) => [capitalize(machine.characteristic.category), true])
-    );
+    // categories.value = Object.fromEntries(
+    //   machines.value.map((machine) => [capitalize(machine.characteristic.category), true])
+    // );
   
-    if (props.category) {
-      categories.value = Object.fromEntries(
-        machines.value.map((machine) => [capitalize(machine.characteristic.category), false])
-      );
-      categories.value[capitalize(props.category)] = true;
-      emitChangedCategory("change:category", categories.value);
-    }
+    // if (props.category) {
+    //   categories.value = Object.fromEntries(
+    //     machines.value.map((machine) => [capitalize(machine.characteristic.category), false])
+    //   );
+    //   categories.value[capitalize(props.category)] = true;
+    //   emitChangedCategory("change:category", categories.value);
+    // }
   });
   </script>
   

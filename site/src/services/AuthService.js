@@ -1,4 +1,4 @@
-import axios from "../utils/axios";
+import axios from "../utils/axios.js";
 
 class AuthService {
   async login(user) {

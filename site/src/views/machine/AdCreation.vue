@@ -1,7 +1,7 @@
 <template>
   <main class="container my-5">
     <div class="d-flex justify-content-center">
-      <img class="mt-5" style="width: 35%" src="../../assets/Logo_WashConnect.png" />
+      <img class="mt-5" style="width: 25%" src="../../assets/Logo_WashConnect.png" />
     </div>
     <h1 class="text-center mt-5">Creating new ad</h1>
     <div class="alert alert-warning my-3" role="alert">
@@ -47,49 +47,95 @@
                 />
                 <div class="invalid-feedback">A valid description is required!</div>
               </div>
+            </div>
 
-              <!-- Price -->
-              <div class="forms-inputs mb-4">
-                <span>Price</span>
-                <input
-                  autocomplete="off"
-                  type="number"
-                  v-model="price"
-                  :class="{ 'form-control': true, 'is-invalid': !validPrice(price) && priceBlured }"
-                  @blur="priceBlured = true"
-                  @keyup.enter="submit"
-                />
-                <div class="invalid-feedback">A valid price is required!</div>
-              </div>
 
-              <!-- Stock Quantity -->
-              <div class="forms-inputs mb-4">
-                <span>Stock Quantity</span>
-                <input
-                  autocomplete="off"
-                  type="number"
-                  v-model="stockQty"
-                  :class="{ 'form-control': true, 'is-invalid': !validStockQty(stockQty) && stockQtyBlured }"
-                  @blur="stockQtyBlured = true"
-                  @keyup.enter="submit"
-                />
-                <div class="invalid-feedback">A valid stock quantity is required!</div>
-              </div>
-
-              <!-- Image URL -->
-              <div class="forms-inputs mb-4">
-                <span>Ad's Illustration</span>
+            <!-- Address -->
+            <div class="row">
+              <div class="col-md-4 forms-inputs mb-4">
+                <span>Address</span>
                 <input
                   autocomplete="off"
                   type="text"
-                  v-model="imageUrl"
-                  :class="{ 'form-control': true, 'is-invalid': !validimageUrl(imageUrl) && imageUrlBlured }"
-                  @blur="imageUrlBlured = true"
+                  v-model="address"
+                  :class="{ 'form-control': true, 'is-invalid': !validAddress(address) && addressBlured }"
+                  @blur="addressBlured = true"
                   @keyup.enter="submit"
                 />
-                <div class="invalid-feedback">A valid illustration is required!</div>
+                <div class="invalid-feedback">A valid address is required!</div>
+              </div>
+
+              <div class="col-md-4 forms-inputs mb-4">
+                <span>Zip Code</span>
+                <input
+                  autocomplete="off"
+                  type="text"
+                  v-model="zipCode"
+                  :class="{ 'form-control': true, 'is-invalid': !validZipCode(zipCode) && zipCodeBlured }"
+                  @blur="zipCodeBlured = true"
+                  @keyup.enter="submit"
+                />
+                <div class="invalid-feedback">A valid zip code is required!</div>
+              </div>
+
+              <div class="col-md-4 forms-inputs mb-4">
+                <span>City</span>
+                <input
+                  autocomplete="off"
+                  type="text"
+                  v-model="city"
+                  :class="{ 'form-control': true, 'is-invalid': !validCity(city) && cityBlured }"
+                  @blur="cityBlured = true"
+                  @keyup.enter="submit"
+                />
+                <div class="invalid-feedback">A valid city is required!</div>
               </div>
             </div>
+
+
+            <!-- Price -->
+            <div class="forms-inputs mb-4">
+              <span>Washing Price</span>
+              <input
+                autocomplete="off"
+                type="number"
+                v-model="price"
+                :class="{ 'form-control': true, 'is-invalid': !validPrice(price) && priceBlured }"
+                @blur="priceBlured = true"
+                @keyup.enter="submit"
+              />
+              <div class="invalid-feedback">A valid washing price is required!</div>
+            </div>
+
+            <!-- Price -->
+            <div class="forms-inputs mb-4">
+              <span>Drying Price</span>
+              <input
+                autocomplete="off"
+                type="number"
+                v-model="price"
+                :class="{ 'form-control': true, 'is-invalid': !validPrice(price) && priceBlured }"
+                @blur="priceBlured = true"
+                @keyup.enter="submit"
+              />
+              <div class="invalid-feedback">A valid drying price is required!</div>
+            </div>
+
+            <!-- Image URL -->
+            <br/>
+            <div class="forms-inputs mb-4">
+              <span>Ad's Illustration</span>
+              <input
+                autocomplete="off"
+                type="text"
+                v-model="imageUrl"
+                :class="{ 'form-control': true, 'is-invalid': !validimageUrl(imageUrl) && imageUrlBlured }"
+                @blur="imageUrlBlured = true"
+                @keyup.enter="submit"
+              />
+              <div class="invalid-feedback">A valid illustration is required!</div>
+            </div>
+            
 
             <div class="mb-3">
               <button @click.prevent="submit" class="btn btn-dark w-100">Create</button>
@@ -106,10 +152,11 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { useToast } from "vue-toastification";
 import router from "../../router/index.js";
-import { useAuthStore, useMachinesStore } from "../../stores";
+import { useAuthStore } from "../../stores/auth.js";
+import { useMachinesStore } from "../../stores/machines.js";
 
 const { isAuthenticated } = storeToRefs(useAuthStore());
-const { createMachine } = useadsStore();
+const { createMachine } = useMachinesStore();
 
 if (!isAuthenticated.value) {
   router.push({ title: "login" });
@@ -122,27 +169,24 @@ const title = ref("");
 const titleBlured = ref(false);
 const description = ref("");
 const descriptionBlured = ref(false);
+
+const address = ref("");
+const addressBlured = ref(false);
+const zipCode = ref(0);
+const zipCodeBlured = ref(false);
+const city = ref("");
+const cityBlured = ref(false);
+
 const price = ref(0);
 const priceBlured = ref(false);
-const stockQty = ref(0);
-const stockQtyBlured = ref(false);
 const imageUrl = ref("");
 const imageUrlBlured = ref(false);
 
 const initCharacteristics = {
   manufacturer: "manufacturer",
-  category: "commercial",
-  passengers: 1,
-  length: 1,
-  height: 1,
-  wingspan: 1,
-  weight: 1,
-  engines: 1,
-  maxSpeed: 1,
-  range: 1,
-  cruiseSpeed: 1,
-  fuelCapacity: 1,
-  fuelConsumption: 1,
+  max_capacity: 5,
+  cycle_wash_duration: 20,
+  cycle_dry_duration: 20,
 };
 
 const valid = ref(false);
@@ -157,13 +201,24 @@ function validDescription(description) {
   return description.length > 0;
 }
 
+
+function validAddress(address) {
+  return address.length > 0;
+}
+
+function validZipCode(zipCode) {
+  return zipCode > 0 && zipCode < 100000;
+}
+
+function validCity(city) {
+  return city.length > 0;
+}
+
+
 function validPrice(price) {
   return price > 0;
 }
 
-function validStockQty(stockQty) {
-  return stockQty > 0;
-}
 
 function validimageUrl(imageUrl) {
   return imageUrl.length > 0;
@@ -172,14 +227,18 @@ function validimageUrl(imageUrl) {
 function validate() {
   titleBlured.value = true;
   descriptionBlured.value = true;
+  addressBlured.value = true;
+  zipCodeBlured.value = true;
+  cityBlured.value = true;
   priceBlured.value = true;
-  stockQtyBlured.value = true;
   imageUrlBlured.value = true;
   if (
     validTitle(title.value) &&
     validDescription(description.value) &&
+    validAddress(address.value) &&
+    validZipCode(zipCode.value) &&
+    validCity(city.value) &&
     validPrice(price.value) &&
-    validStockQty(stockQty.value) &&
     validimageUrl(imageUrl.value)
   )
     valid.value = true;
@@ -192,8 +251,10 @@ async function submit() {
     const newAd = await createad({
       title: title.value,
       description: description.value,
+      address: address.value,
+      zipCode: zipCode.value,
+      city: city.value,
       price: price.value,
-      stockQuantity: stockQty.value,
       imageUrl: imageUrl.value,
       characteristics: initCharacteristics,
     });
