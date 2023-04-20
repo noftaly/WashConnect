@@ -4,6 +4,7 @@ import './database.js';
 
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
@@ -16,6 +17,7 @@ const app = express();
 app.use(helmet()); // Secure the app against common web vulnerabilities
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
