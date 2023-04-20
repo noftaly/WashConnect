@@ -27,14 +27,17 @@ router.route('/users/:userId')
 
 router.get('/testing', ensureAuthenticated, testing.find);
 
+// Addresses
+router.route('/addresses')
+  .get(ensureAuthenticated, addresses.getPersonalAddresses)
+  .post(ensureAuthenticated, addresses.createPersonalAddress);
+router.route('/addresses/:addressId')
+  .get(ensureAuthenticated, addresses.getPersonalAddressById)
+  .delete(ensureAuthenticated, addresses.removePersonalAddress)
 
-
-// Addresses route
-router.get('/addresses', ensureAuthenticated, addresses.getPersonalAddresses);
-router.get('/addresses/:addressId', ensureAuthenticated, addresses.getPersonalAddressById);
-router.post('/addresses', ensureAuthenticated, addresses.createPersonalAddress);
-router.delete('/addresses/:addressId', ensureAuthenticated, addresses.removePersonalAddress)
-
-router.get('/timeslot/:machineId', timeslots.getScheduleForMachine)
-router.post('/timeslot/makereservation', ensureAuthenticated, timeslots.makeReservation)
-router.get('/timeslot', ensureAuthenticated, timeslots.getCurrentReservations)
+// Timeslots
+router.route('/timeslots')
+  .get(ensureAuthenticated, timeslots.getCurrentReservations)
+  .post(ensureAuthenticated, timeslots.makeReservation);
+router.route('/timeslots/:machineId')
+  .get(timeslots.getScheduleForMachine);
