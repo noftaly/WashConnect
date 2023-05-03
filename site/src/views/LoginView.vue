@@ -54,10 +54,10 @@
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import router from "../router";
-import { useAuthStore } from "../stores/auth.js";
+import { useAuth } from "../utils/useAuthHook.js";
 
-const { isAuthenticated } = storeToRefs(useAuthStore());
-const { login } = useAuthStore();
+const { isAuthenticated } = storeToRefs(useAuth());
+const { login } = useAuth();
 
 if (isAuthenticated.value) {
   router.push({ name: "home" });

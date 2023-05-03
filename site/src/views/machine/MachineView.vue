@@ -54,10 +54,10 @@ import { useRoute } from "vue-router";
 import MachineDetailsCharacteristics from "../../components/machine/MachineDetailsCharacteristics.vue";
 import MachineDetailsHeader from "../../components/machine/MachineDetailsHeader.vue";
 import MachineDetailsPayment from "../../components/machine/MachineDetailsPayment.vue";
-import { useAuthStore } from "../../stores/auth.js";
+import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
 
-const { isAdmin } = storeToRefs(useAuthStore());
+const { isAdmin } = storeToRefs(useAuth());
 const { machine } = storeToRefs(useMachinesStore());
 const { clearMachine, fetchMachine } = useMachinesStore();
 

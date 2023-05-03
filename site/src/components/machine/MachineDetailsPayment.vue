@@ -59,7 +59,7 @@
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import PriceFormatted from "../formatters/PriceFormatted.vue";
-import { useAuthStore } from "../../stores/auth.js";
+import { useAuth } from "../../utils/useAuthHook.js";
 import { useCartStore } from "../../stores/cart.js";
 import { useMachinesStore } from "../../stores/machines.js";
 
@@ -70,7 +70,7 @@ const props = defineProps({
   },
 });
 
-const { isAuthenticated } = storeToRefs(useAuthStore());
+const { isAuthenticated } = storeToRefs(useAuth());
 const { getMachineById } = useMachinesStore();
 const { addToCart, quantityOf, updateItem } = useCartStore();
 

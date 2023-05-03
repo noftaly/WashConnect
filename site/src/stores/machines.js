@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import axios from "../utils/axios";
-import authHeader from "../utils/authHeader";
 
 export const useMachinesStore = defineStore("machines", {
   state: () => ({
@@ -45,14 +44,14 @@ export const useMachinesStore = defineStore("machines", {
     },
 
     async createMachine(machine) {
-      const response = await axios.post("/machines", machine, { headers: authHeader() });
+      const response = await axios.post("/machines", machine);
       this.machines.push(response.data);
 
       return response.data;
     },
 
     async updateMachine(machine) {
-      const response = await axios.patch(`/machines/${machine.id}`, machine, { headers: authHeader() });
+      const response = await axios.patch(`/machines/${machine.id}`, machine);
       const index = this.machines.findIndex((p) => p.id === machine.id);
       this.machines[index] = response.data;
 
@@ -60,7 +59,7 @@ export const useMachinesStore = defineStore("machines", {
     },
 
     async deleteMachine(id) {
-      await axios.delete(`/machines/${id}`, { headers: authHeader() });
+      await axios.delete(`/machines/${id}`);
       const index = this.machines.findIndex((p) => p.id === id);
       this.machines.splice(index, 1);
     },

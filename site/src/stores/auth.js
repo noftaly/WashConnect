@@ -1,32 +1,42 @@
 import { defineStore } from "pinia";
-import AuthService from "../services/AuthService.js";
-import { useCartStore } from "./cart.js";
+import axios from "../utils/axios";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    user: JSON.parse(localStorage.getItem("user")) || null,
+    user: null,
+    isAuthenticated: false,
   }),
-  getters: {
-    isAuthenticated: (state) => {
-      return Boolean(state.user);
-    },
-    // isAdmin: (state) => {
-    //   return state.user && state.user.role === "admin";
-    // },
-  },
   actions: {
-    async login(credentials) {
-      this.user = await AuthService.login(credentials);
-      useCartStore().fetchItems();
+    async fetchUser() {
+      const response = await axios.get("/auth/me");
+      this.user = response.data;
+      this.isAuthenticated = true;
+    },
+
+    async login(user) {
+      const response = await axios.post("/auth/login", {
+        username: user.username,
+        password: user.password,
+      });
+      this.isAuthenticated = true;
+      this.user = response.data;
     },
 
     async logout() {
-      AuthService.logout();
+      await axios.post("/auth/logout");
       this.user = null;
+      this.isAuthenticated = false;
     },
 
-    async register(user, address) {
-      await AuthService.register(user, address);
+    async register(user) {
+      await axios.post("/auth/register", {
+        email: user.email,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        password: user.password,
+        phoneNumber: user.phoneNumber,
+      });
     },
   },
 });

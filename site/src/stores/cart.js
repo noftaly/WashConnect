@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import axios from "../utils/axios";
-import authHeader from "../utils/authHeader";
 
 export const useCartStore = defineStore("cart", {
   state: () => ({
@@ -23,19 +22,15 @@ export const useCartStore = defineStore("cart", {
     },
 
     async fetchItems() {
-      const response = await axios.get("/order-lines", { headers: authHeader() });
+      const response = await axios.get("/order-lines");
       this.cartItems = response.data;
     },
 
     async addToCart(orderLine) {
-      const response = await axios.post(
-        "/order-lines",
-        {
-          quantity: orderLine.quantity,
-          productId: orderLine.productId,
-        },
-        { headers: authHeader() }
-      );
+      const response = await axios.post("/order-lines", {
+        quantity: orderLine.quantity,
+        productId: orderLine.productId,
+      });
       this.cartItems.push(response.data);
 
       return response.data;
@@ -45,14 +40,10 @@ export const useCartStore = defineStore("cart", {
       const orderLineId = this.cartItems.find((item) => item.productId === orderLine.productId)?.id;
       if (!orderLineId) throw new Error(`Order line with product id ${orderLine.productId} not found in cart`);
 
-      const response = await axios.patch(
-        `/order-lines/${orderLineId}`,
-        {
-          quantity: orderLine.quantity,
-          productId: orderLine.productId,
-        },
-        { headers: authHeader() }
-      );
+      const response = await axios.patch(`/order-lines/${orderLineId}`, {
+        quantity: orderLine.quantity,
+        productId: orderLine.productId,
+      });
       const index = this.cartItems.findIndex((p) => p.id === orderLineId);
       this.cartItems[index] = response.data;
 
@@ -75,7 +66,7 @@ export const useCartStore = defineStore("cart", {
     },
 
     async deleteItem(id) {
-      await axios.delete(`/order-lines/${id}`, { headers: authHeader() });
+      await axios.delete(`/order-lines/${id}`);
       const index = this.cartItems.findIndex((p) => p.id === id);
       this.cartItems.splice(index, 1);
     },

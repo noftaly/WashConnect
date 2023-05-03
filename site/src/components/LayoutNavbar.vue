@@ -87,13 +87,13 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import router from "../router";
 
-import { useAuthStore } from "../stores/auth.js";
+import { useAuth } from "../utils/useAuthHook.js";
 import { useMachinesStore } from "../stores/machines.js";
 import { useCartStore } from "../stores/cart.js";
 
-const { isAuthenticated } = storeToRefs(useAuthStore());
+const { isAuthenticated } = storeToRefs(useAuth());
 const { count } = storeToRefs(useCartStore());
-const { logout } = useAuthStore();
+const { logout } = useAuth();
 
 const { searchMachine } = useMachinesStore();
 
