@@ -25,7 +25,7 @@ const router = createRouter({
     {
       path: "/register",
       name: "register",
-      component: () => import("../views/RegisterView.vue")
+      component: () => import("../views/RegisterView.vue"),
     },
     {
       path: "/machines/:id",
@@ -36,7 +36,7 @@ const router = createRouter({
       path: "/new_ad",
       name: "new_ad",
       component: () => import("../views/machine/AdCreation.vue"),
-    }
+    },
   ],
 });
 

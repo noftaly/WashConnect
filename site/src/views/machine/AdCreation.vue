@@ -49,7 +49,6 @@
               </div>
             </div>
 
-
             <!-- Address -->
             <div class="row">
               <div class="col-md-4 forms-inputs mb-4">
@@ -92,7 +91,6 @@
               </div>
             </div>
 
-
             <!-- Price -->
             <div class="forms-inputs mb-4">
               <span>Washing Price</span>
@@ -122,7 +120,7 @@
             </div>
 
             <!-- Image URL -->
-            <br/>
+            <br />
             <div class="forms-inputs mb-4">
               <span>Ad's Illustration</span>
               <input
@@ -135,7 +133,6 @@
               />
               <div class="invalid-feedback">A valid illustration is required!</div>
             </div>
-            
 
             <div class="mb-3">
               <button @click.prevent="submit" class="btn btn-dark w-100">Create</button>
@@ -152,10 +149,10 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { useToast } from "vue-toastification";
 import router from "../../router/index.js";
-import { useAuthStore } from "../../stores/auth.js";
+import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
 
-const { isAuthenticated } = storeToRefs(useAuthStore());
+const { isAuthenticated } = storeToRefs(useAuth());
 const { createMachine } = useMachinesStore();
 
 if (!isAuthenticated.value) {
@@ -196,11 +193,9 @@ function validTitle(title) {
   return title.length > 0;
 }
 
-
 function validDescription(description) {
   return description.length > 0;
 }
-
 
 function validAddress(address) {
   return address.length > 0;
@@ -214,11 +209,9 @@ function validCity(city) {
   return city.length > 0;
 }
 
-
 function validPrice(price) {
   return price > 0;
 }
-
 
 function validimageUrl(imageUrl) {
   return imageUrl.length > 0;

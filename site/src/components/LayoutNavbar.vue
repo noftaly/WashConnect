@@ -1,26 +1,26 @@
 <template>
-    <nav class="navbar navbar-blue navbar-expand-lg fixed-top navbarScroll">
-      <div class="container-fluid">
-        <RouterLink class="navbar-brand" to="/">
-          <img src="../assets/Logo_WashConnect.png" height="45" />
-        </RouterLink>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-between" id="collapsable">
-            <span style="font-size: 1rem" class="mt-1">Wash Connect - Share your washing machine to your neighbors!</span>
-          <div class="d-flex flex-column flex-lg-row gap-3 align-items-center me-1">
-            <div class="d-flex">
-              <input
-                class="form-control rounded-pill border-0 shadow-sm py-1"
-                type="search"
-                placeholder="Search"
-                v-model="searchQuery"
-                @keyup.enter="search"
-              />
-            </div>
-            <div v-if="isAuthenticated" class="navbar-nav d-flex flex-row gap-1">
-              <!-- <li v-if="isAdmin" class="nav-item">
+  <nav class="navbar navbar-blue navbar-expand-lg fixed-top navbarScroll">
+    <div class="container-fluid">
+      <RouterLink class="navbar-brand" to="/">
+        <img src="../assets/Logo_WashConnect.png" height="45" />
+      </RouterLink>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="collapsable">
+        <span style="font-size: 1rem" class="mt-1">Wash Connect - Share your washing machine to your neighbors!</span>
+        <div class="d-flex flex-column flex-lg-row gap-3 align-items-center me-1">
+          <div class="d-flex">
+            <input
+              class="form-control rounded-pill border-0 shadow-sm py-1"
+              type="search"
+              placeholder="Search"
+              v-model="searchQuery"
+              @keyup.enter="search"
+            />
+          </div>
+          <div v-if="isAuthenticated" class="navbar-nav d-flex flex-row gap-1">
+            <!-- <li v-if="isAdmin" class="nav-item">
                 <RouterLink class="nav-link p-1" to="/users">
                   <div class="d-flex flex-column">
                     <font-awesome-icon icon="fa-solid fa-users" size="xl" />
@@ -28,105 +28,104 @@
                   </div>
                 </RouterLink>
               </li> -->
-              <li>
-                <RouterLink class="nav-link p-1" to="/new_ad">
-                  <div class="d-flex flex-column">
-                    <font-awesome-icon icon="fas circle-plus" />
-                    <span style="font-size: 0.7rem" class="text-center mt-1">New Ad</span>
-                  </div>
-                </RouterLink>
-              </li>
-              <li class="nav-item">
-                <RouterLink class="nav-link p-1" to="/cart">
-                  <div style="width: 2rem">
-                    <font-awesome-layers>
-                      <font-awesome-icon icon="fa-solid fa-cart-shopping" size="xl" />
-                      <font-awesome-layers-text counter :value="count" position="bottom-left" class="fa-2x5" />
-                    </font-awesome-layers>
-                    <span style="font-size: 0.7rem" class="text-center mt-1">Cart</span>
-                  </div>
-                </RouterLink>
-              </li>
-              <li class="nav-item">
-                <RouterLink class="nav-link p-1" to="/orders">
-                  <div class="d-flex flex-column">
-                    <font-awesome-icon icon="fa-solid fa-file-invoice" size="xl" />
-                    <span style="font-size: 0.7rem" class="text-center mt-1">Orders</span>
-                  </div>
-                </RouterLink>
-              </li>
-              <li class="nav-item">
-                <div class="nav-link cursor-pointer p-1" @click.prevent="doLogout">
-                  <div class="d-flex flex-column">
-                    <font-awesome-icon icon="fa-solid fa-right-from-bracket" size="xl" />
-                    <span style="font-size: 0.7rem" class="text-center mt-1">Logout</span>
-                  </div>
+            <li>
+              <RouterLink class="nav-link p-1" to="/new_ad">
+                <div class="d-flex flex-column">
+                  <font-awesome-icon icon="fas circle-plus" />
+                  <span style="font-size: 0.7rem" class="text-center mt-1">New Ad</span>
                 </div>
-              </li>
-            </div>
-            <div v-else class="navbar-nav d-flex flex-row gap-3">
-              <li class="nav-item">
-                <RouterLink class="nav-link" to="/register">
-                  <font-awesome-icon icon="fa-solid fa-user" /> Register
-                </RouterLink>
-              </li>
-              <li class="nav-item">
-                <RouterLink class="nav-link" to="/login">
-                  <font-awesome-icon icon="fa-solid fa-right-to-bracket" /> Login
-                </RouterLink>
-              </li>
-            </div>
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink class="nav-link p-1" to="/cart">
+                <div style="width: 2rem">
+                  <font-awesome-layers>
+                    <font-awesome-icon icon="fa-solid fa-cart-shopping" size="xl" />
+                    <font-awesome-layers-text counter :value="count" position="bottom-left" class="fa-2x5" />
+                  </font-awesome-layers>
+                  <span style="font-size: 0.7rem" class="text-center mt-1">Cart</span>
+                </div>
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink class="nav-link p-1" to="/orders">
+                <div class="d-flex flex-column">
+                  <font-awesome-icon icon="fa-solid fa-file-invoice" size="xl" />
+                  <span style="font-size: 0.7rem" class="text-center mt-1">Orders</span>
+                </div>
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <div class="nav-link cursor-pointer p-1" @click.prevent="doLogout">
+                <div class="d-flex flex-column">
+                  <font-awesome-icon icon="fa-solid fa-right-from-bracket" size="xl" />
+                  <span style="font-size: 0.7rem" class="text-center mt-1">Logout</span>
+                </div>
+              </div>
+            </li>
+          </div>
+          <div v-else class="navbar-nav d-flex flex-row gap-3">
+            <li class="nav-item">
+              <RouterLink class="nav-link" to="/register">
+                <font-awesome-icon icon="fa-solid fa-user" /> Register
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink class="nav-link" to="/login">
+                <font-awesome-icon icon="fa-solid fa-right-to-bracket" /> Login
+              </RouterLink>
+            </li>
           </div>
         </div>
       </div>
-    </nav>
-  </template>
-  
-  <script setup>
-  import { storeToRefs } from "pinia";
-  import { ref } from "vue";
-  import router from "../router";
+    </div>
+  </nav>
+</template>
 
-  import { useAuthStore } from "../stores/auth.js";
-  import { useMachinesStore } from "../stores/machines.js";
-  import { useCartStore } from "../stores/cart.js";
-  
-  const { isAuthenticated } = storeToRefs(useAuthStore());
-  const { count } = storeToRefs(useCartStore());
-  const { logout } = useAuthStore();
-  
-  const { searchMachine } = useMachinesStore();
-  
-  const searchQuery = ref("");
-  
-  function doLogout() {
-    logout();
-    router.push({ name: "login" });
-  }
-  
-  async function search() {
-    searchMachine(searchQuery.value);
-    router.push({ name: "search", force: true });
-  }
-  </script>
-  
-  <style scoped>
-  .fa-2x5 {
-    transform: scale(0.6);
-  }
-  .navbar-blue {
-    background-color: rgb(132, 177, 240);
-  }
-  
-  .nav-link:not(.discreet) {
-    transition: all 0.2s ease-in-out;
-    margin-left: 0.3rem;
-    margin-right: 0.3rem;
-  }
-  
-  .nav-link:hover:not(.discreet) {
-    background-color: #00000013;
-    border-radius: 0.5rem;
-  }
-  </style>
-  
+<script setup>
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
+import router from "../router";
+
+import { useAuthStore } from "../stores/auth.js";
+import { useMachinesStore } from "../stores/machines.js";
+import { useCartStore } from "../stores/cart.js";
+
+const { isAuthenticated } = storeToRefs(useAuthStore());
+const { count } = storeToRefs(useCartStore());
+const { logout } = useAuthStore();
+
+const { searchMachine } = useMachinesStore();
+
+const searchQuery = ref("");
+
+async function doLogout() {
+  await logout();
+  router.push({ name: "login" });
+}
+
+async function search() {
+  searchMachine(searchQuery.value);
+  router.push({ name: "search", force: true });
+}
+</script>
+
+<style scoped>
+.fa-2x5 {
+  transform: scale(0.6);
+}
+.navbar-blue {
+  background-color: rgb(132, 177, 240);
+}
+
+.nav-link:not(.discreet) {
+  transition: all 0.2s ease-in-out;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+}
+
+.nav-link:hover:not(.discreet) {
+  background-color: #00000013;
+  border-radius: 0.5rem;
+}
+</style>

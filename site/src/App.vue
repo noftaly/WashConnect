@@ -4,7 +4,7 @@
   </header>
 
   <div class="mt-7">
-    <RouterView/>
+    <RouterView />
   </div>
 </template>
 

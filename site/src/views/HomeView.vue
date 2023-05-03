@@ -1,8 +1,7 @@
 <template>
-    <MachineList />
-  </template>
-  
-  <script setup>
-  import MachineList from "../components/machine/MachineList.vue";
-  </script>
-  
+  <MachineList />
+</template>
+
+<script setup>
+import MachineList from "../components/machine/MachineList.vue";
+</script>
