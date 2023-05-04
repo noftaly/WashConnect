@@ -18,6 +18,7 @@ router.post('/auth/login', auth.logIn, ensureAuthenticated, auth.me);
 router.post('/auth/register', auth.register)
 router.get('/auth/me', ensureAuthenticated, auth.me);
 router.post('/auth/logout', ensureAuthenticated, auth.logOut);
+router.post('/auth/topup', ensureAuthenticated, auth.topUpBalance);
 
 // Users
 router.route('/users')

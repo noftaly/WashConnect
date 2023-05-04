@@ -19,6 +19,7 @@
               @keyup.enter="search"
             />
           </div>
+          <!-- We run this section if the user is logged in -->
           <div v-if="isAuthenticated" class="navbar-nav d-flex flex-row gap-1">
             <!-- <li v-if="isAdmin" class="nav-item">
                 <RouterLink class="nav-link p-1" to="/users">
@@ -28,6 +29,13 @@
                   </div>
                 </RouterLink>
               </li> -->
+            <!-- We display the balance-->
+            <li class="nav-item">
+              <div class="d-flex flex-column">
+                  <font-awesome-icon icon="fas circle-plus" />
+                  <span style="font-size: 0.7rem" class="text-center mt-1">Balance: {{ user.balance }}€</span>
+                </div>
+            </li>
             <li>
               <RouterLink class="nav-link p-1" to="/new_ad">
                 <div class="d-flex flex-column">
@@ -64,11 +72,13 @@
               </div>
             </li>
           </div>
+          <!-- We run this section if the user is NOT logged in -->
           <div v-else class="navbar-nav d-flex flex-row gap-3">
             <li class="nav-item">
               <RouterLink class="nav-link" to="/register">
                 <font-awesome-icon icon="fa-solid fa-user" /> Register
               </RouterLink>
+
             </li>
             <li class="nav-item">
               <RouterLink class="nav-link" to="/login">
@@ -87,17 +97,18 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import router from "../router";
 
+
 import { useAuth } from "../utils/useAuthHook.js";
 import { useMachinesStore } from "../stores/machines.js";
 import { useCartStore } from "../stores/cart.js";
 
-const { isAuthenticated } = storeToRefs(useAuth());
+const { isAuthenticated, user } = storeToRefs(useAuth());
 const { count } = storeToRefs(useCartStore());
 const { logout } = useAuth();
-
 const { searchMachine } = useMachinesStore();
 
 const searchQuery = ref("");
+// const  balance = ref(0);
 
 async function doLogout() {
   await logout();
@@ -108,6 +119,7 @@ async function search() {
   searchMachine(searchQuery.value);
   router.push({ name: "search", force: true });
 }
+
 </script>
 
 <style scoped>
