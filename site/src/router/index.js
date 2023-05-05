@@ -28,9 +28,29 @@ const router = createRouter({
       component: () => import("../views/RegisterView.vue"),
     },
     {
+      path: "/profile",
+      name: "profile",
+      component: () => import("../views/ProfileView.vue"),
+    },
+    {
+      path: "/balance",
+      name: "balance",
+      component: () => import("../views/BalanceView.vue"),
+    },
+    {
+      path: "/history",
+      name: "history",
+      component: () => import("../views/HistoryView.vue"),
+    },
+    {
       path: "/machines/:id",
       name: "machine",
       component: () => import("../views/machine/MachineView.vue"),
+    },
+    {
+      path: "/booking/:id",
+      name: "booking",
+      component: () => import("../views/machine/AdBooking.vue"),
     },
     {
       path: "/new_ad",
