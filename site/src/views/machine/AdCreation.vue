@@ -160,14 +160,14 @@
 
             <!-- Address -->
             <div class="row">
-              <div class="col-md-4 forms-inputs mb-4">
+              <div class="col-md-6 forms-inputs mb-4">
                 <span>Address</span>
                 <input
                   autocomplete="off"
                   type="text"
-                  v-model="address"
-                  :class="{ 'form-control': true, 'is-invalid': !validAddress(address) && addressBlured }"
-                  @blur="addressBlured = true"
+                  v-model="streetL1"
+                  :class="{ 'form-control': true, 'is-invalid': !validAddress(streetL1) && streetL1Blured }"
+                  @blur="streetL1Blured = true"
                   @keyup.enter="submit"
                 />
                 <div class="invalid-feedback">A valid address is required!</div>
@@ -197,6 +197,19 @@
                   @keyup.enter="submit"
                 />
                 <div class="invalid-feedback">A valid city is required!</div>
+              </div>
+
+              <div class="col-md-4 forms-inputs mb-4">
+                <span>Country</span>
+                <input
+                  autocomplete="off"
+                  type="text"
+                  v-model="country"
+                  :class="{ 'form-control': true, 'is-invalid': !validCountry(country) && countryBlured }"
+                  @blur="countryBlured = true"
+                  @keyup.enter="submit"
+                />
+                <div class="invalid-feedback">A valid country is required!</div>
               </div>
             </div>
 
@@ -232,9 +245,11 @@ import { useToast } from "vue-toastification";
 import router from "../../router/index.js";
 import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
+import { useAddressesStore } from "../../stores/addresses.js";
 
 const { isAuthenticated } = storeToRefs(useAuth());
 const { createMachine } = useMachinesStore();
+const { createPersonalAddress } = useAddressesStore();
 
 if (!isAuthenticated.value) {
   router.push({ title: "login" });
@@ -249,24 +264,27 @@ const hasWasher = ref(false);
 const hasDryer = ref(false);
 const detergentIncluded = ref(false);
 
-const cycle_wash_duration = ref(0);
+const cycle_wash_duration = ref(1);
 const cycle_wash_duration_blured = ref(false);
-const cycle_dry_duration = ref(0);
+const cycle_dry_duration = ref(1);
 const cycle_dry_duration_blured = ref(false);
-const max_capacity = ref(0);
+const max_capacity = ref(1);
 const max_capacity_blured = ref(false);
 
-const priceWashing = ref(0);
+const priceWashing = ref(1);
 const priceWashingBlured = ref(false);
-const priceDrying = ref(0);
+const priceDrying = ref(1);
 const priceDryingBlured = ref(false);
+const priceWashingDrying = ref(1);
 
-const address = ref("");
-const addressBlured = ref(false);
+const streetL1 = ref("");
+const streetL1Blured = ref(false);
 const zipCode = ref(0);
 const zipCodeBlured = ref(false);
 const city = ref("");
 const cityBlured = ref(false);
+const country = ref("");
+const countryBlured = ref(false);
 
 // const imageUrl = ref("");
 // const imageUrlBlured = ref(false);
@@ -297,6 +315,18 @@ function validPrice(price) {
   return price > 0;
 }
 
+function calcTotalPrice() {
+  if(hasWasher.value == true) {
+    priceWashingDrying.value = priceWashing.value;
+  }
+  if(hasDryer.value == true) {
+    priceWashingDrying.value = priceDrying.value;
+  }
+  if(hasWasher.value == true && hasDryer.value == true) {
+    priceWashingDrying.value = priceWashing.value + priceDrying.value;
+  }
+}
+
 function validDuration(duration) {
   return duration > 0;
 }
@@ -317,6 +347,10 @@ function validCity(city) {
   return city.length > 0;
 }
 
+function validCountry(country) {
+  return country.length > 0;
+}
+
 // function validimageUrl(imageUrl) {
 //   return imageUrl.length > 0;
 // }
@@ -331,9 +365,10 @@ function validate() {
   cycle_dry_duration_blured.value = true;
   max_capacity_blured.value = true;
 
-  addressBlured.value = true;
+  streetL1Blured.value = true;
   zipCodeBlured.value = true;
   cityBlured.value = true;
+  countryBlured.value = true;
   // imageUrlBlured.value = true;
   if (
     (hasWasher.value == true || hasDryer.value == true) && // if one machine is at least selected
@@ -351,9 +386,10 @@ function validate() {
       validDuration(cycle_dry_duration.value) &&
       validCapacity(max_capacity.value)) &&
 
-      validAddress(address.value) &&
+      validAddress(streetL1.value) &&
       validZipCode(zipCode.value) &&
-      validCity(city.value) 
+      validCity(city.value) &&
+      validCountry(country.value)
     // validimageUrl(imageUrl.value)
   )
     valid.value = true;
@@ -363,13 +399,20 @@ function validate() {
 async function submit() {
   if (validate()) {
     submitted.value = true;
+    const newAddress = await createPersonalAddress({
+        streetL1: streetL1.value,
+        zipCode: zipCode.value,
+        city: city.value,
+        country: country.value
+      })
+
     const newAd = await createMachine({
       adTitle: title.value,
       adDescription: description.value,
 
       priceWashing: priceWashing.value,
       priceDrying: priceDrying.value,
-      priceWashingDrying: priceWashing.value + priceDrying.value,
+      priceWashingDrying: calcTotalPrice(),
       detergentIncluded: detergentIncluded.value,
 
       maxCapacity: max_capacity.value,
@@ -379,10 +422,8 @@ async function submit() {
       hasWasher: hasWasher.value,
       hasDryer: hasDryer.value,
 
-      address: address.value,
-      zipCode: zipCode.value,
-      city: city.value,
-
+      address: newAddress.id,
+      
       //imageUrl: imageUrl.value,
       //characteristics: initCharacteristics,
     });
