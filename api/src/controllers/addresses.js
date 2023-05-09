@@ -73,7 +73,13 @@ export async function createPersonalAddress(req, res) {
             userId: req.user.id,
         }
     });
+    // I get the address by comparing the streetL1, city, country and zip fields
+    // I get the set of address for a given userID and pick the one with the highest id
+    const addressCreated = await db.Address.findFirst({ where: { userId: req.user.id, line1: req.body.streetL1, city: req.body.city, country: req.body.country, zip: req.body.zip }, orderBy: { id: 'desc' },
+      });
+    // I send the address back to the client
     res.json({ 
+        id: addressCreated.id,
         streetL1: address.line1,
         streetL2: address.line2, 
         city: address.city, 
