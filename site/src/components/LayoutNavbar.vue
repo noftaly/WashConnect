@@ -7,6 +7,7 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse justify-content-between" id="collapsable">
         <span style="font-size: 1rem" class="mt-1">Wash Connect - Share your washing machine to your neighbors!</span>
         <div class="d-flex flex-column flex-lg-row gap-3 align-items-center me-1">
@@ -19,32 +20,39 @@
               @keyup.enter="search"
             />
           </div>
+
           <!-- We run this section if the user is logged in -->
           <div v-if="isAuthenticated" class="navbar-nav d-flex flex-row gap-1">
-            <!-- <li v-if="isAdmin" class="nav-item">
-                <RouterLink class="nav-link p-1" to="/users">
-                  <div class="d-flex flex-column">
-                    <font-awesome-icon icon="fa-solid fa-users" size="xl" />
-                    <span style="font-size: 0.7rem" class="mt-1">Users</span>
-                  </div>
-                </RouterLink>
-              </li> -->
-            <!-- We display the balance-->
-            <li class="nav-item">
-              <div class="d-flex flex-column">
-                  <font-awesome-icon icon="fas circle-plus" />
-                  <span style="font-size: 0.7rem" class="text-center mt-1">Balance: {{ user.balance }}€</span>
-                </div>
+            <!-- We display the user -->
+            <li>
+              <RouterLink class="nav-link p-1" to="/profile">
+                <div class="d-flex flex-column">
+                  <font-awesome-icon icon="fa-solid fa-circle-user" />
+                  <span style="font-size: 0.7rem" class="text-center mt-1">{{ user.username }}</span>
+              </div>
+              </RouterLink>
             </li>
+
+            <!-- We display the balance-->
+            <li>
+              <RouterLink class="nav-link p-1" to="/balance">
+                <div class="d-flex flex-column">
+                  <font-awesome-icon icon="fa-sharp fa-solid fa-circle-euro" />
+                  <span style="font-size: 0.7rem" class="text-center mt-1">Balance: {{ user.balance }}€</span>
+              </div>
+              </RouterLink>
+            </li>
+
             <li>
               <RouterLink class="nav-link p-1" to="/new_ad">
                 <div class="d-flex flex-column">
-                  <font-awesome-icon icon="fas circle-plus" />
+                  <font-awesome-icon icon="fa-solid fa-circle-plus" size="xl" />
                   <span style="font-size: 0.7rem" class="text-center mt-1">New Ad</span>
                 </div>
               </RouterLink>
             </li>
-            <li class="nav-item">
+            
+            <!-- <li class="nav-item">
               <RouterLink class="nav-link p-1" to="/cart">
                 <div style="width: 2rem">
                   <font-awesome-layers>
@@ -62,7 +70,8 @@
                   <span style="font-size: 0.7rem" class="text-center mt-1">Orders</span>
                 </div>
               </RouterLink>
-            </li>
+            </li> -->
+
             <li class="nav-item">
               <div class="nav-link cursor-pointer p-1" @click.prevent="doLogout">
                 <div class="d-flex flex-column">
@@ -72,13 +81,13 @@
               </div>
             </li>
           </div>
+
           <!-- We run this section if the user is NOT logged in -->
           <div v-else class="navbar-nav d-flex flex-row gap-3">
             <li class="nav-item">
               <RouterLink class="nav-link" to="/register">
                 <font-awesome-icon icon="fa-solid fa-user" /> Register
               </RouterLink>
-
             </li>
             <li class="nav-item">
               <RouterLink class="nav-link" to="/login">
@@ -96,7 +105,6 @@
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import router from "../router";
-
 
 import { useAuth } from "../utils/useAuthHook.js";
 import { useMachinesStore } from "../stores/machines.js";
@@ -120,6 +128,31 @@ async function search() {
   router.push({ name: "search", force: true });
 }
 
+async function getBalance() {
+if (isAuthenticated.value == true) {
+    try {
+      const response = await axios.get("http://localhost:5050/auth/me");
+      return response.data.balance;
+    } catch (error) {
+      console.log("An error has occured");
+      console.error(error);
+      balance.value = -1;
+  }
+  }
+}
+
+async function getUsername() {
+if (isAuthenticated.value == true) {
+    try {
+      const response = await axios.get("http://localhost:5050/auth/me");
+      return response.data.username;
+    } catch (error) {
+      console.log("An error has occured");
+      console.error(error);
+      username.value = -1;
+  }
+  }
+}
 </script>
 
 <style scoped>
