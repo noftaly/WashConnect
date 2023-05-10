@@ -6,230 +6,259 @@
     <h1 class="text-center mt-5">Creating new ad</h1>
 
     <div class="row d-flex justify-content-center">
-      <div class="col-md-6">
-        <div class="px-5 py-5">
-          <div class="form-data" v-if="!submitted">
-            <div class="row">
-              <!-- title -->
-              <div class="forms-inputs mb-4">
-                <span>Ad's Title</span>
+        <div class="col-md-6">
+          <div class="px-5 py-5">
+            <div class="form-data" v-if="!submitted">
+              <div class="row">
+                <!-- title -->
+                <div class="forms-inputs mb-4">
+                  <span>Ad's Title</span>
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    v-model="title"
+                    :class="{ 'form-control': true, 'is-invalid': !validTitle(title) && titleBlured }"
+                    @blur="titleBlured = true"
+                    @keyup.enter="submit"
+                  />
+                  <div class="invalid-feedback">A valid title is required!</div>
+                </div>
+
+                <!-- Description -->
+                <div class="forms-inputs mb-4">
+                  <span>Description</span>
+                  <textarea
+                    autocomplete="off"
+                    type="text"
+                    v-model="description"
+                    :class="{
+                      'form-control': true,
+                      'is-invalid': !validDescription(description) && descriptionBlured,
+                    }"
+                    @blur="descriptionBlured = true"
+                    @keyup.enter="submit"
+                  />
+                  <div class="invalid-feedback">A valid description is required!</div>
+                </div>
+              </div>
+
+              <!-- Machines Check boxes -->
+              <div class="forms-check mb-4">
+                <span>Which type of machine do you have ?</span>
+                <hr />
                 <input
-                  autocomplete="off"
-                  type="text"
-                  v-model="title"
-                  :class="{ 'form-control': true, 'is-invalid': !validTitle(title) && titleBlured }"
-                  @blur="titleBlured = true"
-                  @keyup.enter="submit"
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="hasWasher"
+                  v-on:click="toggleBoolean(hasWasher)"
+                  style="transform: scale(1.25)"
                 />
-                <div class="invalid-feedback">A valid title is required!</div>
+                <label class="form-check-label" for="hasWasher"> Washer ? </label>
+
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="hasDryer"
+                  v-on:click="toggleBoolean(hasDryer)"
+                  style="transform: scale(1.25)"
+                />
+                <label class="form-check-label" for="hasDryer"> Dryer ? </label>
+
+                <div class="invalid-feedback" v-if="hasWasher==false && hasDryer==false">Please select at least one machine</div>
               </div>
 
-              <!-- Description -->
-              <div class="forms-inputs mb-4">
-                <span>Description</span>
-                <textarea
-                  autocomplete="off"
-                  type="text"
-                  v-model="description"
-                  :class="{
-                    'form-control': true,
-                    'is-invalid': !validDescription(description) && descriptionBlured,
-                  }"
-                  @blur="descriptionBlured = true"
-                  @keyup.enter="submit"
-                />
-                <div class="invalid-feedback">A valid description is required!</div>
+              <br />
+
+              <!-- WASHER INFOS -->
+              <div v-if="hasWasher">
+                <div class="forms-inputs mb-4">
+                  <span>Washing Price</span>
+                  <input
+                    autocomplete="off"
+                    type="number"
+                    v-model="priceWashing"
+                    :class="{ 'form-control': true, 'is-invalid': !validPrice(priceWashing) && priceWashingBlured }"
+                    @blur="priceWashingBlured = true"
+                    @keyup.enter="submit"
+                  />
+                  <div class="invalid-feedback">A valid washing price is required!</div>
+                </div>
+
+                <div class="forms-inputs mb-4">
+                  <span>Washing Duration (in minutes)</span>
+                  <input
+                    autocomplete="off"
+                    type="number"
+                    v-model="cycle_wash_duration"
+                    :class="{
+                      'form-control': true,
+                      'is-invalid': !validDuration(cycle_wash_duration) && cycle_wash_duration_blured,
+                    }"
+                    @blur="cycle_wash_duration_blured = true"
+                    @keyup.enter="submit"
+                  />
+                  <div class="invalid-feedback">A valid washing duration is required!</div>
+                </div>
               </div>
-            </div>
 
-            <!-- Machines Check boxes -->
-            <div class="forms-check mb-4">
-              <span>Which type of machine do you have ?</span>
-              <hr />
-              <input
-                class="form-check-input"
-                type="checkbox"
-                v-model="hasWasher"
-                v-on:click="toggleBoolean(hasWasher)"
-                style="transform: scale(1.25)"
-              />
-              <label class="form-check-label" for="hasWasher"> Washer ? </label>
+              <!-- DRYER INFOS -->
+              <div v-if="hasDryer">
+                <div class="forms-inputs mb-4">
+                  <span>Drying Price</span>
+                  <input
+                    autocomplete="off"
+                    type="number"
+                    v-model="priceDrying"
+                    :class="{ 'form-control': true, 'is-invalid': !validPrice(priceDrying) && priceDryingBlured }"
+                    @blur="priceDryingBlured = true"
+                    @keyup.enter="submit"
+                  />
+                  <div class="invalid-feedback">A valid drying price is required!</div>
+                </div>
 
-              <input
-                class="form-check-input"
-                type="checkbox"
-                v-model="hasDryer"
-                v-on:click="toggleBoolean(hasDryer)"
-                style="transform: scale(1.25)"
-              />
-              <label class="form-check-label" for="hasDryer"> Dryer ? </label>
+                <div class="forms-inputs mb-4">
+                  <span>Drying Duration (in minutes)</span>
+                  <input
+                    autocomplete="off"
+                    type="number"
+                    v-model="cycle_dry_duration"
+                    :class="{
+                      'form-control': true,
+                      'is-invalid': !validDuration(cycle_dry_duration) && cycle_dry_duration_blured,
+                    }"
+                    @blur="cycle_dry_duration_blured = true"
+                    @keyup.enter="submit"
+                  />
+                  <div class="invalid-feedback">A valid drying duration is required!</div>
+                </div>
+              </div>
 
-              <div class="invalid-feedback">Please select one machine</div>
-            </div>
-
-            <br />
-
-            <!-- WASHER INFOS -->
-            <div v-if="hasWasher">
-              <div class="forms-inputs mb-4">
-                <span>Washing Price</span>
+              <!-- MAX CAPACITY -->
+              <div class="forms-inputs mb-4" v-if="hasWasher || hasDryer">
+                <span>Max capacity (in Liters)</span>
                 <input
                   autocomplete="off"
                   type="number"
-                  v-model="priceWashing"
-                  :class="{ 'form-control': true, 'is-invalid': !validPrice(priceWashing) && priceWashingBlured }"
-                  @blur="priceWashingBlured = true"
+                  v-model="max_capacity"
+                  :class="{ 'form-control': true, 'is-invalid': !validCapacity(max_capacity) && max_capacity_blured }"
+                  @blur="max_capacity_blured = true"
                   @keyup.enter="submit"
                 />
-                <div class="invalid-feedback">A valid washing price is required!</div>
+                <div class="invalid-feedback">A valid max capacity is required!</div>
               </div>
 
+              <div class="forms-check mb-4">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="detergentIncluded"
+                  v-on:click="toggleBoolean(detergentIncluded)"
+                  style="transform: scale(1.25)"
+                />
+                <label class="form-check-label" for="detergentIncluded"> Is the detergent included ? </label>
+              </div>
+
+              <!-- Address Selection -->
+              <div>
+                <span class="mx-2">Select your address: </span>
+                <button class="btn btn-primary dropdown-toggle mb-4" type="button" id="addressDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{ selectedAddress || 'Address' }}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="addressDropdown" style="max-height: 280px; overflow-y: auto;">
+                  <a class="dropdown-item" v-for="address in addresses" :key="address.id" @click="stringifyAddress(address)">
+                    {{ 'Address ' + address.id }}
+                  </a> 
+
+                <div class="invalid-feedback">Please select an address</div>             
+              </div>
+
+              <!-- Address Creation -->
+              <div class="forms-check mb-4">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="createAddress"
+                  v-on:click="toggleBoolean(createAddress)"
+                  style="transform: scale(1.25)"
+                />
+                <label class="form-check-label" for="createAddress"> Or create a new address </label>
+              </div>
+
+
+              <div v-if="createAddress">
+                <div class="row">
+                  <div class="col-md-6 forms-inputs mb-4">
+                    <span>Address</span>
+                    <input
+                      autocomplete="off"
+                      type="text"
+                      v-model="streetL1"
+                      :class="{ 'form-control': true, 'is-invalid': !validAddress(streetL1) && streetL1Blured }"
+                      @blur="streetL1Blured = true"
+                      @keyup.enter="submit"
+                    />
+                    <div class="invalid-feedback">A valid address is required!</div>
+                  </div>
+
+                  <div class="col-md-4 forms-inputs mb-4">
+                    <span>Zip Code</span>
+                    <input
+                      autocomplete="off"
+                      type="text"
+                      v-model="zip"
+                      :class="{ 'form-control': true, 'is-invalid': !validZip(zip) && zipBlured }"
+                      @blur="zipBlured = true"
+                      @keyup.enter="submit"
+                    />
+                    <div class="invalid-feedback">A valid zip code is required!</div>
+                  </div>
+
+                  <div class="col-md-4 forms-inputs mb-4">
+                    <span>City</span>
+                    <input
+                      autocomplete="off"
+                      type="text"
+                      v-model="city"
+                      :class="{ 'form-control': true, 'is-invalid': !validCity(city) && cityBlured }"
+                      @blur="cityBlured = true"
+                      @keyup.enter="submit"
+                    />
+                    <div class="invalid-feedback">A valid city is required!</div>
+                  </div>
+
+                  <div class="col-md-4 forms-inputs mb-4">
+                    <span>Country</span>
+                    <input
+                      autocomplete="off"
+                      type="text"
+                      v-model="country"
+                      :class="{ 'form-control': true, 'is-invalid': !validCountry(country) && countryBlured }"
+                      @blur="countryBlured = true"
+                      @keyup.enter="submit"
+                    />
+                    <div class="invalid-feedback">A valid country is required!</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Image URL -->
+              <!-- <br />
               <div class="forms-inputs mb-4">
-                <span>Washing Duration (in minutes)</span>
-                <input
-                  autocomplete="off"
-                  type="number"
-                  v-model="cycle_wash_duration"
-                  :class="{
-                    'form-control': true,
-                    'is-invalid': !validDuration(cycle_wash_duration) && cycle_wash_duration_blured,
-                  }"
-                  @blur="cycle_wash_duration_blured = true"
-                  @keyup.enter="submit"
-                />
-                <div class="invalid-feedback">A valid washing duration is required!</div>
-              </div>
-            </div>
-
-            <!-- DRYER INFOS -->
-            <div v-if="hasDryer">
-              <div class="forms-inputs mb-4">
-                <span>Drying Price</span>
-                <input
-                  autocomplete="off"
-                  type="number"
-                  v-model="priceDrying"
-                  :class="{ 'form-control': true, 'is-invalid': !validPrice(priceDrying) && priceDryingBlured }"
-                  @blur="priceDryingBlured = true"
-                  @keyup.enter="submit"
-                />
-                <div class="invalid-feedback">A valid drying price is required!</div>
-              </div>
-
-              <div class="forms-inputs mb-4">
-                <span>Drying Duration (in minutes)</span>
-                <input
-                  autocomplete="off"
-                  type="number"
-                  v-model="cycle_dry_duration"
-                  :class="{
-                    'form-control': true,
-                    'is-invalid': !validDuration(cycle_dry_duration) && cycle_dry_duration_blured,
-                  }"
-                  @blur="cycle_dry_duration_blured = true"
-                  @keyup.enter="submit"
-                />
-                <div class="invalid-feedback">A valid drying duration is required!</div>
-              </div>
-            </div>
-
-            <!-- MAX CAPACITY -->
-            <div class="forms-inputs mb-4" v-if="hasWasher || hasDryer">
-              <span>Max capacity (in Liters)</span>
-              <input
-                autocomplete="off"
-                type="number"
-                v-model="max_capacity"
-                :class="{ 'form-control': true, 'is-invalid': !validCapacity(max_capacity) && max_capacity_blured }"
-                @blur="max_capacity_blured = true"
-                @keyup.enter="submit"
-              />
-              <div class="invalid-feedback">A valid max capacity is required!</div>
-            </div>
-
-            <div class="forms-check mb-4">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                v-model="detergentIncluded"
-                v-on:click="toggleBoolean(detergentIncluded)"
-                style="transform: scale(1.25)"
-              />
-              <label class="form-check-label" for="detergentIncluded"> Is the detergent included ? </label>
-            </div>
-
-            <!-- Address -->
-            <div class="row">
-              <div class="col-md-6 forms-inputs mb-4">
-                <span>Address</span>
+                <span>Ad's Illustration</span>
                 <input
                   autocomplete="off"
                   type="text"
-                  v-model="streetL1"
-                  :class="{ 'form-control': true, 'is-invalid': !validAddress(streetL1) && streetL1Blured }"
-                  @blur="streetL1Blured = true"
+                  v-model="imageUrl"
+                  :class="{ 'form-control': true, 'is-invalid': !validimageUrl(imageUrl) && imageUrlBlured }"
+                  @blur="imageUrlBlured = true"
                   @keyup.enter="submit"
                 />
-                <div class="invalid-feedback">A valid address is required!</div>
+                <div class="invalid-feedback">A valid illustration is required!</div>
+              </div> -->
+
+              <div class="mb-3">
+                <button @click.prevent="submit" class="btn btn-dark w-100">Create</button>
               </div>
-
-              <div class="col-md-4 forms-inputs mb-4">
-                <span>Zip Code</span>
-                <input
-                  autocomplete="off"
-                  type="text"
-                  v-model="zipCode"
-                  :class="{ 'form-control': true, 'is-invalid': !validZipCode(zipCode) && zipCodeBlured }"
-                  @blur="zipCodeBlured = true"
-                  @keyup.enter="submit"
-                />
-                <div class="invalid-feedback">A valid zip code is required!</div>
-              </div>
-
-              <div class="col-md-4 forms-inputs mb-4">
-                <span>City</span>
-                <input
-                  autocomplete="off"
-                  type="text"
-                  v-model="city"
-                  :class="{ 'form-control': true, 'is-invalid': !validCity(city) && cityBlured }"
-                  @blur="cityBlured = true"
-                  @keyup.enter="submit"
-                />
-                <div class="invalid-feedback">A valid city is required!</div>
-              </div>
-
-              <div class="col-md-4 forms-inputs mb-4">
-                <span>Country</span>
-                <input
-                  autocomplete="off"
-                  type="text"
-                  v-model="country"
-                  :class="{ 'form-control': true, 'is-invalid': !validCountry(country) && countryBlured }"
-                  @blur="countryBlured = true"
-                  @keyup.enter="submit"
-                />
-                <div class="invalid-feedback">A valid country is required!</div>
-              </div>
-            </div>
-
-            <!-- Image URL -->
-            <!-- <br />
-            <div class="forms-inputs mb-4">
-              <span>Ad's Illustration</span>
-              <input
-                autocomplete="off"
-                type="text"
-                v-model="imageUrl"
-                :class="{ 'form-control': true, 'is-invalid': !validimageUrl(imageUrl) && imageUrlBlured }"
-                @blur="imageUrlBlured = true"
-                @keyup.enter="submit"
-              />
-              <div class="invalid-feedback">A valid illustration is required!</div>
-            </div> -->
-
-            <div class="mb-3">
-              <button @click.prevent="submit" class="btn btn-dark w-100">Create</button>
             </div>
           </div>
         </div>
@@ -243,6 +272,8 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { useToast } from "vue-toastification";
 import router from "../../router/index.js";
+import axios from "../../utils/axios.js";
+
 import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
 import { useAddressesStore } from "../../stores/addresses.js";
@@ -277,10 +308,15 @@ const priceDrying = ref(1);
 const priceDryingBlured = ref(false);
 const priceWashingDrying = ref(1);
 
+const createAddress = ref(false);
+const selectedAddress = ref("");
+const adAddress = ref(null);
+const addresses = ref(getPersonalAddresses());
+
 const streetL1 = ref("");
 const streetL1Blured = ref(false);
-const zipCode = ref(0);
-const zipCodeBlured = ref(false);
+const zip = ref(0);
+const zipBlured = ref(false);
 const city = ref("");
 const cityBlured = ref(false);
 const country = ref("");
@@ -325,6 +361,7 @@ function calcTotalPrice() {
   if(hasWasher.value == true && hasDryer.value == true) {
     priceWashingDrying.value = priceWashing.value + priceDrying.value;
   }
+  return priceWashingDrying.value;
 }
 
 function validDuration(duration) {
@@ -335,12 +372,36 @@ function validCapacity(capacity) {
   return capacity > 0;
 }
 
+
+async function getPersonalAddresses() {
+  try {
+    const response = await axios.get("http://localhost:5050/addresses");
+    addresses.value = response.data;
+  } catch (error) {
+      console.log("An error has occured");
+      console.error(error);
+      addresses.value = [];
+  }
+  return addresses.value;
+}
+
+
+
+function stringifyAddress(address) {
+  selectedAddress.value = address.streetL1 + ", " + address.zip + " " + address.city + ", " + address.country;
+}
+
+function selectAddress(selectedAddress) {
+  adAddress.value = addresses.value.find((address) => address.streetL1 + ", " + address.zip + " " + address.city + ", " + address.country == selectedAddress.value);
+  return adAddress.value;
+}
+
 function validAddress(address) {
   return address.length > 0;
 }
 
-function validZipCode(zipCode) {
-  return zipCode > 0 && zipCode < 100000;
+function validZip(zip) {
+  return zip > 0 && zip < 100000;
 }
 
 function validCity(city) {
@@ -366,7 +427,7 @@ function validate() {
   max_capacity_blured.value = true;
 
   streetL1Blured.value = true;
-  zipCodeBlured.value = true;
+  zipBlured.value = true;
   cityBlured.value = true;
   countryBlured.value = true;
   // imageUrlBlured.value = true;
@@ -383,13 +444,16 @@ function validate() {
       // if dryer is selected
       (hasDryer.value &&
       validPrice(priceDrying.value) &&
-      validDuration(cycle_dry_duration.value) &&
-      validCapacity(max_capacity.value)) &&
+      validDuration(cycle_dry_duration.value)) &&
 
+      validCapacity(max_capacity.value) &&
+
+      // if a new address is created
+      (createAddress.value &&
       validAddress(streetL1.value) &&
-      validZipCode(zipCode.value) &&
+      validZip(zip.value) &&
       validCity(city.value) &&
-      validCountry(country.value)
+      validCountry(country.value))
     // validimageUrl(imageUrl.value)
   )
     valid.value = true;
@@ -399,13 +463,17 @@ function validate() {
 async function submit() {
   if (validate()) {
     submitted.value = true;
-    const newAddress = await createPersonalAddress({
+
+    if (createAddress.value == false) {
+      adAddress.value = selectAddress(selectedAddress);
+    } else {
+      adAddress.value = await createPersonalAddress({ 
         streetL1: streetL1.value,
-        zipCode: zipCode.value,
+        zip: zip.value,
         city: city.value,
         country: country.value
       })
-
+    }
     const newAd = await createMachine({
       adTitle: title.value,
       adDescription: description.value,
@@ -422,12 +490,13 @@ async function submit() {
       hasWasher: hasWasher.value,
       hasDryer: hasDryer.value,
 
-      address: newAddress.id,
+      addressId: adAddress.value.id,
       
       //imageUrl: imageUrl.value,
       //characteristics: initCharacteristics,
     });
-    router.push({ name: "machine", params: { id: newAd.id } });
+    //router.push({ name: "machine", params: { id: newAd.id } });
+    router.push({ name: "home" });
     window.location.reload();
     useToast().success("Ad created successfully!");
   }

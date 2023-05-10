@@ -16,10 +16,11 @@ export const useAddressesStore = defineStore("addresses", {
         const response = await axios.post("/addresses", {
             streetL1: address.streetL1,
             city: address.city,
-            zipCode: address.zipCode,
+            zip: address.zip,
             country : address.country,
         });
         this.address = response.data;
+        return response.data;
         },
 
         async getPersonalAddressById(addressId) {
