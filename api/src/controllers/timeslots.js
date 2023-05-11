@@ -85,3 +85,69 @@ export async function getCurrentReservations(req, res){
         timeSlot: reservation.timeSlot
     })));
 }
+
+// This will create a new available time slot for a machine
+export async function createNewTimeSlot(req, res){
+    // I verify that I do have 
+    if (!req.body.machineId || !req.body.timeSlot || !req.body.machineType) {
+        return res.status(400).json({ message: 'Missing required fields' });
+    }
+    // I verify that the machine exists
+    const machine = await db.Machine.findUnique({ where: { id: Number(req.body.machineId) }, });
+    if (!machine) {
+        return res.status(404).json({ message: 'Machine not found' });
+    }
+    // I verify that the user is the owner of the machine
+    if (machine.userId !== req.user.id){
+        return res.status(400).json({ message: 'You are not the owner of the machine' });
+    }
+    // I verify that the machine type is valid
+    if (req.body.machineType !== "WASHANDDRY" && req.body.machineType !== "DRY" && req.body.machineType !== "WASH"){
+        return res.status(400).json({ message: 'Invalid machine type' });
+    }
+    if(req.body.machineType === "WASHANDDRY" || req.body.machineType === "WASH"){
+        req.body.machineType = "WASHING_MACHINE";
+    } else {
+        req.body.machineType = "DRYER";
+    }
+    // I verify time slot is a valid date and time in the future
+    
+    if (new Date(req.body.timeSlot) < new Date()){
+        return res.status(400).json({ message: 'Invalid time slot' });
+    }
+    // I convert the time slot to a date
+    req.body.timeSlot = new Date(req.body.timeSlot);
+    // I create a new time slot
+    const newTimeSlot = await db.Agenda.create({
+        data: {
+            timeSlot: req.body.timeSlot,
+            machineId: req.body.machineId,
+            machineType: req.body.machineType
+        },
+    });
+    res.status(200).json({ message: 'Time slot created' });
+}
+
+// This will delete a time slot
+export async function deleteTimeSlot(req, res){
+    // I verify the time slot id is present
+    if (!req.body.timeslotId) {
+        return res.status(400).json({ message: 'Missing required fields' });
+    }
+    // I verify that the time slot exists
+    const timeSlot = await db.Agenda.findUnique({ where: { id: Number(req.body.timeslotId) }, });
+    if (!timeSlot) {
+        return res.status(404).json({ message: 'Time slot not found' });
+    }
+    // I verify that the user is the owner of the machine
+    const machine = await db.Machine.findUnique({ where: { id: timeSlot.machineId }, });
+    if (machine.userId !== req.user.id){
+        return res.status(400).json({ message: 'You are not the owner of the machine' });
+    }
+    // I delete the time slot
+    const deletedTimeSlot = await db.Agenda.delete({
+        where: { id: Number(req.body.timeslotId) },
+    });
+    res.status(200).json({ message: 'Time slot deleted' });
+}
+
