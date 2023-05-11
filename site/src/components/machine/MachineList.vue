@@ -33,7 +33,7 @@ import { ref, watch } from "vue";
 import { useMachinesStore } from "../../stores/machines.js";
 import MachineFilters from "./MachineFilters.vue";
 import MachineCard from "./MachineCard.vue";
-import data from "../../utils/mocked_data.js";
+// import data from "../../utils/mocked_data.js";
 
 const { machines } = storeToRefs(useMachinesStore());
 const { fetchMachines } = useMachinesStore();
@@ -42,7 +42,7 @@ fetchMachines();
 
 const props = defineProps(["category"]);
 
-const shownItems = ref(data);
+const shownItems = ref(fetchMachines());
 
 watch(machines, () => {
   shownItems.value = [...machines.value];

@@ -41,6 +41,7 @@ export const useMachinesStore = defineStore("machines", {
     async fetchMachine(id) {
       const response = await axios.get(`/machines/${id}`);
       this.machine = response.data;
+      return response.data;
     },
 
     async createMachine(machine) {

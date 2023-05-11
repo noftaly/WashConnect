@@ -2,13 +2,10 @@
   <div class="card">
     <div class="card-body d-flex flex-column gap-3">
       <div>
-        <p class="m-0"><PriceFormatted :price="machine.price" notation="compact" /></p>
-        <p class="m-0">
-          <small class="text-muted"> Delivery at <PriceFormatted :price="999.99" /></small>
-        </p>
+        <p class="m-0"><PriceFormatted :price="machine.priceWashingDrying" notation="compact" /></p>
       </div>
 
-      <div>
+      <!-- <div>
         <div v-if="machine.stockQuantity > 0" class="mb-1">
           <p class="text-success">
             In stock <span v-if="machine.stockQuantity < 10">(only {{ machine.stockQuantity }} left!)</span>
@@ -19,10 +16,10 @@
         <div v-else>
           <p class="text-danger">Out of stock</p>
         </div>
-      </div>
+      </div> -->
 
       <!-- Quantity selector -->
-      <div class="d-flex align-items-center gap-2">
+      <!-- <div class="d-flex align-items-center gap-2">
         Quantity:
         <input
           type="number"
@@ -31,19 +28,12 @@
           min="1"
           :max="machine.stockQuantity"
         />
-      </div>
+      </div> -->
+
+      <p>AGENDA TBD</p>
 
       <div v-if="isAuthenticated">
-        <button
-          class="btn btn-outline-primary w-100 mb-1"
-          @click="add"
-          :disabled="quantity <= 0 || machine.stockQuantity === 0 || quantity > machine.stockQuantity"
-        >
-          Add to cart
-        </button>
-        <p class="small mb-0" v-if="cartQuantity > 0">
-          Already {{ cartQuantity }} in <RouterLink to="/cart">your cart</RouterLink>
-        </p>
+        <button class="btn btn-outline-primary w-100 mb-1" @click="">Book this machine</button>
       </div>
       <div v-else>
         <p>
@@ -72,25 +62,6 @@ const props = defineProps({
 
 const { isAuthenticated } = storeToRefs(useAuth());
 const { getMachineById } = useMachinesStore();
-const { addToCart, quantityOf, updateItem } = useCartStore();
 
-const machine = getmachineById(props.id);
-const quantity = ref(1);
-const cartQuantity = ref(quantityOf(props.id));
-
-async function add() {
-  if (cartQuantity.value > 0) {
-    await updateItem({
-      machineId: props.id,
-      quantity: quantity.value,
-    });
-  } else {
-    await addToCart({
-      machineId: props.id,
-      quantity: quantity.value,
-    });
-  }
-  machine.stockQuantity -= quantity.value;
-  cartQuantity.value = quantityOf(props.id);
-}
+const machine = getMachineById(props.id);
 </script>

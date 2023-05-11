@@ -1,5 +1,5 @@
 <template>
-  <h5 class="my-3">Characteristics</h5>
+  <!-- <h5 class="my-3">Characteristics</h5> -->
   <table class="table">
     <tbody>
       <tr v-for="[name, value] in machineCharacteristics" :key="name">
@@ -15,6 +15,8 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
+import { defineProps } from "vue";
 import { characteristicsMap } from "../../utils/constants";
 
 const props = defineProps({
