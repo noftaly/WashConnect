@@ -30,6 +30,7 @@ router.route('/users/:userId')
 router.route('/machines')
   .get(machines.findAll)
   .post(ensureAuthenticated, machines.create);
+router.route('/machines/:machineId').get(machines.getOne);
 
 // Addresses
 router.route('/addresses')
