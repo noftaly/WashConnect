@@ -1,4 +1,5 @@
 import { db } from '../database.js';
+import * as auth from './auth.js';
 import axios from 'axios';
 
 export async function getScheduleForMachine(req, res){
@@ -22,7 +23,7 @@ export async function getScheduleForMachine(req, res){
 export async function makeReservation(req, res){
     // I verify if I'm authenticated
     const user = await db.User.findUnique({ where: { id: req.user.id }, });
-    
+
     if (!req.body.typeOfProduct || !req.body.agendaId) {
         return res.status(400).json({ message: 'Missing required fields' });
     }
@@ -44,13 +45,28 @@ export async function makeReservation(req, res){
     if (user.balance < priceToPay){
         return res.status(400).json({ message: 'Insufficient funds' });
     }
+    // i verify that the machine is available
+    if (agenda.userId !== null){
+        return res.status(400).json({ message: 'Machine not available' });
+    }
+    // I get the id of the machine's owner
+    const machineOwner = await db.Machine.findUnique({ where: { id: agenda.machineId }, select: { userId: true } });
+    // I verify that the user is not the owner of the machine
+    if (machineOwner.userId === req.user.id){
+        return res.status(400).json({ message: 'You cannot reserve your own machine' });
+    }
     // I update the agenda by giving changing the null user id to the user id
     const updatedAgenda = await db.Agenda.update({
         where: { id: Number(req.body.agendaId) },
         data: { userId: req.user.id },
     });
-    // WARNING: The funds are not taken away
-    //I respond 200
+    // I take away the funds by calling topup in auth.topUpBalance and wait for the response
+    await auth.topUpBalance(req, res, -priceToPay);
+    // I update the user id of the machine's owner
+    req.user.id = machineOwner.userId;
+    // I add the funds to the owner of the machine
+    auth.topUpBalance(req, res, priceToPay)
+
     res.status(200).json({ message: 'Reservation made' });
 }
 

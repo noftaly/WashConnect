@@ -43,6 +43,8 @@ router.route('/addresses/:addressId')
 // Timeslots
 router.route('/timeslots')
   .get(timeslots.getCurrentReservations)
-  .post(ensureAuthenticated, timeslots.makeReservation);
+router.route('/timeslots/performreservation')
+.post(ensureAuthenticated, timeslots.makeReservation);
+
 router.route('/timeslots/:machineId')
   .get(timeslots.getScheduleForMachine);

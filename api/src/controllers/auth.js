@@ -61,11 +61,15 @@ export async function logOut(req, res) {
 }
 
 // We write the function to top up the user's balance here
-export async function topUpBalance(req, res) {
+export async function topUpBalance(req, res, val) {
   // We verify req.body.amount is a number
-  if (isNaN(req.body.amount)) {
+  if (isNaN(req.body.amount) && isNaN(val)) {
     res.status(400).json({ message: 'Amount must be a number' });
     return;
+  }
+  // If we passed a val parameter, we use it instead of req.body.amount
+  if (val) {
+    req.body.amount = val;
   }
   // We get the user from the request
   // We do SELECT balance FROM user WHERE id = req.user.id
@@ -79,7 +83,7 @@ export async function topUpBalance(req, res) {
   });
   // I increment the balance by the amount to top up
   // We parse amount to an integer to avoid concatenation
-  const updatedValue = parseFloat(parseInt(response.balance) + parseInt(req.body.amount)).toFixed(2);
+  const updatedValue = parseFloat(parseFloat(response.balance) + parseFloat(req.body.amount)).toFixed(2);
   // I update the user's balance
   await db.user.update({
     where: {
@@ -90,5 +94,8 @@ export async function topUpBalance(req, res) {
     }
   });
   // I return the new balance
-  res.status(200).json({ message: 'Balance topped up, new balance: ' + updatedValue });
+  if (isNaN(val)) 
+    res.status(200).json({ message: 'Balance topped up, new balance: ' + updatedValue });
+  else
+    return updatedValue;
 }
