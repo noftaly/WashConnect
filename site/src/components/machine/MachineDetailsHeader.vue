@@ -1,9 +1,9 @@
 <template>
   <p class="fs-4">
-    <PriceFormatted :price="price" />
+    <PriceFormatted :price="props.price" />
   </p>
-  <p>{{ description }}</p>
-  <!-- <p class="text-muted">Located at {{ address }}</p> -->
+  <p>{{ props.description }}</p>
+  <p class="text-muted">Located at {{ props.address }}</p>
 </template>
 
 <script setup>
@@ -26,11 +26,11 @@ const props = defineProps({
   description: {
     type: String,
     required: true,
-  }
-  // addressId: {
-  //   type: Number,
-  //   required: true,
-  // },
+  },
+  addressId: {
+    type: Number,
+    required: true,
+  },
 });
 
 console.log("proprs: ", props)

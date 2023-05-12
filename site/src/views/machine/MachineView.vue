@@ -1,7 +1,7 @@
 <template>
   <main class="mx-3 my-5">
     <div v-if="machine" class="large-screen">
-      <h1 class="text-center my-5">{{ machine.adTitle }}</h1>
+      <h1 class="text-center my-5">{{ machine.data.adTitle }}</h1>
       <div class="row">
         <div class="col-5">
           <div class="d-flex flex-column">
@@ -10,17 +10,17 @@
         </div>
         <div class="col-5">
           <MachineDetailsHeader
-            :price="machine.priceWashingDrying"
-            :description="machine.adDescription"
-            :address-id="addressId"
+            :price="machine.data.priceWashingDrying"
+            :description="machine.data.adDescription"
+            :address-id="machine.data.addressId"
           />
           <hr />
           <h6>About this machine:</h6>
-          <MachineDetailsCharacteristics :characteristic="machineCharacteristics.value" />
+          <MachineDetailsCharacteristics :characteristic="machineCharacteristics" />
         </div>
         <div class="col-2">
           <div class="sticky">
-            <machineDetailsPayment :id="machine.id" />
+            <machineDetailsPayment :id="id" />
             <!-- <div v-if="isAdmin" class="mt-4">
               <RouterLink class="btn btn-outline-secondary w-100" :to="`/admin/machines/${id}`"
                   >Edit machine</RouterLink>
@@ -31,17 +31,17 @@
     </div>
 
     <div v-if="machine" class="small-screen">
-      <h1 class="text-center my-5">{{ machine.adTitle }}</h1>
+      <h1 class="text-center my-5">{{ machine.data.adTitle }}</h1>
 
       <img src="../../assets/mocked_ad_img.jpg" class="img-fluid" />
 
-      <MachineDetailsHeader :price="machine.priceWashingDrying" :description="machine.adDescription" :address-id="addressId" />
+      <MachineDetailsHeader :price="machine.priceWashingDrying" :description="machine.data.adDescription" :address-id="machine.data.addressId" />
 
-      <MachineDetailsPayment :id="machine.id" />
+      <MachineDetailsPayment :id="id" />
 
       <h5 class="mt-3">About this machine:</h5>
 
-      <MachineDetailsCharacteristics :characteristic="machineCharacteristics.value" />
+      <MachineDetailsCharacteristics :characteristic="machineCharacteristics" />
 
       <!-- <div v-if="isAdmin" class="mt-4">
           <RouterLink class="btn btn-outline-secondary w-100" :to="`/admin/machines/${id}`">Edit machine</RouterLink>
@@ -51,7 +51,6 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
 
@@ -59,46 +58,27 @@ import MachineDetailsCharacteristics from "../../components/machine/MachineDetai
 import MachineDetailsHeader from "../../components/machine/MachineDetailsHeader.vue";
 import MachineDetailsPayment from "../../components/machine/MachineDetailsPayment.vue";
 
-import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
+import axios from "axios";
 
-const { machine } = storeToRefs(useMachinesStore());
+const id = Number(useRoute().params.id);
+const machine = await axios.get(`http://localhost:5050/machines/${id}`);
 const { clearMachine, fetchMachine } = useMachinesStore();
 
-clearMachine();
-const id = Number(useRoute().params.id);
+console.log(machine.data);
 
-fetchMachine(id);
-const addressId = ref(machine.value.addressId);
-const machineCharacteristics = ref({
-  hasWasher: machine.value.hasWasher,
-  hasDryer: machine.value.hasDryer,
-  maxCapacity: machine.value.maxCapacity,
-  washDuration: machine.value.washDuration,
-  dryDuration: machine.value.dryDuration,
-  detergentIncluded: machine.value.detergentIncluded,
-});
 
-// async function loadMachine() {
+const machineCharacteristics = {
+  hasWasher: machine.data.hasWasher,
+  hasDryer: machine.data.hasDryer,
+  maxCapacity: machine.data.maxCapacity,
+  washDuration: machine.data.washDuration,
+  dryDuration: machine.data.dryDuration,
+  detergentIncluded: machine.data.detergentIncluded,
+};
 
-//   clearMachine();
-//   machine.value = await fetchMachine(id);
-
-//   addressId.value = machine.value.addressId;
-
-//   machineCharacteristics.value = {
-//     hasWasher: machine.value.hasWasher,
-//     hasDryer: machine.value.hasDryer,
-//     maxCapacity: machine.value.maxCapacity,
-//     washDuration: machine.value.washDuration,
-//     dryDuration: machine.value.dryDuration,
-//     detergentIncluded: machine.value.detergentIncluded,
-//   };
-
-//   return { addressId, machineCharacteristics };
-// };
-
-// addressId.value, machineCharacteristics.value = await loadMachine();
+//EXAMPLE - Tu as tout ce qu'il faut pour la suite
+console.log("Exemple : "+ machineCharacteristics.washDuration);
 </script>
 
 <style scoped>
