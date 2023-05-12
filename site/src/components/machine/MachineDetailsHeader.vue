@@ -3,7 +3,7 @@
     <PriceFormatted :price="price" />
   </p>
   <p>{{ description }}</p>
-  <p class="text-muted">Located at {{ stringifyAddress(addressId) }}</p>
+  <!-- <p class="text-muted">Located at {{ address }}</p> -->
 </template>
 
 <script setup>
@@ -18,7 +18,7 @@ const { getPersonalAddresses } = useAddressesStore();
 const addresses = ref(getPersonalAddresses());
 const address = ref(null);
 
-defineProps({
+const props = defineProps({
   price: {
     type: Number,
     required: true,
@@ -26,17 +26,22 @@ defineProps({
   description: {
     type: String,
     required: true,
-  },
-  addressId: {
-    type: Number,
-    required: true,
-  },
+  }
+  // addressId: {
+  //   type: Number,
+  //   required: true,
+  // },
 });
 
-async function stringifyAddress(addressId) {
-  addresses.value = await getPersonalAddresses();
-  address.value = addresses.value.find((address) => address.id === addressId);
-  // console.log(address.streetL1);
-  return address.value.streetL1 + ", " + address.value.zip + " " + address.value.city + ", " + address.value.country;
-}
+console.log("proprs: ", props)
+
+// function stringifyAddress(addressId) {
+//   // addresses.value = await getPersonalAddresses();
+//   // console.log('addressId', addressId);
+//   address.value = addresses.value.find((address) => address.id === addressId);
+//   // console.log(address.streetL1);
+//   return address.value.streetL1 + ", " + address.value.zip + " " + address.value.city + ", " + address.value.country;
+// }
+
+// stringifyAddress(props.addressId);
 </script>

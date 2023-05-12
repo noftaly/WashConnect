@@ -6,7 +6,6 @@
         <div class="col-5">
           <div class="d-flex flex-column">
             <img src="../../assets/mocked_ad_img.jpg" class="img-fluid" />
-            <!-- <MachineDetailsCharacteristics :characteristic="machineCharacteristics" /> -->
           </div>
         </div>
         <div class="col-5">
@@ -17,7 +16,7 @@
           />
           <hr />
           <h6>About this machine:</h6>
-          <MachineDetailsCharacteristics :characteristic="machineCharacteristics" />
+          <MachineDetailsCharacteristics :characteristic="machineCharacteristics.value" />
         </div>
         <div class="col-2">
           <div class="sticky">
@@ -32,17 +31,17 @@
     </div>
 
     <div v-if="machine" class="small-screen">
-      <h1 class="text-center my-5">{{ adTitle }}</h1>
+      <h1 class="text-center my-5">{{ machine.adTitle }}</h1>
 
       <img src="../../assets/mocked_ad_img.jpg" class="img-fluid" />
 
-      <MachineDetailsHeader :price="priceWashingDrying" :description="adDescription" :address-id="addressId" />
+      <MachineDetailsHeader :price="machine.priceWashingDrying" :description="machine.adDescription" :address-id="addressId" />
 
       <MachineDetailsPayment :id="machine.id" />
 
       <h5 class="mt-3">About this machine:</h5>
 
-      <MachineDetailsCharacteristics :characteristic="machineCharacteristics" />
+      <MachineDetailsCharacteristics :characteristic="machineCharacteristics.value" />
 
       <!-- <div v-if="isAdmin" class="mt-4">
           <RouterLink class="btn btn-outline-secondary w-100" :to="`/admin/machines/${id}`">Edit machine</RouterLink>
@@ -52,6 +51,7 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
 
@@ -65,27 +65,40 @@ import { useMachinesStore } from "../../stores/machines.js";
 const { machine } = storeToRefs(useMachinesStore());
 const { clearMachine, fetchMachine } = useMachinesStore();
 
-// clearMachine();
-
+clearMachine();
 const id = Number(useRoute().params.id);
-async function loadMachine() {
-  clearMachine();
-  await fetchMachine(id);
-}
 
-loadMachine();
+fetchMachine(id);
+const addressId = ref(machine.value.addressId);
+const machineCharacteristics = ref({
+  hasWasher: machine.value.hasWasher,
+  hasDryer: machine.value.hasDryer,
+  maxCapacity: machine.value.maxCapacity,
+  washDuration: machine.value.washDuration,
+  dryDuration: machine.value.dryDuration,
+  detergentIncluded: machine.value.detergentIncluded,
+});
 
-console.log(machine.adDescription);
-// fetchMachine(id);
+// async function loadMachine() {
 
-const machineCharacteristics = {
-  hasWasher: machine.hasWasher,
-  hasDryer: machine.hasDryer,
-  maxCapacity: machine.maxCapacity,
-  washDuration: machine.washDuration,
-  dryDuration: machine.dryDuration,
-  detergentIncluded: machine.detergentIncluded,
-};
+//   clearMachine();
+//   machine.value = await fetchMachine(id);
+
+//   addressId.value = machine.value.addressId;
+
+//   machineCharacteristics.value = {
+//     hasWasher: machine.value.hasWasher,
+//     hasDryer: machine.value.hasDryer,
+//     maxCapacity: machine.value.maxCapacity,
+//     washDuration: machine.value.washDuration,
+//     dryDuration: machine.value.dryDuration,
+//     detergentIncluded: machine.value.detergentIncluded,
+//   };
+
+//   return { addressId, machineCharacteristics };
+// };
+
+// addressId.value, machineCharacteristics.value = await loadMachine();
 </script>
 
 <style scoped>

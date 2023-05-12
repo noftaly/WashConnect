@@ -19,14 +19,16 @@ import { ref } from "vue";
 import { defineProps } from "vue";
 import { characteristicsMap } from "../../utils/constants";
 
-const props = defineProps({
-  characteristic: {
-    type: Object,
-    required: true,
-  },
-});
+// const props = defineProps({
+//   characteristic: {
+//     type: Object,
+//     required: true,
+//   },
+// });
 
-const machineCharacteristics = Object.entries(props.characteristic).filter(([name]) =>
-  Object.keys(characteristicsMap).includes(name)
-);
+// console.log("CHARprops: ", props);
+
+// const machineCharacteristics = Object.entries(props.characteristic).filter(([name]) =>
+//   Object.keys(characteristicsMap).includes(name)
+// );
 </script>
