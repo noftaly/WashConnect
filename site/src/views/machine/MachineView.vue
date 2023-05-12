@@ -75,15 +75,11 @@ axios.get(`http://localhost:5050/machines/${id}`).then((response) => {
   };
 });
 
-const MachineDetailsHeader = defineAsyncComponent(() =>
-  import("../../components/machine/MachineDetailsHeader.vue")
-);
+const MachineDetailsHeader = defineAsyncComponent(() => import("../../components/machine/MachineDetailsHeader.vue"));
 const MachineDetailsCharacteristics = defineAsyncComponent(() =>
   import("../../components/machine/MachineDetailsCharacteristics.vue")
 );
-const MachineDetailsPayment = defineAsyncComponent(() =>
-  import("../../components/machine/MachineDetailsPayment.vue")
-);
+const MachineDetailsPayment = defineAsyncComponent(() => import("../../components/machine/MachineDetailsPayment.vue"));
 </script>
 
 <style scoped>

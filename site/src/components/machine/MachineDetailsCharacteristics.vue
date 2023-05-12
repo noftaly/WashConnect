@@ -8,7 +8,7 @@
         </td>
         <td class="py-1">
           <div v-if="checkIfBoolean(value)">
-            {{ value ? 'Yes' : 'No' }}  
+            {{ value ? "Yes" : "No" }}
           </div>
           <div v-else>
             {{ value }}

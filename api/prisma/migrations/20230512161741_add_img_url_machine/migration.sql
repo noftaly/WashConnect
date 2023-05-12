@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Machine` ADD COLUMN `imgUrl` VARCHAR(255) NOT NULL DEFAULT '';

@@ -32,18 +32,15 @@ const props = defineProps({
   },
 });
 
-const address = computed(() =>
-  addresses.value.find((addr) => addr.id === props.addressId)
-);
+const address = computed(() => addresses.value.find((addr) => addr.id === props.addressId));
 const addressStr = computed(() => {
   const { streetL1, zip, city, country } = address.value;
   return `${streetL1}, ${zip} ${city}, ${country}`;
 });
 
 const username = computed(() => {
-  return user.value ? user.value.username : '';
+  return user.value ? user.value.username : "";
 });
-
 
 async function getInfos(userId) {
   try {
