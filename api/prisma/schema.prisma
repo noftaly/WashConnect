@@ -71,6 +71,7 @@ model Machine {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
   Agenda             Agenda[]
+  imgUrl             String   @default("") @db.VarChar(255)
 }
 
 model Agenda {
