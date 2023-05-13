@@ -42,10 +42,11 @@
               </div>
             </div>
 
+            <hr/>
+
             <!-- Machines Check boxes -->
             <div class="forms-check mb-4">
-              <span>Which type of machine do you have ?</span>
-              <hr />
+              <span>Which type of machine do you have ?</span><br/>
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -68,8 +69,6 @@
                 Please select at least one machine
               </div>
             </div>
-
-            <br />
 
             <!-- WASHER INFOS -->
             <div v-if="hasWasher">
@@ -160,11 +159,12 @@
               <label class="form-check-label" for="detergentIncluded"> Is the detergent included ? </label>
             </div>
 
+            <hr/>
             <!-- Address Selection -->
             <div>
               <span class="mx-2">Select your address: </span>
               <button
-                class="btn btn-primary dropdown-toggle mb-4"
+                class="btn btn-primary dropright dropdown-toggle mb-4"
                 type="button"
                 id="addressDropdown"
                 data-bs-toggle="dropdown"
@@ -182,9 +182,8 @@
                 >
                   {{ "Address " + address.id }}
                 </a>
-
-                <div class="invalid-feedback">Please select an address</div>
               </div>
+              <div class="invalid-feedback">Please select an address</div>
 
               <!-- Address Creation -->
               <div class="forms-check mb-4">
@@ -239,7 +238,7 @@
                     <div class="invalid-feedback">A valid city is required!</div>
                   </div>
 
-                  <div class="col-md-4 forms-inputs mb-4">
+                  <div class="forms-inputs mb-4">
                     <span>Country</span>
                     <input
                       autocomplete="off"
@@ -253,6 +252,18 @@
                   </div>
                 </div>
               </div>
+
+              <hr/>
+              <!-- Time Slot Selector -->
+              <div class="forms-inputs mb-4">
+                <label for="time-slot" class="font-weight-bold mb-2">Choose a time slot:</label>
+                <div class="p-2">
+                  <time-slot-selector id="time-slot" @update="handleDateTimeUpdate" />
+                </div>
+                <small class="form-text text-muted">Select a first time slot of availability for your machine.</small>
+                <div class="invalid-feedback">A valid date/time is required!</div>
+              </div>
+
 
               <!-- Image URL -->
               <!-- <br />
@@ -270,7 +281,7 @@
               </div> -->
 
               <div class="mb-3">
-                <button @click.prevent="submit" class="btn btn-dark w-100">Create</button>
+                <button @click.prevent="submit" class="btn btn-dark w-100" style="font-size: 18px;">Post the ad</button>
               </div>
             </div>
           </div>
@@ -287,17 +298,22 @@ import { useToast } from "vue-toastification";
 import router from "../../router/index.js";
 import axios from "../../utils/axios.js";
 
+import timeSlotSelector from "../../components/machine/timeSlotSelector.vue";
+
 import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
 import { useAddressesStore } from "../../stores/addresses.js";
+import { useTimeSlotsStore } from "../../stores/timeslots.js";
 
 const { isAuthenticated } = storeToRefs(useAuth());
 const { createMachine } = useMachinesStore();
 const { createPersonalAddress } = useAddressesStore();
+const { makeReservation } = useTimeSlotsStore();
 
 if (!isAuthenticated.value) {
   router.push({ title: "login" });
 }
+
 
 const title = ref("");
 const titleBlured = ref(false);
@@ -335,18 +351,16 @@ const cityBlured = ref(false);
 const country = ref("");
 const countryBlured = ref(false);
 
+const firstTimeSlot = ref(new Date());
+const firstTimeSlotBlured = ref(false);
+
 // const imageUrl = ref("");
 // const imageUrlBlured = ref(false);
 
-// const initCharacteristics = {
-//   manufacturer: "manufacturer",
-//   max_capacity: 5,
-//   cycle_wash_duration: 20,
-//   cycle_dry_duration: 20,
-// };
-
 const valid = ref(false);
 const submitted = ref(false);
+
+
 
 function toggleBoolean(value) {
   return !value;
@@ -384,6 +398,8 @@ function validDuration(duration) {
 function validCapacity(capacity) {
   return capacity > 0;
 }
+
+
 
 async function getPersonalAddresses() {
   try {
@@ -425,9 +441,22 @@ function validCountry(country) {
   return country.length > 0;
 }
 
+
+function handleDateTimeUpdate(dateTime) {
+    firstTimeSlot.value = dateTime;
+}
+
+function validDateTime(dateTime) {
+  return dateTime > 0;
+}
+
+
+
 // function validimageUrl(imageUrl) {
 //   return imageUrl.length > 0;
 // }
+
+
 
 function validate() {
   titleBlured.value = true;
@@ -443,6 +472,8 @@ function validate() {
   zipBlured.value = true;
   cityBlured.value = true;
   countryBlured.value = true;
+
+  firstTimeSlotBlured.value = true;
   // imageUrlBlured.value = true;
   if (
     ((hasWasher.value == true || hasDryer.value == true) && // if one machine is at least selected
@@ -457,13 +488,16 @@ function validate() {
       validPrice(priceDrying.value) &&
       validDuration(cycle_dry_duration.value) &&
       validCapacity(max_capacity.value) &&
+
       // if a new address is created
       createAddress.value &&
       validAddress(streetL1.value) &&
       validZip(zip.value) &&
       validCity(city.value) &&
-      validCountry(country.value))
-    // validimageUrl(imageUrl.value)
+      validCountry(country.value)) &&
+
+      validDateTime(firstTimeSlot.value)
+    // && validimageUrl(imageUrl.value)
   )
     valid.value = true;
   return valid.value;
@@ -483,6 +517,7 @@ async function submit() {
         country: country.value,
       });
     }
+
     const newAd = await createMachine({
       adTitle: title.value,
       adDescription: description.value,
@@ -502,10 +537,8 @@ async function submit() {
       addressId: adAddress.value.id,
 
       //imageUrl: imageUrl.value,
-      //characteristics: initCharacteristics,
     });
-    //router.push({ name: "machine", params: { id: newAd.id } });
-    router.push({ name: "home" });
+    router.push({ name: "machine", params: { id: newAd.id } });
     window.location.reload();
     useToast().success("Ad created successfully!");
   }
@@ -514,4 +547,10 @@ async function submit() {
 
 <style scoped>
 @import "../../assets/auth.scss";
+
+.form-check-label {
+    padding-right: 10px;
+    padding-left: 5px;
+}
+
 </style>

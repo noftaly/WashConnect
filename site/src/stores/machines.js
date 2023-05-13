@@ -47,7 +47,6 @@ export const useMachinesStore = defineStore("machines", {
     async createMachine(machine) {
       const response = await axios.post("/machines", machine);
       this.machines.push(response.data);
-
       return response.data;
     },
 
