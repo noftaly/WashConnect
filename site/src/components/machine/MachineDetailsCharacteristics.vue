@@ -7,7 +7,8 @@
           <b>{{ characteristicsMap[name][0] }}</b>
         </td>
         <td class="py-1">
-          {{ value }} <span class="text-muted">{{ characteristicsMap[name][1] }}</span>
+          {{ value }} 
+          <span class="text-muted">{{ characteristicsMap[name][1] }}</span>
         </td>
       </tr>
     </tbody>
@@ -16,7 +17,6 @@
 
 <script setup>
 import { ref } from "vue";
-import { defineProps } from "vue";
 import { characteristicsMap } from "../../utils/constants";
 
 const props = defineProps({

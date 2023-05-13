@@ -1,24 +1,20 @@
 <template>
   <p class="fs-4">
-    <PriceFormatted :price="price" />
+    <PriceFormatted :price="props.price" />
   </p>
-  <p>{{ description }}</p>
-  <p class="text-muted">Located at {{ stringifyAddress(addressId) }}</p>
+  <p>{{ props.description }}</p>
+  <p class="text-muted">Located at {{ addressStr }}</p>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { defineProps } from "vue";
-import axios from "../../utils/axios.js";
-
+import { ref, computed } from "vue";
 import { useAddressesStore } from "../../stores/addresses";
 import PriceFormatted from "../formatters/PriceFormatted.vue";
 
 const { getPersonalAddresses } = useAddressesStore();
-const addresses = ref(getPersonalAddresses());
-const address = ref(null);
+const addresses = ref([]);
 
-defineProps({
+const props = defineProps({
   price: {
     type: Number,
     required: true,
@@ -33,10 +29,22 @@ defineProps({
   },
 });
 
-async function stringifyAddress(addressId) {
-  addresses.value = await getPersonalAddresses();
-  address.value = addresses.value.find((address) => address.id === addressId);
-  // console.log(address.streetL1);
-  return address.value.streetL1 + ", " + address.value.zip + " " + address.value.city + ", " + address.value.country;
+const address = computed(() =>
+  addresses.value.find((addr) => addr.id === props.addressId)
+);
+const addressStr = computed(() => {
+  const { streetL1, zip, city, country } = address.value;
+  return `${streetL1}, ${zip} ${city}, ${country}`;
+});
+
+
+async function getAddresses() {
+  try {
+    addresses.value = await getPersonalAddresses();
+  } catch (error) {
+    console.error(error);
+  }
 }
+
+getAddresses();
 </script>
