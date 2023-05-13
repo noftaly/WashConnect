@@ -28,7 +28,7 @@
           </p>
 
           <p class="card-text">
-            <small class="text-muted">Located at : {{ stringifyAddress(props.addressId) }}</small>
+            <small class="text-muted">Located at : {{ addressStr }}</small>
           </p>
         </div>
       </div>
@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineProps } from "vue";
 import axios from "../../utils/axios.js";
 
@@ -49,27 +49,7 @@ const { getMachineById } = useMachinesStore();
 const displayedMachine = ref(getMachineById(props.id));
 
 const { getPersonalAddresses } = useAddressesStore();
-const addresses = ref(getPersonalAddresses());
-const address = ref(null);
-
-// async function getPersonalAddresses() {
-//   try {
-//     const response = await axios.get("http://localhost:5050/addresses");
-//     addresses.value = response.data;
-//   } catch (error) {
-//       console.log("An error has occured");
-//       console.error(error);
-//       addresses.value = [];
-//   }
-//   return addresses.value;
-// }
-
-async function stringifyAddress(addressId) {
-  addresses.value = await getPersonalAddresses();
-  address.value = addresses.value.find((address) => address.id === addressId);
-  // console.log(address.streetL1);
-  return address.value.streetL1 + ", " + address.value.zip + " " + address.value.city + ", " + address.value.country;
-}
+const addresses = ref([]);
 
 const props = defineProps({
   id: {
@@ -101,4 +81,30 @@ const props = defineProps({
     required: true,
   },
 });
+
+const getMachine = async () => {
+  displayedMachine.value = await getMachineById(props.id);
+};
+
+const address = computed(() => {
+  if (addresses.value.length === 0) {
+    return {};
+  }
+  return addresses.value.find((addr) => addr.id === props.addressId) || {};
+});
+const addressStr = computed(() => {
+  const { streetL1, zip, city, country } = address.value;
+  return `${streetL1}, ${zip} ${city}, ${country}`;
+});
+
+const getAddresses = async () => {
+  try {
+    addresses.value = await getPersonalAddresses();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+getMachine();
+getAddresses();
 </script>

@@ -1,4 +1,4 @@
-<!-- Page pour gérer le solde de l'utilisateur (consulter & recharger le solde) -->
+<!-- Page pour gérer le solde de l'utilisateur (consulter & recharger le solde)
 <template>
   <div class="balance-container">
     <h1 class="balance-title">Votre solde</h1>
@@ -63,4 +63,4 @@ export default {
 .balance-error {
   color: #ff1744;
 }
-</style>
+</style> -->

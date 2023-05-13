@@ -6,14 +6,13 @@
         <div class="col-5">
           <div class="d-flex flex-column">
             <img src="../../assets/mocked_ad_img.jpg" class="img-fluid" />
-            <!-- <MachineDetailsCharacteristics :characteristic="machineCharacteristics" /> -->
           </div>
         </div>
         <div class="col-5">
           <MachineDetailsHeader
             :price="machine.priceWashingDrying"
             :description="machine.adDescription"
-            :address-id="addressId"
+            :address-id="machine.addressId"
           />
           <hr />
           <h6>About this machine:</h6>
@@ -21,7 +20,7 @@
         </div>
         <div class="col-2">
           <div class="sticky">
-            <machineDetailsPayment :id="machine.id" />
+            <MachineDetailsPayment :id="id" />
             <!-- <div v-if="isAdmin" class="mt-4">
               <RouterLink class="btn btn-outline-secondary w-100" :to="`/admin/machines/${id}`"
                   >Edit machine</RouterLink>
@@ -32,17 +31,21 @@
     </div>
 
     <div v-if="machine" class="small-screen">
-      <h1 class="text-center my-5">{{ adTitle }}</h1>
+      <h1 class="text-center my-5">{{ machine.adTitle }}</h1>
 
       <img src="../../assets/mocked_ad_img.jpg" class="img-fluid" />
 
-      <MachineDetailsHeader :price="priceWashingDrying" :description="adDescription" :address-id="addressId" />
+      <MachineDetailsHeader
+        :price="machine.priceWashingDrying"
+        :description="machine.adDescription"
+        :address-id="machine.addressId"
+      />
 
-      <MachineDetailsPayment :id="machine.id" />
+      <MachineDetailsCharacteristics :id="id" />
 
       <h5 class="mt-3">About this machine:</h5>
 
-      <MachineDetailsCharacteristics :characteristic="machineCharacteristics" />
+      <MachineDetailsPayment :characteristic="machineCharacteristics" />
 
       <!-- <div v-if="isAdmin" class="mt-4">
           <RouterLink class="btn btn-outline-secondary w-100" :to="`/admin/machines/${id}`">Edit machine</RouterLink>
@@ -52,40 +55,38 @@
 </template>
 
 <script setup>
-import { storeToRefs } from "pinia";
+import { defineAsyncComponent, ref } from "vue";
 import { useRoute } from "vue-router";
-
-import MachineDetailsCharacteristics from "../../components/machine/MachineDetailsCharacteristics.vue";
-import MachineDetailsHeader from "../../components/machine/MachineDetailsHeader.vue";
-import MachineDetailsPayment from "../../components/machine/MachineDetailsPayment.vue";
-
-import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
-
-const { machine } = storeToRefs(useMachinesStore());
-const { clearMachine, fetchMachine } = useMachinesStore();
-
-// clearMachine();
+import axios from "../../utils/axios.js";
 
 const id = Number(useRoute().params.id);
-async function loadMachine() {
-  clearMachine();
-  await fetchMachine(id);
-}
+const { clearMachine, fetchMachine } = useMachinesStore();
 
-loadMachine();
+const machine = ref(null);
+const machineCharacteristics = ref(null);
 
-console.log(machine.adDescription);
-// fetchMachine(id);
+axios.get(`http://localhost:5050/machines/${id}`).then((response) => {
+  machine.value = response.data;
+  machineCharacteristics.value = {
+    hasWasher: machine.value.hasWasher,
+    hasDryer: machine.value.hasDryer,
+    maxCapacity: machine.value.maxCapacity,
+    washDuration: machine.value.washDuration,
+    dryDuration: machine.value.dryDuration,
+    detergentIncluded: machine.value.detergentIncluded,
+  };
+});
 
-const machineCharacteristics = {
-  hasWasher: machine.hasWasher,
-  hasDryer: machine.hasDryer,
-  maxCapacity: machine.maxCapacity,
-  washDuration: machine.washDuration,
-  dryDuration: machine.dryDuration,
-  detergentIncluded: machine.detergentIncluded,
-};
+const MachineDetailsHeader = defineAsyncComponent(() =>
+  import("../../components/machine/MachineDetailsHeader.vue")
+);
+const MachineDetailsCharacteristics = defineAsyncComponent(() =>
+  import("../../components/machine/MachineDetailsCharacteristics.vue")
+);
+const MachineDetailsPayment = defineAsyncComponent(() =>
+  import("../../components/machine/MachineDetailsPayment.vue")
+);
 </script>
 
 <style scoped>
