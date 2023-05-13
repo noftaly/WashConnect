@@ -44,7 +44,7 @@ app.use('/', router);
 // 404 Handler (if we arrive up to this middleware, it means that the route was not found,
 // because middlewares are executed in order).
 app.use((_req, res) => {
-  res.status(404).send('Not Found');
+  res.status(404).json({ message: 'Not Found' });
 });
 
 // Error handler. It knows it's an error handler because it has 4 arguments.
