@@ -51,6 +51,7 @@ router.route('/timeslots/:timeSlotId')
 
 // Reservations
 router.route('/reservations/:agendaId')
-  .post(ensureAuthenticated, reservations.create);
+  .post(ensureAuthenticated, reservations.create)
+  .delete(ensureAuthenticated, reservations.remove);
 router.route('/reservations')
   .get(ensureAuthenticated, reservations.findAllForSelf);
