@@ -68,7 +68,7 @@ export async function topUpBalance(req, res, val) {
     return;
   }
   // If we passed a val parameter, we use it instead of req.body.amount
-  if (val) {
+  if (!isNaN(val)) {
     req.body.amount = val;
   }
   // We get the user from the request
