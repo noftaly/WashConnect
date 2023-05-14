@@ -7,8 +7,13 @@
           <b>{{ characteristicsMap[name][0] }}</b>
         </td>
         <td class="py-1">
-          {{ value }} 
-          <span class="text-muted">{{ characteristicsMap[name][1] }}</span>
+          <div v-if="checkIfBoolean(value)">
+            {{ value ? 'Yes' : 'No' }}  
+          </div>
+          <div v-else>
+            {{ value }}
+            <span class="text-muted">{{ characteristicsMap[name][1] }}</span>
+          </div>
         </td>
       </tr>
     </tbody>
@@ -29,4 +34,8 @@ const props = defineProps({
 const machineCharacteristics = Object.entries(props.characteristic).filter(([name]) =>
   Object.keys(characteristicsMap).includes(name)
 );
+
+function checkIfBoolean(value) {
+  return typeof value === "boolean";
+}
 </script>
