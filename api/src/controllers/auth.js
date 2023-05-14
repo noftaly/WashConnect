@@ -4,6 +4,8 @@ import { db } from '../database.js';
 import { safeUser } from '../utils/safeUser.js';
 import { createUser, loginUser } from '../validators/auth.js';
 
+
+
 export async function logIn(req, res, next) {
   const { success, error } = loginUser.safeParse(req.body);
   if (!success) {

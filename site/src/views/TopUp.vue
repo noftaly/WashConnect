@@ -1,36 +1,35 @@
 <template>
     <div class="top-up-container">
-      <h1 class="top-up-title">Top Up Your Balance</h1>
-      <form @submit.prevent="topUpBalance">
-        <label for="amount">How much money do you want to put:</label>
-        <input v-model="amount" type="number" id="amount" name="amount" min="0">
-        <button type="submit">Top Up</button>
-      </form>
+      <h1>Top Up Your Balance</h1>
+  
+      <label for="card-number">Card Number:</label>
+      <input type="text" id="card-number" v-model="cardNumber" placeholder="1234 5678 9012 3456" />
+  
+      <label for="expiry-date">Expiry Date:</label>
+      <input type="text" id="expiry-date" v-model="expiryDate" placeholder="MM/YY" />
+  
+      <label for="cvc">CVC:</label>
+      <input type="text" id="cvc" v-model="cvc" placeholder="123" />
+  
+      <label for="amount">Amount to Top Up:</label>
+      <input type="number" id="amount" v-model.number="amount" />
+  
+      <button @click="topUpBalance">Top Up</button>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue';
-  import axios from 'axios';
-  import { storeToRefs } from "pinia";
-  import { useAuthStore } from "../stores/auth.js";
-  
-  const { user, getBalance } = storeToRefs(useAuthStore());
-  const amount = ref(0);
-  
-  const topUpBalance = async () => {
-    try {
-      const response = await axios.post("http://localhost:5050/auth/topup", { amount: amount.value });
-      if (response.status === 200) {
-        user.balance += amount.value;
-        amount.value = 0;
-      }
-    } catch (error) {
-      console.log('An error occurred while topping up the balance:', error);
-    }
-  };
-  </script>
-  
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import { useAuthStore } from "../stores/auth.js";
+
+let cardNumber = ref('');
+let expiryDate = ref('');
+let cvc = ref('');
+let amount = ref(0);
+
+const { topUpBalance } = useAuthStore();
+</script>
+
   <style scoped>
   .top-up-container {
     background-color: #e0f7fa;

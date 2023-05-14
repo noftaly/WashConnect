@@ -38,5 +38,11 @@ export const useAuthStore = defineStore("auth", {
         phoneNumber: user.phoneNumber,
       });
     },
+    async topUpBalance(amount) {
+      const response = await axios.post("/auth/topUpBalance", {
+        amount: amount,
+      });
+      this.user = response.data;
+    }
   },
 });
