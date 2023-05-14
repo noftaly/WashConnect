@@ -109,7 +109,6 @@ import axios from "../utils/axios.js";
 
 import { useAuth } from "../utils/useAuthHook.js";
 import { useMachinesStore } from "../stores/machines.js";
-import { useCartStore } from "../stores/cart.js";
 
 const { isAuthenticated, user } = storeToRefs(useAuth());
 const { logout } = useAuth();

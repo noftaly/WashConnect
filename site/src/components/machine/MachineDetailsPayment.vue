@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-body d-flex flex-column gap-3">
       <div>
-        <p class="m-0"><PriceFormatted :price="machine.priceWashingDrying" notation="compact" /></p>
+        <p class="m-0">Price to pay: <PriceFormatted :price="machine.priceWashingDrying" notation="compact" /></p>
       </div>
 
       <p>AGENDA TBD</p>
@@ -12,8 +12,8 @@
       </div>
       <div v-else>
         <p>
-          Please <RouterLink to="/login">login</RouterLink> or <RouterLink to="/register">register</RouterLink> to add
-          this machine to your cart.
+          Please <RouterLink to="/login">login</RouterLink> or <RouterLink to="/register">register</RouterLink> to book
+          this machine.
         </p>
       </div>
     </div>
@@ -25,7 +25,6 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import PriceFormatted from "../formatters/PriceFormatted.vue";
 import { useAuth } from "../../utils/useAuthHook.js";
-import { useCartStore } from "../../stores/cart.js";
 import { useMachinesStore } from "../../stores/machines.js";
 
 const props = defineProps({

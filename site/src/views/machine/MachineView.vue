@@ -10,8 +10,8 @@
         </div>
         <div class="col-5">
           <MachineDetailsHeader
-            :price="machine.priceWashingDrying"
             :description="machine.adDescription"
+            :user-id="machine.userId"
             :address-id="machine.addressId"
           />
           <hr />
@@ -32,21 +32,17 @@
 
     <div v-if="machine" class="small-screen">
       <h1 class="text-center my-5">{{ machine.adTitle }}</h1>
-
       <img src="../../assets/mocked_ad_img.jpg" class="img-fluid" />
 
       <MachineDetailsHeader
-        :price="machine.priceWashingDrying"
         :description="machine.adDescription"
+        :user-id="machine.userId"
         :address-id="machine.addressId"
       />
-
-      <MachineDetailsCharacteristics :id="id" />
-
       <h5 class="mt-3">About this machine:</h5>
+      <MachineDetailsCharacteristics :characteristic="machineCharacteristics"/>
 
-      <MachineDetailsPayment :characteristic="machineCharacteristics" />
-
+      <MachineDetailsPayment :id="id" />
       <!-- <div v-if="isAdmin" class="mt-4">
           <RouterLink class="btn btn-outline-secondary w-100" :to="`/admin/machines/${id}`">Edit machine</RouterLink>
         </div> -->

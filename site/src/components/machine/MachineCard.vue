@@ -28,6 +28,7 @@
           </p>
 
           <p class="card-text">
+            <small class="text-muted">Posted by : {{ username }}</small><br/>
             <small class="text-muted">Located at : {{ addressStr }}</small>
           </p>
         </div>
@@ -39,17 +40,11 @@
 <script setup>
 import { ref, computed } from "vue";
 import { defineProps } from "vue";
-import axios from "../../utils/axios.js";
 
+import { useUsersStore } from "../../stores/users";
 import { useMachinesStore } from "../../stores/machines.js";
 import { useAddressesStore } from "../../stores/addresses";
 import PriceFormatted from "../formatters/PriceFormatted.vue";
-
-const { getMachineById } = useMachinesStore();
-const displayedMachine = ref(getMachineById(props.id));
-
-const { getPersonalAddresses } = useAddressesStore();
-const addresses = ref([]);
 
 const props = defineProps({
   id: {
@@ -76,24 +71,51 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  userId: {
+    type: Number,
+    required: true,
+  },
   addressId: {
     type: Number,
     required: true,
   },
 });
 
+const { getMachineById } = useMachinesStore();
+const displayedMachine = ref(null);
+
+const { getUser } = useUsersStore();
+const username = ref(null);
+
+const { getPersonalAddresses } = useAddressesStore();
+const addresses = ref([]);
+
 const getMachine = async () => {
-  displayedMachine.value = await getMachineById(props.id);
+  try {
+    displayedMachine.value = await getMachineById(props.id);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-const address = computed(() => {
+const getUsername = async () => {
+  try {
+    const user = await getUser(props.userId);
+    username.value = user.username;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const addressObj = computed(() => {
   if (addresses.value.length === 0) {
     return {};
   }
   return addresses.value.find((addr) => addr.id === props.addressId) || {};
 });
+
 const addressStr = computed(() => {
-  const { streetL1, zip, city, country } = address.value;
+  const { streetL1, zip, city, country } = addressObj.value;
   return `${streetL1}, ${zip} ${city}, ${country}`;
 });
 
@@ -106,5 +128,6 @@ const getAddresses = async () => {
 };
 
 getMachine();
+getUsername();
 getAddresses();
 </script>

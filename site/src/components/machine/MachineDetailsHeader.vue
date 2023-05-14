@@ -1,26 +1,27 @@
 <template>
-  <p class="fs-4">
-    <PriceFormatted :price="props.price" />
-  </p>
-  <p>{{ props.description }}</p>
+  <p class="fs-4">{{ props.description }}</p>
+  <p class="text-muted">Posted by {{ username }}</p>
   <p class="text-muted">Located at {{ addressStr }}</p>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
+import { useUsersStore } from "../../stores/users";
 import { useAddressesStore } from "../../stores/addresses";
-import PriceFormatted from "../formatters/PriceFormatted.vue";
+
+const { getUser } = useUsersStore();
+const user = ref({});
 
 const { getPersonalAddresses } = useAddressesStore();
 const addresses = ref([]);
 
 const props = defineProps({
-  price: {
-    type: Number,
-    required: true,
-  },
   description: {
     type: String,
+    required: true,
+  },
+  userId: {
+    type: Number,
     required: true,
   },
   addressId: {
@@ -37,14 +38,19 @@ const addressStr = computed(() => {
   return `${streetL1}, ${zip} ${city}, ${country}`;
 });
 
+const username = computed(() => {
+  return user.value ? user.value.username : '';
+});
 
-async function getAddresses() {
+
+async function getInfos(userId) {
   try {
     addresses.value = await getPersonalAddresses();
+    user.value = await getUser(userId);
   } catch (error) {
     console.error(error);
   }
 }
 
-getAddresses();
+getInfos(props.userId);
 </script>
