@@ -39,7 +39,7 @@ export const useAuthStore = defineStore("auth", {
       });
     },
     async topUpBalance(amount) {
-      const response = await axios.post("/auth/topUpBalance", {
+      const response = await axios.post("/auth/topup", {
         amount: amount,
       });
       this.user = response.data;

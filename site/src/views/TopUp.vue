@@ -14,7 +14,7 @@
       <label for="amount">Amount to Top Up:</label>
       <input type="number" id="amount" v-model.number="amount" />
   
-      <button @click="topUpBalance">Top Up</button>
+      <button @click="topUpBalance(amount)">Top Up</button>
     </div>
 </template>
 
