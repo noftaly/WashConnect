@@ -173,7 +173,7 @@
               >
                 {{ selectedAddress || "Address" }}
               </button>
-              <div class="dropdown-menu" aria-labelledby="addressDropdown" style="max-height: 280px; overflow-y: auto">
+              <div class="dropdown-menu" aria-labelledby="addressDropdown" style="max-height: 110px; overflow-y: auto">
                 <a
                   class="dropdown-item"
                   v-for="address in addresses"

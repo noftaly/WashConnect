@@ -2,14 +2,41 @@
   <div class="card">
     <div class="card-body d-flex flex-column gap-3">
       <div>
-        <p class="m-0">Price to pay: <PriceFormatted :price="machine.priceWashingDrying" notation="compact" /></p>
+        <p class="m-0">Renting price: <PriceFormatted :price="machine.priceWashingDrying" notation="compact" /></p>
       </div>
 
-      <p>AGENDA TBD</p>
-
+      <hr/>
       <div v-if="isAuthenticated">
+        <div>
+          <span class="mx-2">Select an appointment:</span><br/>
+          <button
+            class="btn btn-primary dropright dropdown-toggle mb-4 justify-content-center w-100"
+            type="button"
+            id="timeslotDropdown"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+          {{ selectedTimeSlot || "Time Slot" }}
+          </button>
+
+          <div class="dropdown-menu" aria-labelledby="timeslotDropdown" style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center;">
+            <a
+              class="dropdown-item"
+              v-for="timeSlot in availableSlots"
+              :key="timeSlot.id"
+              @click="selectTimeSlot(timeSlot.timeSlot)"
+            >
+            {{ new Date(timeSlot.timeSlot).toLocaleString() }}
+            </a>
+          </div>
+        </div>
+
+        <br/>
+        <br/>
         <button class="btn btn-outline-primary w-100 mb-1">Book this machine</button>
       </div>
+
       <div v-else>
         <p>
           Please <RouterLink to="/login">login</RouterLink> or <RouterLink to="/register">register</RouterLink> to book
@@ -22,10 +49,13 @@
 
 <script setup>
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import axios from "../../utils/axios.js";
+import { ref, computed } from "vue";
 import PriceFormatted from "../formatters/PriceFormatted.vue";
+
 import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
+import { useTimeSlotsStore } from "../../stores/timeslots.js";
 
 const props = defineProps({
   id: {
@@ -36,6 +66,30 @@ const props = defineProps({
 
 const { isAuthenticated } = storeToRefs(useAuth());
 const { getMachineById } = useMachinesStore();
-
 const machine = getMachineById(props.id);
+
+const timeSlots = ref(getTimeSlots(props.id));
+const selectedTimeSlot = ref("");
+
+
+async function getTimeSlots(machineId) {
+  try {
+    const response = await axios.get(`/timeslots/${machineId}`);
+    timeSlots.value = response.data;
+  } catch (error) {
+    console.log("An error has occured");
+    console.error(error);
+    timeSlots.value = [];
+  }
+  return timeSlots.value;
+}
+
+const availableSlots = computed(() => {
+  return timeSlots.value.filter((slot) => slot.isAvailable);
+});
+
+function selectTimeSlot(slot) {
+  const slotDate = new Date(slot);
+  selectedTimeSlot.value = slotDate.toLocaleString();
+}
 </script>
