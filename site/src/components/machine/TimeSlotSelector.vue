@@ -1,12 +1,19 @@
 <template>
-  <div>
-    <label for="date-picker">Date:</label>
-    <input type="date" id="date-picker" v-model="selectedDate" @input="updateDateTime"/>
-    
-    <label for="time-picker">Time:</label>
-    <input type="time" id="time-picker" v-model="selectedTime" @input="updateDateTime"/>
+  <div class="d-flex flex-column align-items-center mt-3">
+    <div class="mb-2">
+      <label for="date-picker" class="font-weight-bold">Date:</label>
+      <input type="date" id="date-picker" v-model="selectedDate" @input="updateDateTime"/>
+    </div>
+              
+    <div>        
+      <label for="time-picker" class="font-weight-bold">Time:</label>
+      <input type="time" id="time-picker" v-model="selectedTime" @input="updateDateTime"/>
+    </div>
   </div>
 </template>
+
+
+
 
 <script>
 export default {

@@ -257,7 +257,7 @@
               <!-- Time Slot Selector -->
               <div class="forms-inputs mb-4">
                 <label for="time-slot" class="font-weight-bold mb-2">Choose a time slot:</label>
-                <div class="p-2">
+                <div style="display: flex; flex-direction: column;">
                   <time-slot-selector id="time-slot" @update="handleDateTimeUpdate" />
                 </div>
                 <small class="form-text text-muted">Select a first time slot of availability for your machine.</small>
@@ -445,7 +445,6 @@ function validCountry(country) {
 
 function handleDateTimeUpdate(dateTime) {
     firstTimeSlot.value = dateTime;
-    console.log(firstTimeSlot.value.toISOString());
 }
 
 function validDateTime(dateTime) {

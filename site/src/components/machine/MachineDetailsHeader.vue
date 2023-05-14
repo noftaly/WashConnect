@@ -1,7 +1,9 @@
 <template>
-  <p class="fs-4">{{ props.description }}</p>
-  <p class="text-muted">Posted by {{ username }}</p>
-  <p class="text-muted">Located at {{ addressStr }}</p>
+  <div class="text-wrap">
+    <p class="fs-4">{{ props.description }}</p>
+    <p class="text-muted">Posted by {{ username }}</p>
+    <p class="text-muted">Located at {{ addressStr }}</p>
+  </div>
 </template>
 
 <script setup>

@@ -21,10 +21,6 @@
         <div class="col-2">
           <div class="sticky">
             <MachineDetailsPayment :id="id" />
-            <!-- <div v-if="isAdmin" class="mt-4">
-              <RouterLink class="btn btn-outline-secondary w-100" :to="`/admin/machines/${id}`"
-                  >Edit machine</RouterLink>
-            </div> -->
           </div>
         </div>
       </div>
@@ -34,19 +30,25 @@
       <h1 class="text-center my-5">{{ machine.adTitle }}</h1>
       <img src="../../assets/mocked_ad_img.jpg" class="img-fluid" />
 
-      <MachineDetailsHeader
-        :description="machine.adDescription"
-        :user-id="machine.userId"
-        :address-id="machine.addressId"
-      />
-      <h5 class="mt-3">About this machine:</h5>
-      <MachineDetailsCharacteristics :characteristic="machineCharacteristics"/>
-
-      <MachineDetailsPayment :id="id" />
-      <!-- <div v-if="isAdmin" class="mt-4">
-          <RouterLink class="btn btn-outline-secondary w-100" :to="`/admin/machines/${id}`">Edit machine</RouterLink>
-        </div> -->
+      <div class="small-screen-details">
+        <div class="row justify-content-between align-items-center">
+          <div class="col-8">
+            <MachineDetailsHeader
+              :description="machine.adDescription"
+              :user-id="machine.userId"
+              :address-id="machine.addressId"
+            />
+          </div>
+          <div class="col-4">
+            <MachineDetailsPayment :id="id" />
+          </div>
+        </div>
+        <hr />
+        <h5 class="mt-3">About this machine:</h5>
+        <MachineDetailsCharacteristics :characteristic="machineCharacteristics" />
+      </div>
     </div>
+
   </main>
 </template>
 
@@ -57,7 +59,6 @@ import { useMachinesStore } from "../../stores/machines.js";
 import axios from "../../utils/axios.js";
 
 const id = Number(useRoute().params.id);
-const { clearMachine, fetchMachine } = useMachinesStore();
 
 const machine = ref(null);
 const machineCharacteristics = ref(null);
@@ -90,14 +91,18 @@ const MachineDetailsPayment = defineAsyncComponent(() =>
   .sticky {
     position: static;
   }
-}
 
-.large-screen {
-  display: none;
-}
+  .large-screen {
+    display: none;
+  } 
 
-.small-screen {
-  display: block;
+  .small-screen {
+    display: block;
+  } 
+
+  .small-screen-details {
+    margin-top: 20px;
+  }
 }
 
 @media (min-width: 992px) {

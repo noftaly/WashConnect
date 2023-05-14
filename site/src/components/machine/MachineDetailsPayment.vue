@@ -7,17 +7,27 @@
 
       <hr/>
       <div v-if="isAuthenticated">
-        <div>
-          <span class="mx-2">Select an appointment:</span><br/>
+        
+        <div v-if="isCurrentUserMachineOwner(machine.userId, user.id)">
+          <div class="forms-inputs mb-4">
+            <label for="time-slot" class="font-weight-bold mb-2">Add more time slots for your machine:</label>
+            <div class="d-flex flex-column align-items-center mt-3">
+              <TimeSlotSelector id="time-slot" @update="handleDateTimeUpdate" />
+            </div>
+
+            <br/>
+            <button class="btn btn-primary w-100 mb-1">Add time slot</button>
+          </div>
+
           <button
-            class="btn btn-primary dropright dropdown-toggle mb-4 justify-content-center w-100"
+            class="btn btn-secondary dropright dropdown-toggle mb-4 justify-content-center w-100"
             type="button"
             id="timeslotDropdown"
             data-bs-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
           >
-          {{ selectedTimeSlot || "Time Slot" }}
+          Current Time Slots
           </button>
 
           <div class="dropdown-menu" aria-labelledby="timeslotDropdown" style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center;">
@@ -25,23 +35,53 @@
               class="dropdown-item"
               v-for="timeSlot in availableSlots"
               :key="timeSlot.id"
-              @click="selectTimeSlot(timeSlot.timeSlot)"
             >
             {{ new Date(timeSlot.timeSlot).toLocaleString() }}
             </a>
           </div>
         </div>
 
-        <br/>
-        <br/>
-        <button class="btn btn-outline-primary w-100 mb-1">Book this machine</button>
-      </div>
+        <div v-else>
+          <div v-if="!areThereAvailableSlots()" class="alert alert-primary mt-3" role="alert">
+            <p>Sorry, there are no available time slots for this machine at the moment...</p>
+          </div>
 
-      <div v-else>
-        <p>
-          Please <RouterLink to="/login">login</RouterLink> or <RouterLink to="/register">register</RouterLink> to book
-          this machine.
-        </p>
+          <div v-else>
+            <span class="mx-2">Select an appointment:</span><br/>
+            <button
+              class="btn btn-primary dropright dropdown-toggle mb-4 justify-content-center w-100"
+              type="button"
+              id="timeslotDropdown"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+            {{ selectedTimeSlot || "Time Slot" }}
+            </button>
+
+            <div class="dropdown-menu" aria-labelledby="timeslotDropdown" style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center;">
+              <a
+                class="dropdown-item"
+                v-for="timeSlot in availableSlots"
+                :key="timeSlot.id"
+                @click="selectTimeSlot(timeSlot.timeSlot)"
+              >
+              {{ new Date(timeSlot.timeSlot).toLocaleString() }}
+              </a>
+            </div>
+
+            <br/>
+            <br/>
+            <button class="btn btn-outline-primary w-100 mb-1">Book this machine</button>
+          </div>
+        </div>
+
+        <div v-else>
+          <p>
+            Please <RouterLink to="/login">login</RouterLink> or <RouterLink to="/register">register</RouterLink> to book
+            this machine.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -51,11 +91,12 @@
 import { storeToRefs } from "pinia";
 import axios from "../../utils/axios.js";
 import { ref, computed } from "vue";
+
 import PriceFormatted from "../formatters/PriceFormatted.vue";
+import TimeSlotSelector from "../machine/timeSlotSelector.vue";
 
 import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
-import { useTimeSlotsStore } from "../../stores/timeslots.js";
 
 const props = defineProps({
   id: {
@@ -64,12 +105,34 @@ const props = defineProps({
   },
 });
 
+
 const { isAuthenticated } = storeToRefs(useAuth());
+const user = ref(fetchUser());
+
+async function fetchUser() {
+  try {
+    const response = await axios.get("/auth/me");
+    user.value = response.data;
+  } catch (error) {
+    console.log("An error has occured");
+    console.error(error);
+    user.value = {};
+  }
+  return user.value;
+}
+
+function isCurrentUserMachineOwner(machineUserId, currentUserId) {
+  return machineUserId === currentUserId;
+}
+
+
+
 const { getMachineById } = useMachinesStore();
 const machine = getMachineById(props.id);
 
 const timeSlots = ref(getTimeSlots(props.id));
 const selectedTimeSlot = ref("");
+const newTimeSlot = ref(new Date());
 
 
 async function getTimeSlots(machineId) {
@@ -91,5 +154,13 @@ const availableSlots = computed(() => {
 function selectTimeSlot(slot) {
   const slotDate = new Date(slot);
   selectedTimeSlot.value = slotDate.toLocaleString();
+}
+
+function areThereAvailableSlots() {
+  return availableSlots.value.length > 0;
+}
+
+function handleDateTimeUpdate(dateTime) {
+    newTimeSlot.value = dateTime;
 }
 </script>
