@@ -25,8 +25,8 @@
               </div>
 
               <!-- Description -->
-              <div class="forms-inputs mb-4">
-                <span>Description</span>
+              <div class="forms-inputs mb-4 from-group">
+                <label for="description"><span class="font-weight-bold">Description</span></label>
                 <textarea
                   autocomplete="off"
                   type="text"
@@ -261,7 +261,7 @@
                   <time-slot-selector id="time-slot" @update="handleDateTimeUpdate" />
                 </div>
                 <small class="form-text text-muted">Select a first time slot of availability for your machine.</small>
-                <div class="invalid-feedback">A valid date/time is required!</div>
+                <div class="invalid-feedback">A valid date/time, in the future, is required!</div>
               </div>
 
 
@@ -308,7 +308,7 @@ import { useTimeSlotsStore } from "../../stores/timeslots.js";
 const { isAuthenticated } = storeToRefs(useAuth());
 const { createMachine } = useMachinesStore();
 const { createPersonalAddress } = useAddressesStore();
-const { makeReservation } = useTimeSlotsStore();
+const { createTimeSlot } = useTimeSlotsStore();
 
 if (!isAuthenticated.value) {
   router.push({ title: "login" });
@@ -323,6 +323,7 @@ const descriptionBlured = ref(false);
 const hasWasher = ref(false);
 const hasDryer = ref(false);
 const detergentIncluded = ref(false);
+const machineType = ref("");
 
 const cycle_wash_duration = ref(1);
 const cycle_wash_duration_blured = ref(false);
@@ -444,13 +445,18 @@ function validCountry(country) {
 
 function handleDateTimeUpdate(dateTime) {
     firstTimeSlot.value = dateTime;
+    console.log(firstTimeSlot.value.toISOString());
 }
 
 function validDateTime(dateTime) {
-  return dateTime > 0;
+  // check if date is in the future
+  const now = new Date();
+  if (dateTime == null || dateTime < now) {
+    return false;
+  }
+
+  return true;
 }
-
-
 
 // function validimageUrl(imageUrl) {
 //   return imageUrl.length > 0;
@@ -476,27 +482,33 @@ function validate() {
   firstTimeSlotBlured.value = true;
   // imageUrlBlured.value = true;
   if (
-    ((hasWasher.value == true || hasDryer.value == true) && // if one machine is at least selected
-      validTitle(title.value) &&
-      validDescription(description.value) &&
-      // if washer is selected
-      hasWasher.value &&
-      validPrice(priceWashing.value) &&
-      validDuration(cycle_wash_duration.value)) ||
+    (hasWasher.value == true || hasDryer.value == true) && // if one machine is at least selected
+    validTitle(title.value) &&
+    validDescription(description.value) &&
+
+    // if washer is selected
+    (hasWasher.value &&
+    validPrice(priceWashing.value) &&
+    validDuration(cycle_wash_duration.value)) ||
+
     // if dryer is selected
     (hasDryer.value &&
-      validPrice(priceDrying.value) &&
-      validDuration(cycle_dry_duration.value) &&
-      validCapacity(max_capacity.value) &&
+    validPrice(priceDrying.value) &&
+    validDuration(cycle_dry_duration.value)) &&
 
-      // if a new address is created
-      createAddress.value &&
-      validAddress(streetL1.value) &&
-      validZip(zip.value) &&
-      validCity(city.value) &&
-      validCountry(country.value)) &&
+    validCapacity(max_capacity.value) &&
 
-      validDateTime(firstTimeSlot.value)
+    // if a new address is created
+    (createAddress.value &&
+    validAddress(streetL1.value) &&
+    validZip(zip.value) &&
+    validCity(city.value) &&
+    validCountry(country.value)) || 
+
+    // if an existing address is selected
+    (!createAddress.value && selectedAddress.value != "") &&
+
+    validDateTime(firstTimeSlot.value)
     // && validimageUrl(imageUrl.value)
   )
     valid.value = true;
@@ -538,6 +550,17 @@ async function submit() {
 
       //imageUrl: imageUrl.value,
     });
+
+    if (newAd.hasWasher == true && newAd.hasDryer == true) {
+      machineType.value = "WASHANDDRY";
+    } else if (newAd.hasWasher == true && newAd.hasDryer == false) {
+      machineType.value = "WASH";
+    } else if (newAd.hasDryer == true && newAd.hasWasher == false) {
+      machineType.value = "DRYER";
+    }
+
+    await createTimeSlot(newAd.id, firstTimeSlot.value.toISOString(), machineType.value);
+
     router.push({ name: "machine", params: { id: newAd.id } });
     window.location.reload();
     useToast().success("Ad created successfully!");
