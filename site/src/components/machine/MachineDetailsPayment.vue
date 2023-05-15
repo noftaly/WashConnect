@@ -10,13 +10,13 @@
         
         <div v-if="isCurrentUserMachineOwner(machine.userId, user.id)">
           <div class="forms-inputs mb-4">
-            <label for="time-slot" class="font-weight-bold mb-2">Add more time slots for your machine:</label>
+            <label for="time-slot" class="font-weight-bold mb-2 " style="text-align: center; font-size: 20px;">Add more time slots for your machine:</label>
             <div class="d-flex flex-column align-items-center mt-3">
               <TimeSlotSelector id="time-slot" @update="handleDateTimeUpdate" />
             </div>
 
             <br/>
-            <button class="btn btn-primary w-100 mb-1">Add time slot</button>
+            <button class="btn btn-primary w-100 mb-1" @click="createNewTimeSlot(machine)">Add time slot</button>
           </div>
 
           <button
@@ -91,12 +91,14 @@
 import { storeToRefs } from "pinia";
 import axios from "../../utils/axios.js";
 import { ref, computed } from "vue";
+import { useToast } from "vue-toastification";
 
 import PriceFormatted from "../formatters/PriceFormatted.vue";
 import TimeSlotSelector from "../machine/timeSlotSelector.vue";
 
 import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
+import { useTimeSlotsStore } from "../../stores/timeslots.js";
 
 const props = defineProps({
   id: {
@@ -160,7 +162,37 @@ function areThereAvailableSlots() {
   return availableSlots.value.length > 0;
 }
 
+
+const { createTimeSlot } = useTimeSlotsStore();
+const machineType = ref("");
+
 function handleDateTimeUpdate(dateTime) {
     newTimeSlot.value = dateTime;
 }
+
+async function createNewTimeSlot(machine) {
+  const timeSlot = newTimeSlot.value;
+  const now = new Date();
+
+  // Verification of future date
+  if (timeSlot != null && timeSlot > now) {
+
+    if (machine.hasWasher == true && machine.hasDryer == true) {
+      machineType.value = "WASHANDDRY";
+    } else if (machine.hasWasher == true && machine.hasDryer == false) {
+      machineType.value = "WASH";
+    } else if (machine.hasDryer == true && machine.hasWasher == false) {
+      machineType.value = "DRYER";
+    }
+
+    await createTimeSlot(machine.id, timeSlot.toISOString(), machineType.value);
+    newTimeSlot.value = new Date();
+    window.location.reload();
+    useToast().success("Time Slot added successfully!");
+  }
+  else {
+    alert("Please select a future date and time.");
+  }
+}
+
 </script>

@@ -205,7 +205,7 @@
                       autocomplete="off"
                       type="text"
                       v-model="streetL1"
-                      :class="{ 'form-control': true, 'is-invalid': !validAddress(streetL1) && streetL1Blured }"
+                      :class="{ 'form-control': true, 'is-invalid': !validStreet(streetL1) && streetL1Blured }"
                       @blur="streetL1Blured = true"
                       @keyup.enter="submit"
                     />
@@ -281,7 +281,8 @@
               </div> -->
 
               <div class="mb-3">
-                <button @click.prevent="submit" class="btn btn-dark w-100" style="font-size: 18px;">Post the ad</button>
+                <button :disabled="!validate()" @click.prevent="submit" class="btn btn-dark w-100" style="font-size: 20px;">Post the ad</button>
+                <span class="text-muted">Please make sure to fill up all the informations before posting yout ad?</span>
               </div>
             </div>
           </div>
@@ -359,6 +360,7 @@ const firstTimeSlotBlured = ref(false);
 // const imageUrlBlured = ref(false);
 
 const valid = ref(false);
+const validAddress = ref(false);
 const submitted = ref(false);
 
 
@@ -426,8 +428,8 @@ function selectAddress(selectedAddress) {
   return adAddress.value;
 }
 
-function validAddress(address) {
-  return address.length > 0;
+function validStreet(streetL1) {
+  return streetL1.length > 0;
 }
 
 function validZip(zip) {
@@ -450,7 +452,7 @@ function handleDateTimeUpdate(dateTime) {
 function validDateTime(dateTime) {
   // check if date is in the future
   const now = new Date();
-  if (dateTime == null || dateTime < now) {
+  if (dateTime == null && dateTime < now) {
     return false;
   }
 
@@ -461,6 +463,21 @@ function validDateTime(dateTime) {
 //   return imageUrl.length > 0;
 // }
 
+
+function validateAddress() {
+  if (createAddress.value == false) {
+    if (selectedAddress.value != "") {
+      validAddress.value = true;
+    }
+  } else if (createAddress.value == true) {
+    if (validStreet(streetL1.value) && validZip(zip.value) && validCity(city.value) && validCountry(country.value)) {
+      validAddress.value = true;
+    }
+  }
+  else {
+    validAddress.value = false;
+  }
+}
 
 
 function validate() {
@@ -496,17 +513,7 @@ function validate() {
     validDuration(cycle_dry_duration.value)) &&
 
     validCapacity(max_capacity.value) &&
-
-    // if a new address is created
-    (createAddress.value &&
-    validAddress(streetL1.value) &&
-    validZip(zip.value) &&
-    validCity(city.value) &&
-    validCountry(country.value)) || 
-
-    // if an existing address is selected
-    (!createAddress.value && selectedAddress.value != "") &&
-
+    validateAddress() &&
     validDateTime(firstTimeSlot.value)
     // && validimageUrl(imageUrl.value)
   )
