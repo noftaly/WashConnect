@@ -12,7 +12,7 @@
           <div class="forms-inputs mb-4">
             <label for="time-slot" class="font-weight-bold mb-2 " style="text-align: center; font-size: 20px;">Add more time slots for your machine:</label>
             <div class="d-flex flex-column align-items-center mt-3">
-              <TimeSlotSelector id="time-slot" @update="handleDateTimeUpdate" />
+              <TimeSlotSelector id="time-slot" @update="handleDateTimeUpdate"/>
             </div>
 
             <br/>
@@ -75,16 +75,17 @@
             <button class="btn btn-outline-primary w-100 mb-1">Book this machine</button>
           </div>
         </div>
+      </div>
 
-        <div v-else>
-          <p>
-            Please <RouterLink to="/login">login</RouterLink> or <RouterLink to="/register">register</RouterLink> to book
-            this machine.
-          </p>
-        </div>
+      <div v-else>
+        <p>
+          Please <RouterLink to="/login">login</RouterLink> or <RouterLink to="/register">register</RouterLink> to book
+          this machine.
+        </p>
       </div>
     </div>
-  </div>
+  </div> 
+
 </template>
 
 <script setup>
