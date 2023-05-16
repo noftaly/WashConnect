@@ -53,9 +53,9 @@ const router = createRouter({
       component: () => import("../views/machine/MachineView.vue"),
     },
     {
-      path: "/booking/",
-      name: "booking",
-      component: () => import("../views/machine/AdBooking.vue"),
+      path: "/reservations/:id",
+      name: "reservation",
+      component: () => import("../views/machine/AdReservation.vue"),
     },
     {
       path: "/new_ad",

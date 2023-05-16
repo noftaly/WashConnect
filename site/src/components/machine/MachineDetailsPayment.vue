@@ -72,7 +72,9 @@
 
             <br/>
             <br/>
-            <button class="btn btn-outline-primary w-100 mb-1">Book this machine</button>
+            <RouterLink :to="`/reservations/${id}`">
+              <button class="btn btn-outline-primary w-100 mb-1">Book this machine</button>
+            </RouterLink>
           </div>
         </div>
       </div>

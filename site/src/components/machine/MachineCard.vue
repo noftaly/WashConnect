@@ -92,11 +92,12 @@ const addresses = ref([]);
 
 const getMachine = async () => {
   try {
-    displayedMachine.value = await getMachineById(props.id);
+    displayedMachine.value = getMachineById(props.id);
   } catch (error) {
     console.error(error);
   }
 };
+
 
 const getUsername = async () => {
   try {
