@@ -61,7 +61,11 @@ export async function findAll(req, res, next) {
     where: { AND: queries },
   });
 
-  res.json(machines);
+  const addresses = await db.address.findMany({
+    where: {id: {in: machines.map(machine => machine.addressId)}}
+  });
+
+  res.json({machines: machines, addresses: addresses});
 }
 
 export async function create(req, res, next) {
@@ -87,10 +91,22 @@ export async function getOne(req, res) {
   const machine = await db.machine.findUnique({
     where: { id: parseInt(req.params.machineId) },
   });
+  const address = await db.address.findUnique({
+	where: { id: machine.addressId },
+  })
+  const username = await db.user.findUnique({
+	where: { id: machine.userId },
+	select: {
+		username: true,
+	}
+  })
+  const timeSlots = await db.agenda.findMany({
+	where: { machineId: machine.id, timeSlot: {gt: new Date()} },
+  })
   // If the machine doesn't exist, return 404
   if (!machine) {
     res.status(404).json({ message: 'Machine not found' });
     return;
   }
-  res.json(machine);
+  res.json({machine: machine, address: address, userName: username, timeSlots: timeSlots});
 }

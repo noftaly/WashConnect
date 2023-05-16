@@ -14,9 +14,9 @@
       <div class="col-md-9">
         <div class="mx-4 me-md-5">
           <div v-for="item in shownItems" :key="item.id">
-            <RouterLink :to="`/machines/${item.id}`" class="text-decoration-none">
-              <MachineCard v-bind="item" />
-            </RouterLink>
+            <!-- <RouterLink :to="`/machines/${item.id}`" class="text-decoration-none"> -->
+              <MachineCard :machine="item" :addresses="addressesMachines" />
+            <!-- </RouterLink> -->
           </div>
           <div v-if="shownItems.length === 0">
             <h5 class="text-center mt-6 my-auto">No machines matching your filters was found</h5>
@@ -33,23 +33,23 @@ import { ref, watch } from "vue";
 import { useMachinesStore } from "../../stores/machines.js";
 import MachineFilters from "./MachineFilters.vue";
 import MachineCard from "./MachineCard.vue";
-// import data from "../../utils/mocked_data.js";
+import data from "../../utils/mocked_data.js";
 
-const { machines } = storeToRefs(useMachinesStore());
+const { machines, addressesMachines } = storeToRefs(useMachinesStore());
 const { fetchMachines } = useMachinesStore();
 
 fetchMachines();
 
 const props = defineProps(["category"]);
 
-const shownItems = ref(fetchMachines());
+const shownItems = ref(machines.value);
 
 watch(machines, () => {
   shownItems.value = [...machines.value];
 });
 
-const pricePredicate = (priceRange) => (item) => item.price >= priceRange[0] && item.price <= priceRange[1];
-const manufacturerPredicate = (manufacturers) => (item) => manufacturers[item.characteristic.manufacturer];
+const pricePredicate = (priceRange) => (item) => item.priceDrying >= priceRange[0] && item.priceDrying <= priceRange[1] || item.priceWashing >= priceRange[0] && item.priceWhashing <= priceRange[1];
+const manufacturerPredicate = (manufacturers) => (item) => manufacturers[item.manufacturer];
 const categoryPredicate = (categories) => (item) => categories[item.characteristic.category];
 
 const predicates = {

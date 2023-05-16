@@ -11,7 +11,6 @@ export const useAuthStore = defineStore("auth", {
       const response = await axios.get("/auth/me");
       this.user = response.data;
       this.isAuthenticated = true;
-      return response.data;
     },
 
     async login(user) {
@@ -39,11 +38,5 @@ export const useAuthStore = defineStore("auth", {
         phoneNumber: user.phoneNumber,
       });
     },
-    async topUpBalance(amount) {
-      const response = await axios.post("/auth/topup", {
-        amount: amount,
-      });
-      this.user = response.data;
-    }
   },
 });

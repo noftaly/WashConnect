@@ -78,7 +78,7 @@ const priceRange = ref([0, 100]);
 
 const { machines } = storeToRefs(useMachinesStore());
 
-const emitChangedCategory = defineEmits(["change:category"]);
+const emitChangedCategory = defineEmits(["change:category", "change:price", "change:manufacturer"]);
 
 const props = defineProps({
   category: {
@@ -92,7 +92,7 @@ const categories = ref({});
 
 watch(machines, () => {
   manufacturers.value = Object.fromEntries(
-    machines.value.map((machine) => [machine.characteristic.manufacturer, true])
+    machines.value.map((machine) => [machine.manufacturer, true])
   );
   // categories.value = Object.fromEntries(
   //   machines.value.map((machine) => [capitalize(machine.characteristic.category), true])

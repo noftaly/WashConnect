@@ -2,104 +2,66 @@
   <div class="card">
     <div class="card-body d-flex flex-column gap-3">
       <div>
-        <p class="m-0">Renting price: <PriceFormatted :price="machine.priceWashingDrying" notation="compact" /></p>
+        <p class="m-0"><PriceFormatted :price="machine.price" notation="compact" /></p>
+        <p class="m-0">
+          <small class="text-muted"> Delivery at <PriceFormatted :price="999.99" /></small>
+        </p>
       </div>
 
-      <hr/>
-      <div v-if="isAuthenticated">
-        
-        <div v-if="isCurrentUserMachineOwner(machine.userId, user.id)">
-          <div class="forms-inputs mb-4">
-            <label for="time-slot" class="font-weight-bold mb-2 " style="text-align: center; font-size: 20px;">Add more time slots for your machine:</label>
-            <div class="d-flex flex-column align-items-center mt-3">
-              <TimeSlotSelector id="time-slot" @update="handleDateTimeUpdate"/>
-            </div>
-
-            <br/>
-            <button class="btn btn-primary w-100 mb-1" @click="createNewTimeSlot(machine)">Add time slot</button>
-          </div>
-
-          <button
-            class="btn btn-secondary dropright dropdown-toggle mb-4 justify-content-center w-100"
-            type="button"
-            id="timeslotDropdown"
-            data-bs-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-          Current Time Slots
-          </button>
-
-          <div class="dropdown-menu" aria-labelledby="timeslotDropdown" style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center;">
-            <a
-              class="dropdown-item"
-              v-for="timeSlot in availableSlots"
-              :key="timeSlot.id"
-            >
-            {{ new Date(timeSlot.timeSlot).toLocaleString() }}
-            </a>
-          </div>
+      <div>
+        <div v-if="machine.stockQuantity > 0" class="mb-1">
+          <p class="text-success">
+            In stock <span v-if="machine.stockQuantity < 10">(only {{ machine.stockQuantity }} left!)</span>
+          </p>
+          <p class="my-0 small text-dark"><font-awesome-icon icon="fa-solid fa-check" /> Receive in 2 days</p>
+          <p class="my-0 small text-dark"><font-awesome-icon icon="fa-solid fa-check" /> Giftable</p>
         </div>
-
         <div v-else>
-          <div v-if="!areThereAvailableSlots()" class="alert alert-primary mt-3" role="alert">
-            <p>Sorry, there are no available time slots for this machine at the moment...</p>
-          </div>
-
-          <div v-else>
-            <span class="mx-2">Select an appointment:</span><br/>
-            <button
-              class="btn btn-primary dropright dropdown-toggle mb-4 justify-content-center w-100"
-              type="button"
-              id="timeslotDropdown"
-              data-bs-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-            {{ selectedTimeSlot || "Time Slot" }}
-            </button>
-
-            <div class="dropdown-menu" aria-labelledby="timeslotDropdown" style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center;">
-              <a
-                class="dropdown-item"
-                v-for="timeSlot in availableSlots"
-                :key="timeSlot.id"
-                @click="selectTimeSlot(timeSlot.timeSlot)"
-              >
-              {{ new Date(timeSlot.timeSlot).toLocaleString() }}
-              </a>
-            </div>
-
-            <br/>
-            <br/>
-            <button class="btn btn-outline-primary w-100 mb-1">Book this machine</button>
-          </div>
+          <p class="text-danger">Out of stock</p>
         </div>
       </div>
 
+      <!-- Quantity selector -->
+      <div class="d-flex align-items-center gap-2">
+        Quantity:
+        <input
+          type="number"
+          class="form-control form-control-sm text-center"
+          v-model="quantity"
+          min="1"
+          :max="machine.stockQuantity"
+        />
+      </div>
+
+      <div v-if="isAuthenticated">
+        <button
+          class="btn btn-outline-primary w-100 mb-1"
+          @click="add"
+          :disabled="quantity <= 0 || machine.stockQuantity === 0 || quantity > machine.stockQuantity"
+        >
+          Add to cart
+        </button>
+        <p class="small mb-0" v-if="cartQuantity > 0">
+          Already {{ cartQuantity }} in <RouterLink to="/cart">your cart</RouterLink>
+        </p>
+      </div>
       <div v-else>
         <p>
-          Please <RouterLink to="/login">login</RouterLink> or <RouterLink to="/register">register</RouterLink> to book
-          this machine.
+          Please <RouterLink to="/login">login</RouterLink> or <RouterLink to="/register">register</RouterLink> to add
+          this machine to your cart.
         </p>
       </div>
     </div>
-  </div> 
-
+  </div>
 </template>
 
 <script setup>
 import { storeToRefs } from "pinia";
-import axios from "../../utils/axios.js";
-import { ref, computed } from "vue";
-import { useToast } from "vue-toastification";
-
+import { ref } from "vue";
 import PriceFormatted from "../formatters/PriceFormatted.vue";
-import TimeSlotSelector from "../machine/timeSlotSelector.vue";
-
 import { useAuth } from "../../utils/useAuthHook.js";
+import { useCartStore } from "../../stores/cart.js";
 import { useMachinesStore } from "../../stores/machines.js";
-import { useTimeSlotsStore } from "../../stores/timeslots.js";
 
 const props = defineProps({
   id: {
@@ -108,92 +70,27 @@ const props = defineProps({
   },
 });
 
-
 const { isAuthenticated } = storeToRefs(useAuth());
-const user = ref(fetchUser());
-
-async function fetchUser() {
-  try {
-    const response = await axios.get("/auth/me");
-    user.value = response.data;
-  } catch (error) {
-    console.log("An error has occured");
-    console.error(error);
-    user.value = {};
-  }
-  return user.value;
-}
-
-function isCurrentUserMachineOwner(machineUserId, currentUserId) {
-  return machineUserId === currentUserId;
-}
-
-
-
 const { getMachineById } = useMachinesStore();
-const machine = getMachineById(props.id);
+const { addToCart, quantityOf, updateItem } = useCartStore();
 
-const timeSlots = ref(getTimeSlots(props.id));
-const selectedTimeSlot = ref("");
-const newTimeSlot = ref(new Date());
+const machine = getmachineById(props.id);
+const quantity = ref(1);
+const cartQuantity = ref(quantityOf(props.id));
 
-
-async function getTimeSlots(machineId) {
-  try {
-    const response = await axios.get(`/timeslots/${machineId}`);
-    timeSlots.value = response.data;
-  } catch (error) {
-    console.log("An error has occured");
-    console.error(error);
-    timeSlots.value = [];
+async function add() {
+  if (cartQuantity.value > 0) {
+    await updateItem({
+      machineId: props.id,
+      quantity: quantity.value,
+    });
+  } else {
+    await addToCart({
+      machineId: props.id,
+      quantity: quantity.value,
+    });
   }
-  return timeSlots.value;
+  machine.stockQuantity -= quantity.value;
+  cartQuantity.value = quantityOf(props.id);
 }
-
-const availableSlots = computed(() => {
-  return timeSlots.value.filter((slot) => slot.isAvailable);
-});
-
-function selectTimeSlot(slot) {
-  const slotDate = new Date(slot);
-  selectedTimeSlot.value = slotDate.toLocaleString();
-}
-
-function areThereAvailableSlots() {
-  return availableSlots.value.length > 0;
-}
-
-
-const { createTimeSlot } = useTimeSlotsStore();
-const machineType = ref("");
-
-function handleDateTimeUpdate(dateTime) {
-    newTimeSlot.value = dateTime;
-}
-
-async function createNewTimeSlot(machine) {
-  const timeSlot = newTimeSlot.value;
-  const now = new Date();
-
-  // Verification of future date
-  if (timeSlot != null && timeSlot > now) {
-
-    if (machine.hasWasher == true && machine.hasDryer == true) {
-      machineType.value = "WASHANDDRY";
-    } else if (machine.hasWasher == true && machine.hasDryer == false) {
-      machineType.value = "WASH";
-    } else if (machine.hasDryer == true && machine.hasWasher == false) {
-      machineType.value = "DRYER";
-    }
-
-    await createTimeSlot(machine.id, timeSlot.toISOString(), machineType.value);
-    newTimeSlot.value = new Date();
-    window.location.reload();
-    useToast().success("Time Slot added successfully!");
-  }
-  else {
-    alert("Please select a future date and time.");
-  }
-}
-
 </script>

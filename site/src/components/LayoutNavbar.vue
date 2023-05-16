@@ -29,7 +29,7 @@
                 <div class="d-flex flex-column">
                   <font-awesome-icon icon="fa-solid fa-circle-user" />
                   <span style="font-size: 0.7rem" class="text-center mt-1">{{ user.username }}</span>
-                </div>
+              </div>
               </RouterLink>
             </li>
 
@@ -39,7 +39,7 @@
                 <div class="d-flex flex-column">
                   <font-awesome-icon icon="fa-sharp fa-solid fa-circle-euro" />
                   <span style="font-size: 0.7rem" class="text-center mt-1">Balance: {{ user.balance }}€</span>
-                </div>
+              </div>
               </RouterLink>
             </li>
 
@@ -48,6 +48,14 @@
                 <div class="d-flex flex-column">
                   <font-awesome-icon icon="fa-solid fa-circle-plus" size="xl" />
                   <span style="font-size: 0.7rem" class="text-center mt-1">New Ad</span>
+                </div>
+              </RouterLink>
+            </li>
+			<li>
+              <RouterLink class="nav-link p-1" to="/history">
+                <div class="d-flex flex-column">
+                  <font-awesome-icon icon="fa-solid fa-circle-plus" size="xl" />
+                  <span style="font-size: 0.7rem" class="text-center mt-1">history</span>
                 </div>
               </RouterLink>
             </li>
@@ -105,12 +113,13 @@
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import router from "../router";
-import axios from "../utils/axios.js";
 
 import { useAuth } from "../utils/useAuthHook.js";
 import { useMachinesStore } from "../stores/machines.js";
+import { useCartStore } from "../stores/cart.js";
 
 const { isAuthenticated, user } = storeToRefs(useAuth());
+const { count } = storeToRefs(useCartStore());
 const { logout } = useAuth();
 const { searchMachine } = useMachinesStore();
 
@@ -128,7 +137,7 @@ async function search() {
 }
 
 async function getBalance() {
-  if (isAuthenticated.value == true) {
+if (isAuthenticated.value == true) {
     try {
       const response = await axios.get("http://localhost:5050/auth/me");
       return response.data.balance;
@@ -136,12 +145,12 @@ async function getBalance() {
       console.log("An error has occured");
       console.error(error);
       balance.value = -1;
-    }
+  }
   }
 }
 
 async function getUsername() {
-  if (isAuthenticated.value == true) {
+if (isAuthenticated.value == true) {
     try {
       const response = await axios.get("http://localhost:5050/auth/me");
       return response.data.username;
@@ -149,7 +158,7 @@ async function getUsername() {
       console.log("An error has occured");
       console.error(error);
       username.value = -1;
-    }
+  }
   }
 }
 </script>

@@ -38,11 +38,6 @@ const router = createRouter({
       component: () => import("../views/BalanceView.vue"),
     },
     {
-      path: "/topup",
-      name: "topup",
-      component: () => import("../views/TopUp.vue"),
-    },
-    {
       path: "/history",
       name: "history",
       component: () => import("../views/HistoryView.vue"),

@@ -3,7 +3,6 @@ import ensureAuthenticated from './middlewares/ensureAuthenticated.js';
 import * as users from './controllers/users.js';
 import * as auth from './controllers/auth.js';
 import * as addresses from './controllers/addresses.js';
-import * as reservations from './controllers/reservations.js';
 import * as timeslots from './controllers/timeslots.js';
 import * as machines from './controllers/machines.js';
 
@@ -42,16 +41,10 @@ router.route('/addresses/:addressId')
   .delete(ensureAuthenticated, addresses.removePersonalAddress)
 
 // Timeslots
+router.route('/timeslots')
+  .get(timeslots.getCurrentReservations)
+router.route('/timeslots/performreservation')
+.post(ensureAuthenticated, timeslots.makeReservation);
+
 router.route('/timeslots/:machineId')
-  .post(ensureAuthenticated, timeslots.create)
-  .get(ensureAuthenticated, timeslots.findAllForMachine);
-
-router.route('/timeslots/:timeSlotId')
-  .delete(ensureAuthenticated, timeslots.remove)
-
-// Reservations
-router.route('/reservations/:agendaId')
-  .post(ensureAuthenticated, reservations.create)
-  .delete(ensureAuthenticated, reservations.remove);
-router.route('/reservations')
-  .get(ensureAuthenticated, reservations.findAllForSelf);
+  .get(timeslots.getScheduleForMachine);

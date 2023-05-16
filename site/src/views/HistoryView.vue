@@ -1,10 +1,11 @@
 <!-- Page pour consulter l'historique des annonces réservées -->
 <template>
-  <div>
-    <ListHistory />
-  </div>
+	<div>
+		<ListHistory/>
+	</div>
 </template>
 
 <script setup>
-import ListHistory from "../components/history/ListHistory.vue";
+import ListHistory from '../components/history/ListHistory.vue';
+
 </script>

@@ -5,7 +5,13 @@ export const useMachinesStore = defineStore("machines", {
   state: () => ({
     machines: [],
     searchedMachines: [],
-    machine: null,
+    bookingProgress: {
+		machine: null,
+		userName: null,
+		address: null,
+		timeSlots: []
+	},
+	addressesMachines: []
   }),
   getters: {
     getManufacturers: (state) => {
@@ -30,7 +36,8 @@ export const useMachinesStore = defineStore("machines", {
 
     async fetchMachines() {
       const response = await axios.get("/machines");
-      this.machines = response.data;
+      this.machines = response.data.machines;
+	  this.addressesMachines = response.data.addresses;
     },
 
     async searchMachines(searchQuery) {
@@ -40,13 +47,13 @@ export const useMachinesStore = defineStore("machines", {
 
     async fetchMachine(id) {
       const response = await axios.get(`/machines/${id}`);
-      this.machine = response.data;
-      return response.data;
+      this.bookingProgress = {...response.data};
     },
 
     async createMachine(machine) {
       const response = await axios.post("/machines", machine);
       this.machines.push(response.data);
+
       return response.data;
     },
 
@@ -63,5 +70,17 @@ export const useMachinesStore = defineStore("machines", {
       const index = this.machines.findIndex((p) => p.id === id);
       this.machines.splice(index, 1);
     },
+
+	async bookMachine(bookedMachine) {
+		const response = await axios.post('/timeslots/performreservation', {
+			typeOfProduct: bookedMachine.typeOfProduct,
+			machineId: bookedMachine.machineId,
+			timeSlot: bookedMachine.timeSlot
+		})
+		if (response.data.message === "Reservation made") {
+			this.bookingProgress.timeSlots.push(response.data.timeSlot)
+			return true;
+		}
+	}
   },
 });

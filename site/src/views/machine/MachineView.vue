@@ -1,85 +1,31 @@
 <template>
   <main class="mx-3 my-5">
-    <div v-if="machine" class="large-screen">
-      <h1 class="text-center my-5">{{ machine.adTitle }}</h1>
-      <div class="row">
-        <div class="col-5">
-          <div class="d-flex flex-column">
-            <img src="../../assets/mocked_ad_img.jpg" class="img-fluid" />
-          </div>
-        </div>
-        <div class="col-5">
-          <MachineDetailsHeader
-            :description="machine.adDescription"
-            :user-id="machine.userId"
-            :address-id="machine.addressId"
-          />
-          <hr />
-          <h6>About this machine:</h6>
-          <MachineDetailsCharacteristics :characteristic="machineCharacteristics" />
-        </div>
-        <div class="col-2">
-          <div class="sticky">
-            <MachineDetailsPayment :id="id" />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="machine" class="small-screen">
-      <h1 class="text-center my-5">{{ machine.adTitle }}</h1>
-      <img src="../../assets/mocked_ad_img.jpg" class="img-fluid" />
-
-      <div class="small-screen-details">
-        <div class="row justify-content-between align-items-center">
-          <div class="col-8">
-            <MachineDetailsHeader
-              :description="machine.adDescription"
-              :user-id="machine.userId"
-              :address-id="machine.addressId"
-            />
-          </div>
-          <div class="col-4">
-            <MachineDetailsPayment :id="id" />
-          </div>
-        </div>
-        <hr />
-        <h5 class="mt-3">About this machine:</h5>
-        <MachineDetailsCharacteristics :characteristic="machineCharacteristics" />
-      </div>
-    </div>
-
+	<div v-if="bookingProgress.machine">
+		<MachineReservedCard
+			:machineSelected="bookingProgress.machine"
+			:usersMachine="bookingProgress.userName"
+			:addressMachine="bookingProgress.address"
+			:timeSlots="bookingProgress.timeSlots"
+		/>
+	</div>
   </main>
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref } from "vue";
+import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
+import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
-import axios from "../../utils/axios.js";
+import MachineReservedCard from '../../components/machine/MachineReservedCard.vue';
+
+const { isAdmin } = storeToRefs(useAuth());
+const { bookingProgress } = storeToRefs(useMachinesStore());
+const { clearMachine, fetchMachine } = useMachinesStore();
+
+clearMachine();
 
 const id = Number(useRoute().params.id);
-
-const machine = ref(null);
-const machineCharacteristics = ref(null);
-
-axios.get(`http://localhost:5050/machines/${id}`).then((response) => {
-  machine.value = response.data;
-  machineCharacteristics.value = {
-    hasWasher: machine.value.hasWasher,
-    hasDryer: machine.value.hasDryer,
-    maxCapacity: machine.value.maxCapacity,
-    washDuration: machine.value.washDuration,
-    dryDuration: machine.value.dryDuration,
-    detergentIncluded: machine.value.detergentIncluded,
-  };
-});
-
-const MachineDetailsHeader = defineAsyncComponent(() => import("../../components/machine/MachineDetailsHeader.vue"));
-const MachineDetailsCharacteristics = defineAsyncComponent(() =>
-  import("../../components/machine/MachineDetailsCharacteristics.vue")
-);
-const MachineDetailsPayment = defineAsyncComponent(() => import("../../components/machine/MachineDetailsPayment.vue"));
+fetchMachine(id);
 </script>
 
 <style scoped>
@@ -87,18 +33,14 @@ const MachineDetailsPayment = defineAsyncComponent(() => import("../../component
   .sticky {
     position: static;
   }
+}
 
-  .large-screen {
-    display: none;
-  } 
+.large-screen {
+  display: none;
+}
 
-  .small-screen {
-    display: block;
-  } 
-
-  .small-screen-details {
-    margin-top: 20px;
-  }
+.small-screen {
+  display: block;
 }
 
 @media (min-width: 992px) {
