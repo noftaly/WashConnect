@@ -3,12 +3,7 @@
     <div class="row">
       <div class="col-md-3">
         <div class="mx-3 ms-md-3">
-          <MachineFilters
-            :category="props.category"
-            @change:price="updatedPrices"
-            @change:manufacturer="updatedManufacturer"
-            @change:category="updatedCategory"
-          />
+          <MachineFilters/>
         </div>
       </div>
       <div class="col-md-9">
@@ -30,17 +25,15 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
+import axios from "../../utils/axios.js";
 import { useMachinesStore } from "../../stores/machines.js";
 import MachineFilters from "./MachineFilters.vue";
 import MachineCard from "./MachineCard.vue";
-// import data from "../../utils/mocked_data.js";
 
 const { machines } = storeToRefs(useMachinesStore());
-const { fetchMachines } = useMachinesStore();
+const { fetchMachines, filters } = useMachinesStore();
 
 fetchMachines();
-
-const props = defineProps(["category"]);
 
 const shownItems = ref(fetchMachines());
 
@@ -48,46 +41,24 @@ watch(machines, () => {
   shownItems.value = [...machines.value];
 });
 
-const pricePredicate = (priceRange) => (item) => item.price >= priceRange[0] && item.price <= priceRange[1];
-const manufacturerPredicate = (manufacturers) => (item) => manufacturers[item.characteristic.manufacturer];
-const categoryPredicate = (categories) => (item) => categories[item.characteristic.category];
 
-const predicates = {
-  price: null,
-  manufacturer: null,
-  category: null,
-};
+// async function filterMachines() {
+//    await axios.get("http://localhost:5050/machines", {
+//     params: {
+//       pgt: filters.pgt,
+//       plt: filters.plt
+//     }
+//   })
+//   .then((response) => {
+//     machines.value = response.data;
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
+// } 
 
-function updatedPrices(priceRange) {
-  predicates.price = pricePredicate(priceRange);
-  filterItems();
-}
+// filterMachines();
 
-function updatedManufacturer(manufacturers) {
-  predicates.manufacturer = manufacturerPredicate(manufacturers);
-  filterItems();
-}
-
-function updatedCategory(categories) {
-  const categoriesLowerCase = Object.keys(categories).reduce((acc, key) => {
-    acc[key.toLowerCase()] = categories[key];
-    return acc;
-  }, {});
-  console.log(categoriesLowerCase);
-  predicates.category = categoryPredicate(categoriesLowerCase);
-  filterItems();
-}
-
-function filterItems() {
-  const predicate = Object.values(predicates)
-    .filter((predicate) => predicate !== null)
-    .reduce(
-      (acc, predicate) => (item) => acc(item) && predicate(item),
-      () => true
-    );
-
-  shownItems.value = machines.value.filter(predicate);
-}
 </script>
 
 <style scoped>

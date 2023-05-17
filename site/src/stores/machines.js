@@ -6,6 +6,12 @@ export const useMachinesStore = defineStore("machines", {
     machines: [],
     searchedMachines: [],
     machine: null,
+    filters: {
+      pgt: 1,
+      plt: 20,
+      type: 0,
+      capacity: 10,
+    }
   }),
   getters: {
     getManufacturers: (state) => {
