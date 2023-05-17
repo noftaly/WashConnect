@@ -1,7 +1,4 @@
-# YouPlane website
-
-- Yohan Fajerman
-- Elliot Maisl
+# WashConnect website -- Front-end
 
 ## Recommended IDE Setup
 

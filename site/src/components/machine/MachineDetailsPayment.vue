@@ -2,7 +2,12 @@
   <div class="card">
     <div class="card-body d-flex flex-column gap-3">
       <div>
-        <p class="m-0">Renting price: <PriceFormatted :price="machine.priceWashingDrying" notation="compact" /></p>
+        <p class="m-0 mb-1">Renting price: </p>
+        <ul class="list-group">
+          <li class="list-group-item d-flex align-items-center gap-2" v-if="machine.hasWasher == true">Washing Price: <PriceFormatted :price="machine.priceWashing" notation="compact" /></li>
+          <li class="list-group-item d-flex align-items-center gap-2" v-if="machine.hasDryer == true">Drying Price: <PriceFormatted :price="machine.priceDrying" notation="compact" /></li>
+          <li class="list-group-item d-flex align-items-center gap-2" v-if="machine.hasWasher == true && machine.hasDryer == true">Washing & Drying Price: <PriceFormatted :price="machine.priceWashingDrying" notation="compact" /></li>
+        </ul>
       </div>
 
       <hr/>
@@ -47,16 +52,16 @@
           </div>
 
           <div v-else>
-            <span class="mx-2">Select an appointment:</span><br/>
+            <span class="text-muted">You will be able to choose a time slot when confirming your reservation.</span><br/>
             <button
-              class="btn btn-primary dropright dropdown-toggle mb-4 justify-content-center w-100"
+              class="btn btn-secondary dropright dropdown-toggle mt-2 mb-4 justify-content-center w-100"
               type="button"
               id="timeslotDropdown"
               data-bs-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
             >
-            {{ selectedTimeSlot || "Time Slot" }}
+            Consult available Time Slots
             </button>
 
             <div class="dropdown-menu" aria-labelledby="timeslotDropdown" style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center;">
@@ -64,7 +69,6 @@
                 class="dropdown-item"
                 v-for="timeSlot in availableSlots"
                 :key="timeSlot.id"
-                @click="selectTimeSlot(timeSlot.timeSlot)"
               >
               {{ new Date(timeSlot.timeSlot).toLocaleString() }}
               </a>
@@ -73,7 +77,7 @@
             <br/>
             <br/>
             <RouterLink :to="`/reservations/${id}`">
-              <button class="btn btn-outline-primary w-100 mb-1">Book this machine</button>
+              <button class="btn btn-outline-primary w-100 mb-1" style="font-size: 20px;">Go to reservation</button>
             </RouterLink>
           </div>
         </div>
@@ -155,11 +159,6 @@ async function getTimeSlots(machineId) {
 const availableSlots = computed(() => {
   return timeSlots.value.filter((slot) => slot.isAvailable);
 });
-
-function selectTimeSlot(slot) {
-  const slotDate = new Date(slot);
-  selectedTimeSlot.value = slotDate.toLocaleString();
-}
 
 function areThereAvailableSlots() {
   return availableSlots.value.length > 0;

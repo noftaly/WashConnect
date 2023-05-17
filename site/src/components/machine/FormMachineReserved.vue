@@ -21,31 +21,48 @@
 						</select>
 					</div>
 
-					<div class="card-text mb-4" v-if="selectedOption === 'Wash'">You will pay: {{
-						machineSelected.priceWashing }}€</div>
-					<div class="card-text mb-4" v-else-if="selectedOption === 'Dry'">You will pay: {{
-						machineSelected.priceDrying }}€</div>
-					<div class="card-text mb-4" v-else-if="selectedOption === 'Wash & Dry'">You will pay: {{ 
-					machineSelected.priceWashingDrying }}€</div>
+					<div class="card-text mb-4" v-if="selectedOption === 'Wash'">You will pay: <strong>
+						<PriceFormatted :price="machineSelected.priceWashing" notation="compact" /></strong>
+					</div>
+					<div class="card-text mb-4" v-else-if="selectedOption === 'Dry'">You will pay: <strong>
+						<PriceFormatted :price="machineSelected.priceDrying" notation="compact" /></strong>
+					</div>
+					<div class="card-text mb-4" v-else-if="selectedOption === 'Wash & Dry'">You will pay: <strong>
+						<PriceFormatted :price="machineSelected.priceWashingDrying" notation="compact" /> </strong>
+					</div>
 
-					<div class="input-group mb-3">
-						<span class="input-group-text" for="selectedDate">Choose a date : </span>
-						<input class="form-control" @change="daySelected" type="date" id="selectedDate"
-							v-model="selectedDate" :min="minDate" required />
+            		<span class="mx-2">Select an appointment:</span><br/>
+            		<button
+						class="btn btn-primary dropright dropdown-toggle mb-4 justify-content-center w-100"
+						type="button"
+						id="timeslotDropdown"
+						data-bs-toggle="dropdown"
+						aria-haspopup="true"
+						aria-expanded="false"
+            		>
+            		{{ selectedTimeSlot || "Time Slot" }}
+            		</button>
+
+					<div class="dropdown-menu" aria-labelledby="timeslotDropdown" style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center;">
+					<a
+						class="dropdown-item"
+						v-for="timeSlot in getAvailableSlots(timeSlots)"
+						:key="timeSlot.id"
+						@click="selectTimeSlot(timeSlot.timeSlot)"
+						
+					>
+					{{ new Date(timeSlot.timeSlot).toLocaleString() }}
+					</a>
 					</div>
-					<div class="input-group mb-3">
-						<span class="input-group-text" for="selectedTime">Choose a time : </span>
-						<select class="form-select" id="selectedTime" v-model="selectedTime" required>
-							<option v-for="time in availableTimes" :value="time">{{ time }}</option>
-						</select>
-					</div>
+
 					<div>
 						<div v-if="!canPay && selectedOption !== '' && selectedDate !== '' && selectedTime !== ''">
 							You don't have enough money to pay
 						</div>
 
 						<button :disabled="disabled" @click="reserve" type="button"
-							class="btn btn-outline-primary w-50 mt-2">
+							class="btn btn-outline-primary w-50 mt-2 d-flex justify-content-center"
+							style="font-size: 20px;">
 							Reserve
 						</button>
 						<div>
@@ -59,11 +76,15 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from "vue";
+import axios from "../../utils/axios.js";
+import { useToast } from "vue-toastification";
+
 import { useAuthStore } from '../../stores/auth';
-import { useMachinesStore } from '../../stores/machines';
+import { useReservationsStore } from '../../stores/reservations';
+import PriceFormatted from "../formatters/PriceFormatted.vue";
 
 const authStore = useAuthStore();
-const machineStore = useMachinesStore();
+const { createReservation } = useReservationsStore();
 
 const user = authStore.user;
 
@@ -78,11 +99,35 @@ const emits = defineEmits(['closeModal'])
 
 
 const selectedOption = ref('');
-const selectedDate = ref('');
-const selectedTime = ref('');
+const timeSlots = ref(getTimeSlots(props.machineSelected.id));
+const selectedTimeSlot = ref("");
+const availableSlots = ref([]);
+const timeSlotId = ref(0);
+
 const canPay = ref(false);
-const bookedTimes = ref([]);
 const currentDate = new Date();
+
+
+function translateSelectedOption(selectedOption) {
+  let machineType;
+
+  switch (selectedOption) {
+    case "Wash":
+      machineType = "WASH";
+      break;
+    case "Dry":
+      machineType = "DRY";
+      break;
+    case "Wash & Dry":
+      machineType = "WASHANDDRY";
+      break;
+    default:
+      machineType = "";
+  }
+
+  return machineType;
+}
+
 
 const pricePaiement = computed(() => selectedOption.value === 'Wash' ? props.machineSelected.priceWashing : selectedOption.value === 'Dry' ? props.machineSelected.priceDrying
  ? props.machineSelected.priceWashingDrying : selectedOption.value === 'Wash & Dry' : 0)
@@ -90,7 +135,7 @@ const pricePaiement = computed(() => selectedOption.value === 'Wash' ? props.mac
 
 const disabled = computed(() => {
 	if ( canPay.value === true) {
-		if( selectedOption.value === '' || selectedDate.value === '' || selectedTime.value === '') {
+		if( selectedOption.value === '' || selectedTimeSlot.value === "") {
 			return true;
 		} else {
 			return false;
@@ -109,37 +154,56 @@ watch(pricePaiement, value => {
 	}
 })
 
+async function getTimeSlots(machineId) {
+  try {
+    const response = await axios.get(`/timeslots/${machineId}`);
+    timeSlots.value = response.data;
+  } catch (error) {
+    console.log("An error has occured");
+    console.error(error);
+    timeSlots.value = [];
+  }
+  return timeSlots.value;
+}
 
-const availableTimes = computed(() => {
-	const allTimes = [
-		'09:00',
-		'10:00',
-		'11:00',
-		'12:00',
-		'13:00',
-		'14:00',
-		'15:00',
-		'16:00',
-		'17:00',
-		'18:00',
-		'19:00',
-		'20:00',
-		'21:00',
-		'22:00'
-	];
+function selectTimeSlot(slot) {
+  const slotDate = new Date(slot);
+  selectedTimeSlot.value = slotDate.toLocaleString();
+  timeSlotId.value = getTimeSlotId(selectedTimeSlot, timeSlots)
+}
 
-	return allTimes.filter((time) => !isTimeBooked(time));
-});
+function getTimeSlotId(timeSlot, timeSlots) {
+  for (let i = 0; i < timeSlots.length; i++) {
+	if (new Date(timeSlots[i].timeSlot).toLocaleString() === timeSlot) {
+	  timeSlotId = timeSlots[i].id;
+	}
+  }
+  return timeSlotId;
+}
 
-const isTimeBooked = (time) => {
-	return bookedTimes.value.includes(time);
-};
+// const availableSlots = computed(() => {
+//   return timeSlots.value.filter((slot) => slot.isAvailable);
+// });
+
+function getAvailableSlots(timeSlots) {
+	for (let i = 0; i < timeSlots.length; i++) {
+		if (timeSlots[i].isAvailable === true && !availableSlots.value.includes(timeSlots[i])) {
+			availableSlots.value.push(timeSlots[i]);
+		}
+	}
+	return availableSlots.value;
+}
+
 
 onMounted(() => {
 
 
 })
 
+
+
+
+// NE PAS SUPP POUR DATES AU PASSE
 const daySelected = () => {
 	bookedTimes.value = [];
 	// To prevent to reserve from passed hours in the actual Day
@@ -178,33 +242,20 @@ const daySelected = () => {
 	})
 }
 
-const reserve = async (event) => {
-	const dateParts = selectedDate.value.split('-');
-	const timeParts = selectedTime.value.split(':');
-	const year = parseInt(dateParts[0]);
-	const month = parseInt(dateParts[1]) - 1;
-	const day = parseInt(dateParts[2]);
-	const hour = parseInt(timeParts[0]);
-	const minute = parseInt(timeParts[1]);
 
-	const bookedMachine = {
-		typeOfProduct: selectedOption.value.toUpperCase(),
-		machineId: props.machineSelected.id,
-		timeSlot: new Date(year, month, day, hour, minute)
-	}
+async function reserve() {
+	// const bookedMachine = {
+	// 	typeOfProduct: translateSelectedOption(selectedOption.value),
+	// 	machineId: props.machineSelected.id,
+	// 	timeSlot: new Date(selectedTimeSlot.value).toISOString(),
+	// }
 
-	const response = await machineStore.bookMachine(bookedMachine);
-	if (response) {
-		emits('closeModal');
-	}
+	await createReservation(translateSelectedOption(selectedOption.value), timeSlotId.value);
+	emits('closeModal');
+	router.push({name: "home"});
+    window.location.reload();
+	console.log("YAAYYA");
+    useToast().success("Machine reserved for ", selectedTimeSlot.value, " with programme ", selectedOption.value, " selected !");
 };
-
-const minDate = computed(() => {
-	const year = currentDate.getFullYear();
-	const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-	const day = String(currentDate.getDate()).padStart(2, '0');
-	return `${year}-${month}-${day}`;
-});
-
 
 </script>

@@ -25,30 +25,29 @@
           <div v-if="isAuthenticated" class="navbar-nav d-flex flex-row gap-1">
             <!-- We display the user -->
             <li>
-                  <RouterLink class="btn btn-info nav-link p-1" to="/profile">
-                    <div class="d-flex flex-column text-center mx-auto">
-                      <font-awesome-icon icon="fa-solid fa-circle-user" />
-                      <span style="font-size: 0.7rem">{{ user.username }}</span>
-                    </div>
-                  </RouterLink>
+              <RouterLink class="nav-link p-1" to="/profile">
+                <div class="d-flex flex-column">
+                  <font-awesome-icon icon="fa-solid fa-circle-user" />
+                  <span style="font-size: 0.7rem" class="text-center mt-1">{{ user.username }}</span>
+                </div>
+              </RouterLink>
             </li>
 
             <!-- We display the balance-->
             <li>
-                <RouterLink class="btn btn-primary nav-link p-1" to="/balance">
-                  <div class="d-flex flex-column text-center mx-auto">
-                    <font-awesome-icon icon="fa-sharp fa-solid fa-circle-euro" />
-                    <span style="font-size: 0.7rem">Balance: {{ user.balance }}€</span>
-                  </div>
-                </RouterLink>
+              <RouterLink class="nav-link p-1" to="/balance">
+                <div class="d-flex flex-column">
+                  <font-awesome-icon icon="fa-sharp fa-solid fa-circle-euro" />
+                  <span style="font-size: 0.7rem" class="text-center mt-1">Balance: {{ user.balance }}€</span>
+                </div>
+              </RouterLink>
             </li>
 
-
             <li>
-              <RouterLink class="btn btn-success nav-link p-1" to="/new_ad">
-                <div class="d-flex flex-column text-center mx-auto">
+              <RouterLink class="nav-link p-1" to="/new_ad">
+                <div class="d-flex flex-column">
                   <font-awesome-icon icon="fa-solid fa-circle-plus" size="xl" />
-                  <span style="font-size: 0.7rem">New Ad</span>
+                  <span style="font-size: 0.7rem" class="text-center mt-1">New Ad</span>
                 </div>
               </RouterLink>
             </li>

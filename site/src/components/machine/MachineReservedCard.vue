@@ -30,12 +30,12 @@
 							</li>
 							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasWasher == true">
 								<span>
-									Washing Price: {{ machineSelected.priceWashing }}€
+									Washing Price: <PriceFormatted :price="machineSelected.priceWashing" notation="compact" />
 								</span>
 							</li>
 							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasWasher == true">
 								<span>
-									Washing Duration: {{ machineSelected.washDuration }}min
+									Washing Duration: {{ machineSelected.washDuration }} min
 								</span>
 							</li>
 							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.detergentIncluded">
@@ -45,22 +45,22 @@
 							</li>
 							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasWasher == true || machineSelected.hasDryer == true">
 								<span>
-									Max Capacity: {{ machineSelected.maxCapacity }}kg
+									Max Capacity: {{ machineSelected.maxCapacity }} kg
 								</span>
 							</li>
 							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasDryer == true">
 								<span>
-									Drying Price: {{ machineSelected.priceDrying }}€
+									Drying Price: <PriceFormatted :price="machineSelected.priceDrying" notation="compact" />
 								</span>
 							</li>
 							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasDryer == true">
 								<span>
-									Drying Duration: {{ machineSelected.dryDuration }}min
+									Drying Duration: {{ machineSelected.dryDuration }} min
 								</span>
 							</li>
 						</ul>
 						<div>
-							<button :disabled="disabled" @click="seeReservation" type="button" class="btn btn-outline-primary w-50 mt-4">
+							<button :disabled="disabled" @click="seeReservation" type="button" class="btn btn-outline-primary w-50 mt-4" style="font-size: 20px;">
 								Make a reservation
 							</button>
 						</div>
