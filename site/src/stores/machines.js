@@ -13,14 +13,6 @@ export const useMachinesStore = defineStore("machines", {
       capacity: 10,
     }
   }),
-  getters: {
-    getManufacturers: (state) => {
-      return [...new Set(state.machines.map((machine) => machine.characteristic.manufacturer))];
-    },
-    getCategories: (state) => {
-      return [...new Set(state.machines.map((machine) => machine.characteristic.category))];
-    },
-  },
   actions: {
     clearMachine() {
       this.machine = null;
@@ -41,7 +33,7 @@ export const useMachinesStore = defineStore("machines", {
 
     async searchMachines(searchQuery) {
       const response = await axios.get(`/machines/search?q=${searchQuery}`);
-      this.searchedmachines = response.data;
+      this.searchedMachines = response.data;
     },
 
     async fetchMachine(id) {

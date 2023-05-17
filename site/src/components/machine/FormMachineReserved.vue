@@ -56,7 +56,7 @@
 					</div>
 
 					<div>
-						<div v-if="!canPay && selectedOption !== '' && selectedDate !== '' && selectedTime !== ''">
+						<div class="alert alert-warning" v-if="!canPay && selectedOption !== '' && selectedDate !== '' && selectedTime !== ''">
 							You don't have enough money to pay
 						</div>
 
@@ -76,6 +76,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from "vue";
+import router from "../../router/index.js";
 import axios from "../../utils/axios.js";
 import { useToast } from "vue-toastification";
 
@@ -169,21 +170,17 @@ async function getTimeSlots(machineId) {
 function selectTimeSlot(slot) {
   const slotDate = new Date(slot);
   selectedTimeSlot.value = slotDate.toLocaleString();
-  timeSlotId.value = getTimeSlotId(selectedTimeSlot, timeSlots)
+  timeSlotId.value = getTimeSlotId(selectedTimeSlot.value, timeSlots.value)
 }
 
 function getTimeSlotId(timeSlot, timeSlots) {
   for (let i = 0; i < timeSlots.length; i++) {
 	if (new Date(timeSlots[i].timeSlot).toLocaleString() === timeSlot) {
-	  timeSlotId = timeSlots[i].id;
+		return timeSlots[i].id;
 	}
   }
-  return timeSlotId;
+  return null; // Return null if no matching time slot is found
 }
-
-// const availableSlots = computed(() => {
-//   return timeSlots.value.filter((slot) => slot.isAvailable);
-// });
 
 function getAvailableSlots(timeSlots) {
 	for (let i = 0; i < timeSlots.length; i++) {
@@ -252,10 +249,10 @@ async function reserve() {
 
 	await createReservation(translateSelectedOption(selectedOption.value), timeSlotId.value);
 	emits('closeModal');
-	router.push({name: "home"});
-    window.location.reload();
-	console.log("YAAYYA");
-    useToast().success("Machine reserved for ", selectedTimeSlot.value, " with programme ", selectedOption.value, " selected !");
+	router.push({ name: "home" }).then(() => {
+		window.location.reload();
+	});
+    useToast().success("Machine reserved successfully !");
 };
 
 </script>

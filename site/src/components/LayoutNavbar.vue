@@ -52,26 +52,6 @@
               </RouterLink>
             </li>
 
-            <!-- <li class="nav-item">
-              <RouterLink class="nav-link p-1" to="/cart">
-                <div style="width: 2rem">
-                  <font-awesome-layers>
-                    <font-awesome-icon icon="fa-solid fa-cart-shopping" size="xl" />
-                    <font-awesome-layers-text counter :value="count" position="bottom-left" class="fa-2x5" />
-                  </font-awesome-layers>
-                  <span style="font-size: 0.7rem" class="text-center mt-1">Cart</span>
-                </div>
-              </RouterLink>
-            </li>
-            <li class="nav-item">
-              <RouterLink class="nav-link p-1" to="/orders">
-                <div class="d-flex flex-column">
-                  <font-awesome-icon icon="fa-solid fa-file-invoice" size="xl" />
-                  <span style="font-size: 0.7rem" class="text-center mt-1">Orders</span>
-                </div>
-              </RouterLink>
-            </li> -->
-
             <li class="nav-item">
               <div class="nav-link cursor-pointer p-1" @click.prevent="doLogout">
                 <div class="d-flex flex-column">
@@ -115,7 +95,6 @@ const { logout } = useAuth();
 const { searchMachine } = useMachinesStore();
 
 const searchQuery = ref("");
-// const  balance = ref(0);
 
 async function doLogout() {
   await logout();
@@ -127,31 +106,6 @@ async function search() {
   router.push({ name: "search", force: true });
 }
 
-async function getBalance() {
-  if (isAuthenticated.value == true) {
-    try {
-      const response = await axios.get("http://localhost:5050/auth/me");
-      return response.data.balance;
-    } catch (error) {
-      console.log("An error has occured");
-      console.error(error);
-      balance.value = -1;
-    }
-  }
-}
-
-async function getUsername() {
-  if (isAuthenticated.value == true) {
-    try {
-      const response = await axios.get("http://localhost:5050/auth/me");
-      return response.data.username;
-    } catch (error) {
-      console.log("An error has occured");
-      console.error(error);
-      username.value = -1;
-    }
-  }
-}
 </script>
 
 <style scoped>

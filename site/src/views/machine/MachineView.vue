@@ -32,14 +32,14 @@
 
       <div class="small-screen-details">
         <div class="row justify-content-between align-items-center">
-          <div class="col-8">
+          <div>
             <MachineDetailsHeader
               :description="machine.adDescription"
               :user-id="machine.userId"
               :address-id="machine.addressId"
             />
           </div>
-          <div class="col-4">
+          <div>
             <MachineDetailsPayment :id="id" />
           </div>
         </div>

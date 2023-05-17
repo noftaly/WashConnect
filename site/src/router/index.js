@@ -53,6 +53,11 @@ const router = createRouter({
       component: () => import("../views/machine/MachineView.vue"),
     },
     {
+      path: "/search",
+      name: "search",
+      component: () => import("../views/SearchResultsView.vue"),
+    },
+    {
       path: "/reservations/:id",
       name: "reservation",
       component: () => import("../views/machine/AdReservation.vue"),
