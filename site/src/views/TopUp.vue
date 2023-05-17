@@ -18,6 +18,16 @@
       </div>
 
       <div v-if="paymentMethod === 'newCard'">
+
+        <label for="card-type">Card Type:</label>
+        
+    <select id="card-type" v-model="cardType">
+      <option value="visa">Visa</option>
+      <option value="mastercard">Mastercard</option>
+      <option value="cb">Carte Bancaire</option>
+      
+    </select>
+        
         <label for="card-number" class="form-label">Card Number:</label>
         <input type="text" id="card-number" v-model="cardNumber" placeholder="1234 5678 9012 3456" class="form-control mb-3">
 
@@ -26,6 +36,12 @@
 
         <label for="cvc" class="form-label">CVC:</label>
         <input type="text" id="cvc" v-model="cvc" placeholder="123" class="form-control mb-3">
+
+        <label for="card-name">Name on Card:</label>
+        <input type="text" id="card-name" v-model="cardName" placeholder="Name Surname" />
+
+        <label for="country">Country:</label>
+        <input type="text" id="country" v-model="country" placeholder="Country" />
       </div>
 
       <label for="amount" class="form-label">Amount to Top Up:</label>
@@ -41,10 +57,13 @@ import { ref } from 'vue';
 import { useAuthStore } from "../stores/auth.js";
 import { useRouter } from 'vue-router';
 
-let cardNumber = ref('');
-let expiryDate = ref('');
-let cvc = ref('');
-let amount = ref(0);
+  let cardType = ref('');
+  let cardNumber = ref('');
+  let expiryDate = ref('');
+  let cvc = ref('');
+  let cardName = ref('');
+  let country = ref('');
+  let amount = ref(0);
 let paymentMethod = ref('');
 
 const { topUpBalance } = useAuthStore();
