@@ -1,7 +1,7 @@
 import { db } from '../database.js';
 
 export async function create(req, res) {
-  if (!req.body.typeOfProduct) {
+  if (!req.body.typeOfProduct || Number.isNaN(Number(req.params.agendaId))) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
