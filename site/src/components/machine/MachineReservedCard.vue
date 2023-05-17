@@ -13,29 +13,29 @@
 								<!-- <SvgDry /> -->
 							<!-- </span>{{ dayAppointment.toDateString() }} at {{ hourAppointment }}:{{ minuteAppointment }}</h5> -->
 						<h5 class="card-title">{{ machineSelected.adTitle }}</h5>
-						<h6 class="card-subtitle  mt-4 text-body-secondary">About this machine</h6>
+						<h6 class="card-subtitle  mt-4 text-body-secondary">About this machine: </h6>
 						<p class="card-text">
 							{{ machineSelected.adDescription }}
 						</p>
 						<ul class="list-group">
-							<li class="list-group-item d-flex align-items-center gap-2">
+							<!-- <li class="list-group-item d-flex align-items-center gap-2">
 								<span class="d-flex">
-									{{ username }}
+									Posted by {{ username }}
 								</span>
-							</li>
+							</li> -->
 							<li class="list-group-item d-flex align-items-center gap-2">
 								<span>
-									{{ addressStr }}
+									Located at {{ addressStr }}
 								</span>
 							</li>
-							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasWasher">
+							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasWasher == true">
 								<span>
 									Washing Price: {{ machineSelected.priceWashing }}€
 								</span>
 							</li>
-							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasWasher">
+							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasWasher == true">
 								<span>
-									Washing Duration: {{ machineSelected.washingDuration }}min
+									Washing Duration: {{ machineSelected.washDuration }}min
 								</span>
 							</li>
 							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.detergentIncluded">
@@ -43,17 +43,17 @@
 									Detergent included
 								</span>
 							</li>
-							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasWasher">
+							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasWasher == true || machineSelected.hasDryer == true">
 								<span>
-									Capacity: {{ machineSelected.maxCapacity }}kg
+									Max Capacity: {{ machineSelected.maxCapacity }}kg
 								</span>
 							</li>
-							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasDryer">
+							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasDryer == true">
 								<span>
 									Drying Price: {{ machineSelected.priceDrying }}€
 								</span>
 							</li>
-							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasDryer">
+							<li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasDryer == true">
 								<span>
 									Drying Duration: {{ machineSelected.dryDuration }}min
 								</span>
@@ -67,15 +67,13 @@
 					</div>
 				</div>
 			</div>
-			<!-- <Overlay v-model:active="active" :removeOverflow="true" >
+			<Overlay v-model:active="active" :removeOverflow="true" >
 				<FormMachineReserved
 					:machineSelected="machineSelected"
-					:usersMachine="usersMachine"
-					:addressMachine="addressMachine"
-					:timeSlots="timeSlots"
+					:addressMachine="addressStr"
 					@closeModal="closeModal"
 				/>
-			</Overlay> -->
+			</Overlay>
 		</div>
 </template>
 
@@ -121,14 +119,14 @@ const props = defineProps({
 	// timeSlots: {type: Array, required: true}
 })
 
-const getUsername = async () => {
-  try {
-    const user = await getUser(props.machineSelected.userId);
-    username.value = user.username;
-  } catch (error) {
-    console.error(error);
-  }
-};
+// const getUsername = async () => {
+//   try {
+//     const user = await axios.get(`/users/${machineSelected.userId}`);
+//     username.value = user.username;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 const addressObj = computed(() => {
   if (addresses.value.length === 0) {
@@ -150,8 +148,9 @@ const getAddresses = async () => {
   }
 };
 
-getUsername();
+// getUsername();
 getAddresses();
+
 
 const active = ref(false);
 

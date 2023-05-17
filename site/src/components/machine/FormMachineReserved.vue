@@ -3,11 +3,11 @@
 		<div class="row g-0 justify-content-center">
 			<div class="card-body d-flex flex-column w-100">
 				<h5 class="card-title">{{ machineSelected.adTitle }}</h5>
-				<p class="card-text">
+				<!-- <p class="card-text">
 					{{ usersMachine.username }}
-				</p>
+				</p> -->
 				<p class="card-text">
-					{{ addressMachine.line1 }}, {{ addressMachine.zip }}, {{ addressMachine.city }}
+					{{ addressMachine }}
 				</p>
 				<p class="card-text d-flex flex-row gap-3">
 				</p>
@@ -17,6 +17,7 @@
 							<option selected disabled value="">Choose Your Program</option>
 							<option v-if="machineSelected.hasWasher">Wash</option>
 							<option v-if="machineSelected.hasDryer">Dry</option>
+							<option v-if="machineSelected.hasWasher && machineSelected.hasDryer">Wash & Dry</option>
 						</select>
 					</div>
 
@@ -24,7 +25,8 @@
 						machineSelected.priceWashing }}€</div>
 					<div class="card-text mb-4" v-else-if="selectedOption === 'Dry'">You will pay: {{
 						machineSelected.priceDrying }}€</div>
-					<div class="card-text mb-4" v-else>You will pay: </div>
+					<div class="card-text mb-4" v-else-if="selectedOption === 'Wash & Dry'">You will pay: {{ 
+					machineSelected.priceWashingDrying }}€</div>
 
 					<div class="input-group mb-3">
 						<span class="input-group-text" for="selectedDate">Choose a date : </span>
@@ -67,9 +69,10 @@ const user = authStore.user;
 
 const props = defineProps({
 	machineSelected: { type: Object, required: true },
-	usersMachine: { type: Object, required: true },
-	addressMachine: { type: Object, required: true },
-	timeSlots: { type: Array, required: true }
+	addressMachine: { type: String, required: true },
+	// usersMachine: { type: Object, required: true },
+	// addressMachine: { type: Object, required: true },
+	// timeSlots: { type: Array, required: true }
 })
 const emits = defineEmits(['closeModal'])
 
@@ -81,7 +84,8 @@ const canPay = ref(false);
 const bookedTimes = ref([]);
 const currentDate = new Date();
 
-const pricePaiement = computed(() => selectedOption.value === 'Wash' ? props.machineSelected.priceWashing : selectedOption.value === 'Dry' ? props.machineSelected.priceDrying : 0)
+const pricePaiement = computed(() => selectedOption.value === 'Wash' ? props.machineSelected.priceWashing : selectedOption.value === 'Dry' ? props.machineSelected.priceDrying
+ ? props.machineSelected.priceWashingDrying : selectedOption.value === 'Wash & Dry' : 0)
 
 
 const disabled = computed(() => {

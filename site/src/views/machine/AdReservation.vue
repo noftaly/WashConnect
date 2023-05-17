@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-center">
       <img class="mt-5" style="width: 25%" src="../../assets/Logo_WashConnect.png" />
     </div>
-    <h1 class="text-center mt-5">Confirm your reservation!</h1>
+    <h1 class="text-center mt-5">Confirm your reservation !</h1>
 
     <br/>
     <!-- <MachineCard v-bind="machine"></MachineCard> -->
@@ -52,9 +52,7 @@ async function getMachineById() {
   }
 }
 
-onMounted(() => {
-  getMachineById();
-});
+getMachineById();
 </script>
 
 <script>
@@ -65,4 +63,4 @@ export default {
   },
 };
 </script>
-``
+
