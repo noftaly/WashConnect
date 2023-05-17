@@ -1,33 +1,38 @@
 <template>
-  <div class="top-up-container">
-    <h1>Top Up Your Balance</h1>
-    
-    <div class="payment-options">
-      <input type="radio" id="saved-card" value="saved" v-model="paymentMethod">
-      <label for="saved-card">
-        <img src="../assets/visa-logo.png" alt="Visa logo">
-        ****3456
-      </label>
-      
-      <input type="radio" id="new-card" value="new" v-model="paymentMethod">
-      <label for="new-card">Enter New Card Details</label>
-    </div>
-    
-    <div v-if="paymentMethod === 'new'">
-      <label for="card-number">Card Number:</label>
-      <input type="text" id="card-number" v-model="cardNumber" placeholder="1234 5678 9012 3456" />
-  
-      <label for="expiry-date">Expiry Date:</label>
-      <input type="text" id="expiry-date" v-model="expiryDate" placeholder="MM/YY" />
-  
-      <label for="cvc">CVC:</label>
-      <input type="text" id="cvc" v-model="cvc" placeholder="123" />
-    </div>
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-5 w-50">
+      <h1 class="text-center mb-4">Top Up Your Balance</h1>
 
-    <label for="amount">Amount to Top Up:</label>
-    <input type="number" id="amount" v-model.number="amount" />
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="radio" name="paymentMethod" id="savedCard" value="savedCard" v-model="paymentMethod">
+        <label class="form-check-label" for="savedCard">
+          <img src="logo_visa.png" alt="Visa Logo" height="24px"> ****3456
+        </label>
+      </div>
 
-    <button @click="topUpAndRedirect(amount)">Top Up</button>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="radio" name="paymentMethod" id="newCard" value="newCard" v-model="paymentMethod">
+        <label class="form-check-label" for="newCard">
+          Enter New Card Details
+        </label>
+      </div>
+
+      <div v-if="paymentMethod === 'newCard'">
+        <label for="card-number" class="form-label">Card Number:</label>
+        <input type="text" id="card-number" v-model="cardNumber" placeholder="1234 5678 9012 3456" class="form-control mb-3">
+
+        <label for="expiry-date" class="form-label">Expiry Date:</label>
+        <input type="text" id="expiry-date" v-model="expiryDate" placeholder="MM/YY" class="form-control mb-3">
+
+        <label for="cvc" class="form-label">CVC:</label>
+        <input type="text" id="cvc" v-model="cvc" placeholder="123" class="form-control mb-3">
+      </div>
+
+      <label for="amount" class="form-label">Amount to Top Up:</label>
+      <input type="number" id="amount" v-model.number="amount" class="form-control mb-3">
+
+      <button @click="topUpAndRedirect(amount)" class="btn btn-primary w-100">Top Up</button>
+    </div>
   </div>
 </template>
 
