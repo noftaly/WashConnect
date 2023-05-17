@@ -37,14 +37,14 @@
 
       <!-- <br/> -->
       <div class="d-flex justify-content-between align-items-baseline">
-        <span>Min Capacity (L):</span>
+        <span>Capacity (L):</span>
         <input
             type="number"
             class="form-control form-control-sm"
             style="width: 240px;"
-            placeholder="Min Capacity"
-            v-model="minCapacity"
-            @change="changeCapacity(minCapacity)"
+            placeholder="Capacity"
+            v-model="capacity"
+            @change="changeCapacity(capacity)"
           />
       </div>
 
@@ -61,14 +61,8 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
-import Slider from "@vueform/slider";
-import axios from "../../utils/axios.js";
-
-import "@vueform/slider/themes/default.css";
-import priceFormatter from "../../utils/priceFormatter.js";
-import PriceFormatted from "../formatters/PriceFormatted.vue";
 
 import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
@@ -76,15 +70,14 @@ import { useMachinesStore } from "../../stores/machines.js";
 const { isAuthenticated } = storeToRefs(useAuth());
 const priceRange = ref([1, 20]);
 const selectedType = ref("");
-const minCapacity = ref(10);
+const capacity = ref(10);
 
-const { fetchMachines, machines, filters } = useMachinesStore();
+const { filters } = useMachinesStore();
 
 
 function changePriceRange(priceRange) {
   filters.pgt = priceRange[0];
   filters.plt = priceRange[1];
-  filterMachines();
 }
 
 function updateFiltersType(selectedType) {
@@ -97,32 +90,11 @@ function updateFiltersType(selectedType) {
   } else {
     filters.type = 0;
   }
-  filterMachines();
 }
 
-function changeCapacity(minCapacity) {
-  filters.capacity = minCapacity;
-  filterMachines();
+function changeCapacity(capacity) {
+  filters.capacity = capacity;
 }
-
-async function filterMachines() {
-   await axios.get("http://localhost:5050/machines", {
-    params: {
-      pgt: filters.pgt,
-      plt: filters.plt,
-      type: filters.type,
-      capacity: filters.capacity
-    }
-  })
-  .then((response) => {
-    machines.value = response.data;
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-} 
-
-
 </script>
 
 <style scoped>

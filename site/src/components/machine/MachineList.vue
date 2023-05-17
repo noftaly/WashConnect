@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-3">
         <div class="mx-3 ms-md-3">
-          <MachineFilters/>
+          <MachineFilters @change="filterMachines"/>
         </div>
       </div>
       <div class="col-md-9">
@@ -42,22 +42,22 @@ watch(machines, () => {
 });
 
 
-// async function filterMachines() {
-//    await axios.get("http://localhost:5050/machines", {
-//     params: {
-//       pgt: filters.pgt,
-//       plt: filters.plt
-//     }
-//   })
-//   .then((response) => {
-//     machines.value = response.data;
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
-// } 
-
-// filterMachines();
+async function filterMachines() {
+   await axios.get("http://localhost:5050/machines", {
+    params: {
+      pgt: filters.pgt,
+      plt: filters.plt,
+      type: filters.type,
+      capacity: filters.capacity
+    }
+  })
+  .then((response) => {
+    machines.value = response.data;
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+} 
 
 </script>
 
