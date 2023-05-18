@@ -20,28 +20,6 @@
             </router-link>
           </div>
         </div>
-
-        <!-- User information -->
-        <div class="card mt-5" v-if="user">
-          <div class="card-header bg-info text-white text-center">
-            <h2>Your Information</h2>
-          </div>
-          <div class="card-body">
-            <table class="table table-striped">
-              <tbody>
-                <tr>
-                  <th scope="row"><img src="../assets/username.png" alt="username" class="icon"> Username</th>
-                  <td>{{ user.username }}</td>
-                </tr>
-                <tr>
-                  <th scope="row"><img src="../assets/phonenumber.png" alt="phone number" class="icon"> Phone Number</th>
-                  <td>{{ user.phoneNumber }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
