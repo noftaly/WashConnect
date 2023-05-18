@@ -52,18 +52,19 @@
   </div>
 </template>
 
+
 <script setup>
 import { ref } from 'vue';
 import { useAuthStore } from "../stores/auth.js";
 import { useRouter } from 'vue-router';
 
-  let cardType = ref('');
-  let cardNumber = ref('');
-  let expiryDate = ref('');
-  let cvc = ref('');
-  let cardName = ref('');
-  let country = ref('');
-  let amount = ref(0);
+let cardType = ref('');
+let cardNumber = ref('');
+let expiryDate = ref('');
+let cvc = ref('');
+let cardName = ref('');
+let country = ref('');
+let amount = ref(0);
 let paymentMethod = ref('');
 
 const { topUpBalance } = useAuthStore();
@@ -71,9 +72,8 @@ const router = useRouter();
 
 const topUpAndRedirect = async (amount) => {  
   await topUpBalance(amount);
-  router.push({ name: 'balance' });  // Redirection vers la page de balance.
+  router.push({ name: 'profile' });  // Redirection vers la page de profil.
 };
-
 </script>
 
 <style scoped>
