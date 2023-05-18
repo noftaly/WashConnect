@@ -27,7 +27,7 @@
             <li>
               <RouterLink class="nav-link p-1" to="/profile">
                 <div class="d-flex flex-column">
-                  <font-awesome-icon icon="fa-solid fa-circle-user" />
+                  <font-awesome-icon icon="fa-solid fa-user" size="xl" />
                   <span style="font-size: 0.7rem" class="text-center mt-1">{{ user.username }}</span>
                 </div>
               </RouterLink>
@@ -35,19 +35,19 @@
 
             <!-- We display the balance-->
             <li>
-              <RouterLink class="nav-link p-1" to="/balance">
+              <RouterLink class="nav-link p-1" to="/profile">
                 <div class="d-flex flex-column">
-                  <font-awesome-icon icon="fa-sharp fa-solid fa-circle-euro" />
+                  <font-awesome-icon icon="fa-solid fa-wallet" size="xl" />
                   <span style="font-size: 0.7rem" class="text-center mt-1">Balance: {{ user.balance }}€</span>
                 </div>
               </RouterLink>
             </li>
 
             <li>
-              <RouterLink class="nav-link p-1" to="/new_ad">
+              <RouterLink class="nav-link p-1" to="/history">
                 <div class="d-flex flex-column">
-                  <font-awesome-icon icon="fa-solid fa-circle-plus" size="xl" />
-                  <span style="font-size: 0.7rem" class="text-center mt-1">New Ad</span>
+                  <font-awesome-icon icon="fa-solid fa-calendar-check" size="xl" />
+                  <span style="font-size: 0.7rem" class="text-center mt-1">History</span>
                 </div>
               </RouterLink>
             </li>

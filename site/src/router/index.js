@@ -33,11 +33,6 @@ const router = createRouter({
       component: () => import("../views/ProfileView.vue"),
     },
     {
-      path: "/balance",
-      name: "balance",
-      component: () => import("../views/BalanceView.vue"),
-    },
-    {
       path: "/topup",
       name: "topup",
       component: () => import("../views/TopUp.vue"),
