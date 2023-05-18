@@ -104,9 +104,6 @@ const addresses = ref([]);
 
 const props = defineProps({
 	machineSelected: {type: Object, required: true},
-	// usersMachine: {type: Object, required: true},
-	// addressMachine: {type: Object, required: true},
-	// timeSlots: {type: Array, required: true}
 })
 
 // const getUsername = async () => {

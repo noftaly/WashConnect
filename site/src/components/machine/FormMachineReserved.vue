@@ -92,9 +92,6 @@ const user = authStore.user;
 const props = defineProps({
 	machineSelected: { type: Object, required: true },
 	addressMachine: { type: String, required: true },
-	// usersMachine: { type: Object, required: true },
-	// addressMachine: { type: Object, required: true },
-	// timeSlots: { type: Array, required: true }
 })
 const emits = defineEmits(['closeModal'])
 
@@ -197,56 +194,7 @@ onMounted(() => {
 
 })
 
-
-
-
-// NE PAS SUPP POUR DATES AU PASSE
-const daySelected = () => {
-	bookedTimes.value = [];
-	// To prevent to reserve from passed hours in the actual Day
-	const dateToCompare = new Date(selectedDate.value);
-	if (dateToCompare.getFullYear() === currentDate.getFullYear() && dateToCompare.getMonth() === currentDate.getMonth() && dateToCompare.getDate() === currentDate.getDate()) {
-		const currentHour = currentDate.getHours();
-		for (let i = 0; i <= currentHour; i++) {
-			const hourStr = String(i).padStart(2, '0');
-			bookedTimes.value.push(`${hourStr}:00`);
-		}
-	}
-
-	props.timeSlots.map((value) => {
-		if (new Date(value.timeSlot).toISOString().split('T')[0] === selectedDate.value) {
-			if (value.machineType === "WASHING_MACHINE") {
-				const endDate = new Date(value.timeSlot).getTime() + (props.machineSelected.washDuration - 1) * 60000;
-
-				const endBooked = `${new Date(endDate).getHours()}:${new Date(endDate).getMinutes() <10 ? '0' : ''}${new Date(endDate).getMinutes()}`
-
-				const bookedHour = `${new Date(value.timeSlot).getHours()}:${new Date(value.timeSlot).getMinutes() < 10 ? '0': ''}${new Date(value.timeSlot).getMinutes()}`;
-
-				bookedTimes.value.push(bookedHour);
-				bookedTimes.value.push(endBooked);
-			}
-			else if (value.machineType === "DRYER" ) {
-				const endDate = new Date(value.timeSlot).getTime() + (props.machineSelected.dryDuration - 1) * 60000;
-
-				const endBooked = `${new Date(endDate).getHours()}:${new Date(endDate).getMinutes() <10 ? '0' : ''}${new Date(endDate).getMinutes()}`
-
-				const bookedHour = `${new Date(value.timeSlot).getHours()}:${new Date(value.timeSlot).getMinutes() < 10 ? '0': ''}${new Date(value.timeSlot).getMinutes()}`;
-
-				bookedTimes.value.push(bookedHour);
-				bookedTimes.value.push(endBooked);
-			}
-		}
-	})
-}
-
-
 async function reserve() {
-	// const bookedMachine = {
-	// 	typeOfProduct: translateSelectedOption(selectedOption.value),
-	// 	machineId: props.machineSelected.id,
-	// 	timeSlot: new Date(selectedTimeSlot.value).toISOString(),
-	// }
-
 	await createReservation(translateSelectedOption(selectedOption.value), timeSlotId.value);
 	emits('closeModal');
 	router.push({ name: "history" }).then(() => {

@@ -97,23 +97,6 @@ const hourAppointment = computed(() =>  dayAppointment.value.getHours());
 const minuteAppointment = computed(() => dayAppointment.value.getMinutes());
 
 const machineAppointment = computed(() => historyMachine.value.machine);
-// const machineAppointment = computed(() => allMachines.value.find((value) => value.id === props.history.machineID));
-
-// const allAddresses = computed(() => historyMachine.value.addresses);
-// const machineAddress = computed(() => allAddresses.value.find((value) => value.userId === machineAppointment.value.userId));
-
-
-
-// const machineAddressId = computed(() => machineAppointment.value.addressId);
-// const machineAddressStr = computed(async () => {
-//   const address = await getAddressById(machineAddressId.value);
-//   if (address) {
-//     return `${address.streetL1}, ${address.zip} ${address.city}, ${address.country}`;
-//   }
-//   return ''; // Return a default value if address is not available
-// });
-
-// console.log(machineAddressStr.value);
 
 const addressObj = computed(() => {
   if (addresses.value.length === 0) {

@@ -2,7 +2,7 @@
   <div class="d-flex flex-column align-items-center mt-3">
     <div class="mb-2">
       <label for="date-picker" class="font-weight-bold">Date:</label>
-      <input type="date" id="date-picker" v-model="selectedDate" @input="updateDateTime"/>
+      <input type="date" id="date-picker" v-model="selectedDate" :min="minDate" @input="updateDateTime" required/>
     </div>
               
     <div>        
@@ -12,13 +12,11 @@
   </div>
 </template>
 
-
-
-
 <script>
 export default {
   data() {
     return {
+      minDate: new Date().toISOString().split('T')[0],
       selectedDate: '',
       selectedTime: ''
     }
@@ -32,7 +30,6 @@ export default {
 }
 </script>
 
-
 <style scoped>
 .date-time-selector {
   display: flex;
@@ -42,5 +39,5 @@ export default {
 .date-time-selector label {
   margin-left: 0.5rem;
 }
-
 </style>
+
