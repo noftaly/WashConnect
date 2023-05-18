@@ -10,7 +10,7 @@
             <p v-if="loading" class="text-center">Loading...</p>
             <div v-else-if="user.balance >= 0" class="d-flex justify-content-center align-items-center">
               <h3>{{ user.balance }}€</h3>
-              <img src="../assets/piece.png" alt="piece" class="ml-2">
+              <img src="../assets/piece.png" alt="piece" class="icon ml-2">
             </div>
             <p v-else class="text-danger text-center">Une erreur est survenue lors du chargement de votre solde.</p>
           </div>
@@ -49,8 +49,8 @@
 
 <style scoped>
   .icon {
-    height: 20px;
-    width: 20px;
+    height: 15px;
+    width: 15px;
     margin-right: 5px;
   }
 </style>
