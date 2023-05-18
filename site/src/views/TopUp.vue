@@ -6,7 +6,7 @@
       <div class="form-check mb-3">
         <input class="form-check-input" type="radio" name="paymentMethod" id="savedCard" value="savedCard" v-model="paymentMethod">
         <label class="form-check-label" for="savedCard">
-          <img src="visa.png" alt="Visa Logo" height="24px"> ****3456
+          <img src=" ../assets/visa.png" alt="Visa Logo" height="24px"> ****3456
         </label>
       </div>
 
