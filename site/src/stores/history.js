@@ -7,7 +7,7 @@ export const useHistoryStore = defineStore("history", {
   }),
   actions: {
     async getMachineHistory() {
-      const response = await axios.get('/timeslots');
+      const response = await axios.get('/reservations');
       this.machineHistory = response.data;
 	  return true;
     },
