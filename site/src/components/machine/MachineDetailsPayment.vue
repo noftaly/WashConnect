@@ -157,8 +157,12 @@ async function getTimeSlots(machineId) {
 }
 
 const availableSlots = computed(() => {
-  return timeSlots.value.filter((slot) => slot.isAvailable);
+  if (Array.isArray(timeSlots.value)) {
+    return timeSlots.value.filter((slot) => slot.isAvailable);
+  }
+  return []; // Return an empty array if timeSlots.value is not an array
 });
+
 
 function areThereAvailableSlots() {
   return availableSlots.value.length > 0;

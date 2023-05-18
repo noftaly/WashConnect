@@ -6,18 +6,7 @@
     <h1 class="text-center mt-5">Confirm your reservation !</h1>
 
     <br/>
-    <!-- <MachineCard v-bind="machine"></MachineCard> -->
     <MachineReservedCard :machineSelected="machine"></MachineReservedCard>
-
-    <!-- Payment -->
-    <div class="mt-5">
-      <div class="alert alert-warning alert-sm text-center" role="alert">
-        By clicking the button below, {{ machine.priceWashingDrying }} € will be deducted from your balance.
-      </div>
-      <div class="d-flex justify-content-center">
-        <button class="btn btn-primary btn-lg">Book</button>
-      </div>
-    </div>
   </main>
 </template>
 
@@ -58,7 +47,6 @@ getMachineById();
 <script>
 export default {
   components: {
-    MachineCard,
     MachineReservedCard,
   },
 };

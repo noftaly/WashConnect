@@ -3,7 +3,8 @@ import { createPinia } from "pinia";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from "@fortawesome/vue-fontawesome";
 import {
-  faCartShopping,
+  faWallet,
+  faCalendarCheck,
   faCheck,
   faFileInvoice,
   faGift,
@@ -23,8 +24,9 @@ import router from "./router";
 import "./assets/main.scss";
 
 library.add(
+  faWallet,
+  faCalendarCheck,
   faCircleUser,
-  faCartShopping,
   faCheck,
   faUser,
   faRightToBracket,

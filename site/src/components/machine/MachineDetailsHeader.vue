@@ -32,11 +32,19 @@ const props = defineProps({
   },
 });
 
-const address = computed(() => addresses.value.find((addr) => addr.id === props.addressId));
-const addressStr = computed(() => {
-  const { streetL1, zip, city, country } = address.value;
-  return `${streetL1}, ${zip} ${city}, ${country}`;
+const address = computed(() => {
+  const addressData = addresses.value.find((addr) => addr.id === props.addressId);
+  return addressData ? addressData : {}; // Return an empty object if addressData is not available
 });
+
+const addressStr = computed(() => {
+  if (address.value) {
+    const { streetL1, zip, city, country } = address.value;
+    return `${streetL1}, ${zip} ${city}, ${country}`;
+  }
+  return ''; // Return an empty string if address.value is not available
+});
+
 
 const username = computed(() => {
   return user.value ? user.value.username : "";

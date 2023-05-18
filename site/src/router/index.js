@@ -33,11 +33,6 @@ const router = createRouter({
       component: () => import("../views/ProfileView.vue"),
     },
     {
-      path: "/balance",
-      name: "balance",
-      component: () => import("../views/BalanceView.vue"),
-    },
-    {
       path: "/topup",
       name: "topup",
       component: () => import("../views/TopUp.vue"),
@@ -51,6 +46,11 @@ const router = createRouter({
       path: "/machines/:id",
       name: "machine",
       component: () => import("../views/machine/MachineView.vue"),
+    },
+    {
+      path: "/search",
+      name: "search",
+      component: () => import("../views/SearchResultsView.vue"),
     },
     {
       path: "/reservations/:id",

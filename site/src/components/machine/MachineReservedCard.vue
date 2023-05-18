@@ -6,23 +6,13 @@
 				</div>
 				<div class="col-md-8">
 					<div class="card-body border-0">
-						<!-- <h5 v-if="historyMachine.machineType === 'WASHING_MACHINE'" class="card-title"><span> -->
-								<!-- <SvgWash /> -->
-							<!-- </span>{{ dayAppointment.toDateString() }} at {{ hourAppointment }}:{{ minuteAppointment }}</h5> -->
-						<!-- <h5 v-else class="card-title"><span> -->
-								<!-- <SvgDry /> -->
-							<!-- </span>{{ dayAppointment.toDateString() }} at {{ hourAppointment }}:{{ minuteAppointment }}</h5> -->
+
 						<h5 class="card-title">{{ machineSelected.adTitle }}</h5>
 						<h6 class="card-subtitle  mt-4 text-body-secondary">About this machine: </h6>
 						<p class="card-text">
 							{{ machineSelected.adDescription }}
 						</p>
 						<ul class="list-group">
-							<!-- <li class="list-group-item d-flex align-items-center gap-2">
-								<span class="d-flex">
-									Posted by {{ username }}
-								</span>
-							</li> -->
 							<li class="list-group-item d-flex align-items-center gap-2">
 								<span>
 									Located at {{ addressStr }}
@@ -60,7 +50,7 @@
 							</li>
 						</ul>
 						<div>
-							<button :disabled="disabled" @click="seeReservation" type="button" class="btn btn-outline-primary w-50 mt-4" style="font-size: 20px;">
+							<button :disabled="disabled" @click="seeReservation" type="button" class="btn btn-outline-primary w-100 mt-4" style="font-size: 20px;">
 								Make a reservation
 							</button>
 						</div>
