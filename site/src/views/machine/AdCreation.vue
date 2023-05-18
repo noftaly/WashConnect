@@ -265,7 +265,7 @@
               <div class="forms-inputs mb-4">
                 <label for="time-slot" class="font-weight-bold mb-2">Choose a time slot:</label>
                 <div style="display: flex; flex-direction: column;">
-                  <time-slot-selector id="time-slot" @update="handleDateTimeUpdate" />
+                  <TimeSlotSelector id="time-slot" @update="handleDateTimeUpdate" />
                 </div>
                 <small class="form-text text-muted">Select a first time slot of availability for your machine.</small>
                 <div class="invalid-feedback">A valid date/time, in the future, is required!</div>
@@ -290,7 +290,7 @@ import { useToast } from "vue-toastification";
 import router from "../../router/index.js";
 import axios from "../../utils/axios.js";
 
-import timeSlotSelector from "../../components/machine/timeSlotSelector.vue";
+import TimeSlotSelector from "../../components/machine/TimeSlotSelector.vue";
 
 import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
