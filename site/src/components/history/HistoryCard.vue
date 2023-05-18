@@ -3,7 +3,7 @@
 		<div class="card mb-3">
 			<div class="row g-0">
 				<div class="col-md-4">
-					<img :src="machineAppointment.imgUrl.length > 0 ? machineAppointment.imgUrl : AdCover" class="img-fluid rounded-start h-100" style="object-fit: cover" alt="Machine" />
+					<img :src="AdCover" class="img-fluid rounded-start h-100" style="object-fit: cover" alt="Machine" />
 				</div>
 				<div class="col-md-8">
 					<div class="card-body">
@@ -61,7 +61,7 @@
 								<span>
 									<SvgLocation />
 								</span>
-								{{ clientAddress.line1 }}, {{ clientAddress.zip }}, {{ clientAddress.city }}
+								{{ machineAddressStr }}
 							</li>
 						</ul>
 					</div>
@@ -80,22 +80,62 @@ import SvgDetergent from "../../svg/SvgDetergent.vue"
 import SvgTime from "../../svg/SvgTime.vue"
 import SvgWeightLaundry from "../../svg/SvgWeightLaundry.vue"
 import SvgLocation from "../../svg/SvgLocation.vue"
-import { computed } from "vue";
+
+import { ref, computed } from "vue";
+import { useAddressesStore } from "../../stores/addresses";
 
 const props = defineProps({
 	history: { type: Object, required: true },
 })
+
+const { getPersonalAddresses } = useAddressesStore();
+const addresses = ref([]);
 const historyMachine = computed(() => props.history);
 
 const dayAppointment = computed(() => new Date(historyMachine.value.timeSlot));
 const hourAppointment = computed(() =>  dayAppointment.value.getHours());
 const minuteAppointment = computed(() => dayAppointment.value.getMinutes());
 
-const allMachines = computed(() => historyMachine.value.machine);
-const machineAppointment = computed(() => allMachines.value.find((value) => value.id === props.history.machineID));
+const machineAppointment = computed(() => historyMachine.value.machine);
+// const machineAppointment = computed(() => allMachines.value.find((value) => value.id === props.history.machineID));
 
-const allAddresses = computed(() => historyMachine.value.addresses);
-const clientAddress = computed(() => allAddresses.value.find((value) => value.userId === machineAppointment.value.userId));
+// const allAddresses = computed(() => historyMachine.value.addresses);
+// const machineAddress = computed(() => allAddresses.value.find((value) => value.userId === machineAppointment.value.userId));
+
+
+
+// const machineAddressId = computed(() => machineAppointment.value.addressId);
+// const machineAddressStr = computed(async () => {
+//   const address = await getAddressById(machineAddressId.value);
+//   if (address) {
+//     return `${address.streetL1}, ${address.zip} ${address.city}, ${address.country}`;
+//   }
+//   return ''; // Return a default value if address is not available
+// });
+
+// console.log(machineAddressStr.value);
+
+const addressObj = computed(() => {
+  if (addresses.value.length === 0) {
+    return {};
+  }
+  return addresses.value.find((addr) => addr.id === machineAppointment.value.addressId) || {};
+});
+
+const machineAddressStr = computed(() => {
+  const { streetL1, zip, city, country } = addressObj.value;
+  return `${streetL1}, ${zip} ${city}, ${country}`;
+});
+
+const getAddresses = async () => {
+  try {
+    addresses.value = await getPersonalAddresses();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+getAddresses();
 
 </script>
 
