@@ -12,7 +12,7 @@
           <MachineDetailsHeader
             :description="machine.adDescription"
             :user-id="machine.userId"
-            :address-id="machine.addressId"
+            :address="machine.address"
           />
           <hr />
           <h6>About this machine:</h6>
@@ -36,7 +36,7 @@
             <MachineDetailsHeader
               :description="machine.adDescription"
               :user-id="machine.userId"
-              :address-id="machine.addressId"
+              :address="machine.address"
             />
           </div>
           <div>
@@ -55,7 +55,6 @@
 <script setup>
 import { defineAsyncComponent, ref } from "vue";
 import { useRoute } from "vue-router";
-import { useMachinesStore } from "../../stores/machines.js";
 import axios from "../../utils/axios.js";
 
 const id = Number(useRoute().params.id);

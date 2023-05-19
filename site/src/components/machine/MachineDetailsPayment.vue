@@ -97,7 +97,7 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import axios from "../../utils/axios.js";
-import { ref, computed } from "vue";
+import { ref, computed, watchEffect } from "vue";
 import { useToast } from "vue-toastification";
 
 import PriceFormatted from "../formatters/PriceFormatted.vue";
@@ -116,19 +116,25 @@ const props = defineProps({
 
 
 const { isAuthenticated } = storeToRefs(useAuth());
-const user = ref(fetchUser());
+const user = ref(null);
+
+watchEffect(() => {
+  if (isAuthenticated.value) {
+    fetchUser();
+  }
+});
 
 async function fetchUser() {
   try {
     const response = await axios.get("/auth/me");
     user.value = response.data;
   } catch (error) {
-    console.log("An error has occured");
+    console.log("An error has occurred");
     console.error(error);
     user.value = {};
   }
-  return user.value;
 }
+
 
 function isCurrentUserMachineOwner(machineUserId, currentUserId) {
   return machineUserId === currentUserId;
@@ -139,9 +145,14 @@ function isCurrentUserMachineOwner(machineUserId, currentUserId) {
 const { getMachineById } = useMachinesStore();
 const machine = getMachineById(props.id);
 
-const timeSlots = ref(getTimeSlots(props.id));
-const selectedTimeSlot = ref("");
+const timeSlots = ref(null);
 const newTimeSlot = ref(new Date());
+
+watchEffect(() => {
+  if (isAuthenticated.value) {
+    timeSlots.value = getTimeSlots(props.id);
+  }
+});
 
 
 async function getTimeSlots(machineId) {

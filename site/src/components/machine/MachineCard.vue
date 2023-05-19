@@ -75,8 +75,8 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  addressId: {
-    type: Number,
+  address: {
+    type: Object,
     required: true,
   },
 });
@@ -86,9 +86,6 @@ const displayedMachine = ref(null);
 
 const { getUser } = useUsersStore();
 const username = ref(null);
-
-const { getPersonalAddresses } = useAddressesStore();
-const addresses = ref([]);
 
 const getMachine = async () => {
   try {
@@ -108,27 +105,13 @@ const getUsername = async () => {
   }
 };
 
-const addressObj = computed(() => {
-  if (addresses.value.length === 0) {
-    return {};
-  }
-  return addresses.value.find((addr) => addr.id === props.addressId) || {};
-});
 
 const addressStr = computed(() => {
-  const { streetL1, zip, city, country } = addressObj.value;
-  return `${streetL1}, ${zip} ${city}, ${country}`;
+  const { line1, zip, city, country } = props.address;
+  return `${line1}, ${zip} ${city}, ${country}`;
 });
 
-const getAddresses = async () => {
-  try {
-    addresses.value = await getPersonalAddresses();
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 getMachine();
 getUsername();
-getAddresses();
 </script>

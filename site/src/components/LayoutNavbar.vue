@@ -85,7 +85,6 @@
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import router from "../router";
-import axios from "../utils/axios.js";
 
 import { useAuth } from "../utils/useAuthHook.js";
 import { useMachinesStore } from "../stores/machines.js";

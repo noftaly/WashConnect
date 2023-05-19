@@ -86,7 +86,9 @@ export async function create(req, res, next) {
 
 export async function getOne(req, res) {
   const machine = await db.machine.findUnique({
-    where: { id: parseInt(req.params.machineId) },
+    where: 
+    { id: parseInt(req.params.machineId) },
+    include: { address: true },
   });
   // If the machine doesn't exist, return 404
   if (!machine) {

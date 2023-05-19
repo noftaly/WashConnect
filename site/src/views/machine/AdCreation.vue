@@ -290,7 +290,7 @@ import { useToast } from "vue-toastification";
 import router from "../../router/index.js";
 import axios from "../../utils/axios.js";
 
-import TimeSlotSelector from "../../components/TimeSlotSelector.vue";
+import TimeSlotSelector from "../../components/machine/timeSlotSelector.vue";
 
 import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";

@@ -26,8 +26,8 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  addressId: {
-    type: Number,
+  address: {
+    type: Object,
     required: true,
   },
 });
@@ -38,11 +38,8 @@ const address = computed(() => {
 });
 
 const addressStr = computed(() => {
-  if (address.value) {
-    const { streetL1, zip, city, country } = address.value;
-    return `${streetL1}, ${zip} ${city}, ${country}`;
-  }
-  return ''; // Return an empty string if address.value is not available
+  const { line1, zip, city, country } = props.address;
+  return `${line1}, ${zip} ${city}, ${country}`;
 });
 
 
@@ -52,7 +49,7 @@ const username = computed(() => {
 
 async function getInfos(userId) {
   try {
-    addresses.value = await getPersonalAddresses();
+    // addresses.value = await getPersonalAddresses();
     user.value = await getUser(userId);
   } catch (error) {
     console.error(error);
