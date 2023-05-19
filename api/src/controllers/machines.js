@@ -59,6 +59,7 @@ export async function findAll(req, res, next) {
 
   const machines = await db.machine.findMany({
     where: { AND: queries },
+    include: { address: true },
   });
 
   res.json(machines);
