@@ -43,7 +43,7 @@ watch(machines, () => {
 
 
 async function filterMachines() {
-   await axios.get("http://localhost:5050/machines", {
+   await axios.get("/machines", {
     params: {
       pgt: filters.pgt,
       plt: filters.plt,

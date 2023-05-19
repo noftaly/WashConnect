@@ -290,7 +290,7 @@ import { useToast } from "vue-toastification";
 import router from "../../router/index.js";
 import axios from "../../utils/axios.js";
 
-import TimeSlotSelector from "../../components/machine/TimeSlotSelector.vue";
+import TimeSlotSelector from "../../components/TimeSlotSelector.vue";
 
 import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
@@ -394,7 +394,7 @@ function validCapacity(capacity) {
 
 async function getPersonalAddresses() {
   try {
-    const response = await axios.get("http://localhost:5050/addresses");
+    const response = await axios.get("/addresses");
     addresses.value = response.data;
   } catch (error) {
     console.log("An error has occured");

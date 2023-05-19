@@ -63,7 +63,7 @@ const id = Number(useRoute().params.id);
 const machine = ref(null);
 const machineCharacteristics = ref(null);
 
-axios.get(`http://localhost:5050/machines/${id}`).then((response) => {
+axios.get(`/machines/${id}`).then((response) => {
   machine.value = response.data;
   machineCharacteristics.value = {
     hasWasher: machine.value.hasWasher,
