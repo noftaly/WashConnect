@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-body d-flex flex-column gap-3">
+    <div v-if="machine" class="card-body d-flex flex-column gap-3">
       <div>
         <p class="m-0 mb-1">Renting price:</p>
         <ul class="list-group">
@@ -101,6 +101,9 @@
         </p>
       </div>
     </div>
+    <div v-else>
+      <p>Loading...</p>
+    </div>
   </div>
 </template>
 
@@ -124,32 +127,15 @@ const props = defineProps({
   },
 });
 
-const { isAuthenticated } = storeToRefs(useAuth());
-const user = ref(null);
-
-watchEffect(() => {
-  if (isAuthenticated.value) {
-    fetchUser();
-  }
-});
-
-async function fetchUser() {
-  try {
-    const response = await axios.get("/auth/me");
-    user.value = response.data;
-  } catch (error) {
-    console.log("An error has occurred");
-    console.error(error);
-    user.value = {};
-  }
-}
+const { isAuthenticated, user } = storeToRefs(useAuth());
 
 function isCurrentUserMachineOwner(machineUserId, currentUserId) {
   return machineUserId === currentUserId;
 }
 
-const { getMachineById } = useMachinesStore();
-const machine = getMachineById(props.id);
+const { fetchMachine } = useMachinesStore();
+const { machine } = storeToRefs(useMachinesStore());
+fetchMachine(props.id);
 
 const timeSlots = ref(null);
 const newTimeSlot = ref(new Date());
