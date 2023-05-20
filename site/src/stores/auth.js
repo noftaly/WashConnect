@@ -4,7 +4,7 @@ import axios from "../utils/axios";
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: null,
-    isAuthenticated: false,
+    isAuthenticated: null,
   }),
   actions: {
     async fetchUser() {

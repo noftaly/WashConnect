@@ -19,7 +19,7 @@ import MachineReservedCard from "../../components/machine/MachineReservedCard.vu
 import { useMachinesStore } from "../../stores/machines";
 
 const { isAuthenticated } = storeToRefs(useAuth());
-if (!isAuthenticated.value) {
+if (isAuthenticated.value === false) {
   router.push({ name: "login" });
 }
 

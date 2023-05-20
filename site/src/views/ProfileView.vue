@@ -67,7 +67,7 @@ import router from "../router/index.js";
 import { useAuth } from "../utils/useAuthHook.js";
 
 const { user, isAuthenticated } = storeToRefs(useAuth());
-if (!isAuthenticated.value) {
+if (isAuthenticated.value === false) {
   router.push({ name: "login" });
 }
 </script>

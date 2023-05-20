@@ -306,7 +306,7 @@ const { createTimeSlot } = useTimeSlotsStore();
 
 getPersonalAddresses();
 
-if (!isAuthenticated.value) {
+if (isAuthenticated.value === false) {
   router.push({ name: "login" });
 }
 

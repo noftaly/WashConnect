@@ -118,7 +118,7 @@ import { useAuth } from "../utils/useAuthHook.js";
 const { isAuthenticated } = storeToRefs(useAuth());
 const { register } = useAuth();
 
-if (isAuthenticated.value) {
+if (isAuthenticated.value === true) {
   router.push({ name: "home" });
 }
 

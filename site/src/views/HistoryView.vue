@@ -12,7 +12,7 @@ import { useAuth } from "../utils/useAuthHook.js";
 import ListHistory from "../components/history/ListHistory.vue";
 
 const { isAuthenticated } = storeToRefs(useAuth());
-if (!isAuthenticated.value) {
+if (isAuthenticated.value === false) {
   router.push({ name: "login" });
 }
 </script>
