@@ -13,7 +13,7 @@
           v-model="paymentMethod"
         />
         <label class="form-check-label" for="savedCard">
-          <img src=" ../assets/visa.png" alt="Visa Logo" height="24px" /> ****3456
+          <img src="../assets/visa.png" alt="Visa Logo" class="icon" /> ****3456
         </label>
       </div>
 
@@ -121,5 +121,11 @@ const topUpAndRedirect = async (amount) => {
 button {
   display: block;
   margin: 20px auto;
+}
+
+.icon {
+  height: 45px;
+  width: 55px;
+  margin-right: 5px;
 }
 </style>

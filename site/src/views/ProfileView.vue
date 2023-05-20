@@ -8,8 +8,7 @@
             <h1>Your Balance</h1>
           </div>
           <div class="card-body">
-            <p v-if="loading" class="text-center">Loading...</p>
-            <div v-else-if="user.balance >= 0" class="d-flex justify-content-center align-items-center">
+            <div v-if="user && user.balance >= 0" class="d-flex justify-content-center align-items-center">
               <h3>{{ user.balance }}€</h3>
               <img src="../assets/piece.png" alt="piece" class="icon ml-2" />
             </div>
@@ -63,32 +62,17 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import router from "../router/index.js";
-import { useAuthStore } from "../stores/auth.js";
+// import { useAuthStore } from "../stores/auth.js";
 import { useAuth } from "../utils/useAuthHook.js";
 
-const { isAuthenticated } = storeToRefs(useAuth());
+const { user, isAuthenticated } = storeToRefs(useAuth());
 if (!isAuthenticated.value) {
   router.push({ name: "login" });
 }
 
-const { user, getBalance } = storeToRefs(useAuthStore());
-const loading = ref(true);
-
-const fetchBalance = async () => {
-  try {
-    await getBalance();
-    loading.value = false;
-  } catch (err) {
-    console.error(err);
-    user.balance = -1;
-    loading.value = false;
-  }
-};
-
-fetchBalance();
+// const { user } = storeToRefs(useAuthStore());
 </script>
 
 <style scoped>

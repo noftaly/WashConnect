@@ -40,11 +40,3 @@ async function getMachineById() {
 
 getMachineById();
 </script>
-
-<script>
-export default {
-  components: {
-    MachineReservedCard,
-  },
-};
-</script>
