@@ -30,15 +30,19 @@
       </div>
 
       <div v-if="paymentMethod === 'newCard'">
-        <label for="card-type">Card Type:</label>
+        <div class="form-group">
+          <label for="card-type" class="ml-2">Card Type:</label>
+          <select id="card-type" class="form-control" v-model="cardType">
+            <option selected disabled value="">Choose Your Card</option>
+            <option value="visa">Visa</option>
+            <option value="mastercard">Mastercard</option>
+            <option value="cb">Other Debit Card</option>
+          </select>
+        </div>
 
-        <select id="card-type" v-model="cardType">
-          <option value="visa">Visa</option>
-          <option value="mastercard">Mastercard</option>
-          <option value="cb">Carte Bancaire</option>
-        </select>
 
-        <label for="card-number" class="form-label">Card Number:</label>
+        <br/>
+        <label for="card-number" class="form-label mt-2">Card Number:</label>
         <input
           type="text"
           id="card-number"
@@ -53,11 +57,16 @@
         <label for="cvc" class="form-label">CVC:</label>
         <input type="text" id="cvc" v-model="cvc" placeholder="123" class="form-control mb-3" />
 
-        <label for="card-name">Name on Card:</label>
-        <input type="text" id="card-name" v-model="cardName" placeholder="Name Surname" />
+        <div class="form-group">
+          <label for="card-name">Name on Card:</label>
+          <input type="text" id="card-name" class="form-control mb-3" v-model="cardName" placeholder="Name Surname" />
+        </div>
 
-        <label for="country">Country:</label>
-        <input type="text" id="country" v-model="country" placeholder="Country" />
+        <div class="form-group">
+          <label for="country">Country:</label>
+          <input type="text" id="country" class="form-control mb-3" v-model="country" placeholder="Country" />
+        </div>
+
       </div>
 
       <label for="amount" class="form-label">Amount to Top Up:</label>
