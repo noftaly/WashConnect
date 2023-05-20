@@ -47,7 +47,6 @@
           />
         </div>
 
-        <!-- filters by zip code -->
         <br/>
         <div class="d-flex justify-content-between align-items-baseline">
           <span>Zip Code:</span>
@@ -58,6 +57,33 @@
             placeholder="Zip Code"
             v-model="zipCode"
             @change="changeZipCode(zipCode)"
+          />
+        </div>
+
+        <br/>
+        <!-- 2 dates selector to select the machine before / after a certain date -->
+        <div class="d-flex justify-content-between align-items-baseline">
+          <span>Available from:</span>
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            style="width: 240px"
+            placeholder="Available from"
+            v-model="availableFrom"
+            @change="changeAvailableFrom(availableFrom)"
+          />
+        </div>
+
+        <br/>
+        <div class="d-flex justify-content-between align-items-baseline">
+          <span>Available until:</span>
+          <input
+          type="date"
+          class="form-control form-control-sm"
+          style="width: 240px"
+          placeholder="Available until"
+          v-model="availableUntil"
+          @change="changeAvailableUntil(availableUntil)"
           />
         </div>
 
@@ -84,6 +110,8 @@ const priceRange = ref([1, 20]);
 const selectedType = ref("");
 const capacity = ref(10);
 const zipCode = ref(75000);
+const availableFrom = ref(new Date().toISOString().slice(0, 10));
+const availableUntil = ref(new Date().toISOString().slice(0, 10));
 
 const { filters } = useMachinesStore();
 
@@ -125,6 +153,14 @@ async function changeZipCode(zipCode) {
     console.error(error);
     return null;
   }
+}
+
+function changeAvailableFrom(availableFrom) {
+  filters.before = availableFrom;
+}
+
+function changeAvailableUntil(availableUntil) {
+  filters.after = availableUntil;
 }
 
 </script>

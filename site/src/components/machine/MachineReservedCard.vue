@@ -13,6 +13,9 @@
           </p>
           <ul class="list-group">
             <li class="list-group-item d-flex align-items-center gap-2">
+              <span> Posted by {{ machineSelected.user.username }} </span>
+            </li>
+            <li class="list-group-item d-flex align-items-center gap-2">
               <span> Located at {{ addressStr }} </span>
             </li>
             <li class="list-group-item d-flex align-items-center gap-2" v-if="machineSelected.hasWasher == true">
