@@ -1,6 +1,10 @@
 import { db } from '../database.js';
 
 export async function findAllForMachine(req, res) {
+    if (Number.isNaN(Number(req.params.machineId))) {
+        return res.status(400).json({ message: 'Invalid machine ID' });
+    }
+
     const machine = await db.machine.findUnique({ where: { id: Number(req.params.machineId) } });
     if (!machine) {
         return res.status(404).json({ message: 'Machine not found' });

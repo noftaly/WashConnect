@@ -85,12 +85,15 @@ export async function create(req, res, next) {
 }
 
 export async function getOne(req, res) {
+  if (!req.params.machineId || isNaN(Number(req.params.machineId))) {
+    res.status(400).json({ message: 'Invalid machineId' });
+    return;
+  }
+
   const machine = await db.machine.findUnique({
-    where: 
-    { id: parseInt(req.params.machineId) },
+    where: { id: Number(req.params.machineId) },
     include: { address: true },
   });
-  // If the machine doesn't exist, return 404
   if (!machine) {
     res.status(404).json({ message: 'Machine not found' });
     return;
