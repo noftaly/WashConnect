@@ -9,13 +9,9 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useUsersStore } from "../../stores/users";
-import { useAddressesStore } from "../../stores/addresses";
 
 const { getUser } = useUsersStore();
 const user = ref({});
-
-const { getPersonalAddresses } = useAddressesStore();
-const addresses = ref([]);
 
 const props = defineProps({
   description: {
@@ -32,16 +28,10 @@ const props = defineProps({
   },
 });
 
-const address = computed(() => {
-  const addressData = addresses.value.find((addr) => addr.id === props.addressId);
-  return addressData ? addressData : {}; // Return an empty object if addressData is not available
-});
-
 const addressStr = computed(() => {
   const { line1, zip, city, country } = props.address;
   return `${line1}, ${zip} ${city}, ${country}`;
 });
-
 
 const username = computed(() => {
   return user.value ? user.value.username : "";

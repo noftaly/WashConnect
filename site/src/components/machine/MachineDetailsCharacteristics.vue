@@ -21,7 +21,6 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { characteristicsMap } from "../../utils/constants";
 
 const props = defineProps({

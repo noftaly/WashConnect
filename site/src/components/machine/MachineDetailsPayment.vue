@@ -2,25 +2,35 @@
   <div class="card">
     <div class="card-body d-flex flex-column gap-3">
       <div>
-        <p class="m-0 mb-1">Renting price: </p>
+        <p class="m-0 mb-1">Renting price:</p>
         <ul class="list-group">
-          <li class="list-group-item d-flex align-items-center gap-2" v-if="machine.hasWasher == true">Washing Price: <PriceFormatted :price="machine.priceWashing" notation="compact" /></li>
-          <li class="list-group-item d-flex align-items-center gap-2" v-if="machine.hasDryer == true">Drying Price: <PriceFormatted :price="machine.priceDrying" notation="compact" /></li>
-          <li class="list-group-item d-flex align-items-center gap-2" v-if="machine.hasWasher == true && machine.hasDryer == true">Washing & Drying Price: <PriceFormatted :price="machine.priceWashingDrying" notation="compact" /></li>
+          <li class="list-group-item d-flex align-items-center gap-2" v-if="machine.hasWasher == true">
+            Washing Price: <PriceFormatted :price="machine.priceWashing" notation="compact" />
+          </li>
+          <li class="list-group-item d-flex align-items-center gap-2" v-if="machine.hasDryer == true">
+            Drying Price: <PriceFormatted :price="machine.priceDrying" notation="compact" />
+          </li>
+          <li
+            class="list-group-item d-flex align-items-center gap-2"
+            v-if="machine.hasWasher == true && machine.hasDryer == true"
+          >
+            Washing & Drying Price: <PriceFormatted :price="machine.priceWashingDrying" notation="compact" />
+          </li>
         </ul>
       </div>
 
-      <hr/>
+      <hr />
       <div v-if="isAuthenticated">
-        
         <div v-if="isCurrentUserMachineOwner(machine.userId, user.id)">
           <div class="forms-inputs mb-4">
-            <label for="time-slot" class="font-weight-bold mb-2 " style="text-align: center; font-size: 20px;">Add more time slots for your machine:</label>
+            <label for="time-slot" class="font-weight-bold mb-2" style="text-align: center; font-size: 20px"
+              >Add more time slots for your machine:</label
+            >
             <div class="d-flex flex-column align-items-center mt-3">
-              <TimeSlotSelector id="time-slot" @update="handleDateTimeUpdate"/>
+              <TimeSlotSelector id="time-slot" @update="handleDateTimeUpdate" />
             </div>
 
-            <br/>
+            <br />
             <button class="btn btn-primary w-100 mb-1" @click="createNewTimeSlot(machine)">Add time slot</button>
           </div>
 
@@ -32,16 +42,16 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-          Current Time Slots
+            Current Time Slots
           </button>
 
-          <div class="dropdown-menu" aria-labelledby="timeslotDropdown" style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center;">
-            <a
-              class="dropdown-item"
-              v-for="timeSlot in availableSlots"
-              :key="timeSlot.id"
-            >
-            {{ new Date(timeSlot.timeSlot).toLocaleString() }}
+          <div
+            class="dropdown-menu"
+            aria-labelledby="timeslotDropdown"
+            style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center"
+          >
+            <a class="dropdown-item" v-for="timeSlot in availableSlots" :key="timeSlot.id">
+              {{ new Date(timeSlot.timeSlot).toLocaleString() }}
             </a>
           </div>
         </div>
@@ -52,7 +62,8 @@
           </div>
 
           <div v-else>
-            <span class="text-muted">You will be able to choose a time slot when confirming your reservation.</span><br/>
+            <span class="text-muted">You will be able to choose a time slot when confirming your reservation.</span
+            ><br />
             <button
               class="btn btn-secondary dropright dropdown-toggle mt-2 mb-4 justify-content-center w-100"
               type="button"
@@ -61,23 +72,23 @@
               aria-haspopup="true"
               aria-expanded="false"
             >
-            Consult available Time Slots
+              Consult available Time Slots
             </button>
 
-            <div class="dropdown-menu" aria-labelledby="timeslotDropdown" style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center;">
-              <a
-                class="dropdown-item"
-                v-for="timeSlot in availableSlots"
-                :key="timeSlot.id"
-              >
-              {{ new Date(timeSlot.timeSlot).toLocaleString() }}
+            <div
+              class="dropdown-menu"
+              aria-labelledby="timeslotDropdown"
+              style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center"
+            >
+              <a class="dropdown-item" v-for="timeSlot in availableSlots" :key="timeSlot.id">
+                {{ new Date(timeSlot.timeSlot).toLocaleString() }}
               </a>
             </div>
 
-            <br/>
-            <br/>
+            <br />
+            <br />
             <RouterLink :to="`/reservations/${id}`">
-              <button class="btn btn-outline-primary w-100 mb-1" style="font-size: 20px;">Go to reservation</button>
+              <button class="btn btn-outline-primary w-100 mb-1" style="font-size: 20px">Go to reservation</button>
             </RouterLink>
           </div>
         </div>
@@ -90,8 +101,7 @@
         </p>
       </div>
     </div>
-  </div> 
-
+  </div>
 </template>
 
 <script setup>
@@ -114,7 +124,6 @@ const props = defineProps({
   },
 });
 
-
 const { isAuthenticated } = storeToRefs(useAuth());
 const user = ref(null);
 
@@ -135,12 +144,9 @@ async function fetchUser() {
   }
 }
 
-
 function isCurrentUserMachineOwner(machineUserId, currentUserId) {
   return machineUserId === currentUserId;
 }
-
-
 
 const { getMachineById } = useMachinesStore();
 const machine = getMachineById(props.id);
@@ -153,7 +159,6 @@ watchEffect(() => {
     timeSlots.value = getTimeSlots(props.id);
   }
 });
-
 
 async function getTimeSlots(machineId) {
   try {
@@ -174,17 +179,15 @@ const availableSlots = computed(() => {
   return []; // Return an empty array if timeSlots.value is not an array
 });
 
-
 function areThereAvailableSlots() {
   return availableSlots.value.length > 0;
 }
-
 
 const { createTimeSlot } = useTimeSlotsStore();
 const machineType = ref("");
 
 function handleDateTimeUpdate(dateTime) {
-    newTimeSlot.value = dateTime;
+  newTimeSlot.value = dateTime;
 }
 
 async function createNewTimeSlot(machine) {
@@ -193,7 +196,6 @@ async function createNewTimeSlot(machine) {
 
   // Verification of future date
   if (timeSlot != null && timeSlot > now) {
-
     if (machine.hasWasher == true && machine.hasDryer == true) {
       machineType.value = "WASHANDDRY";
     } else if (machine.hasWasher == true && machine.hasDryer == false) {
@@ -206,10 +208,8 @@ async function createNewTimeSlot(machine) {
     newTimeSlot.value = new Date();
     window.location.reload();
     useToast().success("Time Slot added successfully!");
-  }
-  else {
+  } else {
     alert("Please select a future date and time.");
   }
 }
-
 </script>

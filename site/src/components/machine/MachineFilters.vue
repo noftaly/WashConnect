@@ -23,40 +23,39 @@
             v-model="priceRange[1]"
             @chnage="changePriceRange(priceRange)"
           />
-      </div>
+        </div>
 
-      <br/>
-      <div class="input-group mb-3">
-        <select class="form-select" v-model="selectedType" @change="updateFiltersType(selectedType)">
-          <option selected disabled value="">Machine Type</option>
-					<option>Wash</option>
-					<option>Dry</option>
-					<option>Wash & Dry</option>
-				</select>
-			</div>
+        <br />
+        <div class="input-group mb-3">
+          <select class="form-select" v-model="selectedType" @change="updateFiltersType(selectedType)">
+            <option selected disabled value="">Machine Type</option>
+            <option>Wash</option>
+            <option>Dry</option>
+            <option>Wash & Dry</option>
+          </select>
+        </div>
 
-      <!-- <br/> -->
-      <div class="d-flex justify-content-between align-items-baseline">
-        <span>Capacity (L):</span>
-        <input
+        <!-- <br/> -->
+        <div class="d-flex justify-content-between align-items-baseline">
+          <span>Capacity (L):</span>
+          <input
             type="number"
             class="form-control form-control-sm"
-            style="width: 240px;"
+            style="width: 240px"
             placeholder="Capacity"
             v-model="capacity"
             @change="changeCapacity(capacity)"
           />
-      </div>
+        </div>
 
-
-      <div v-if="isAuthenticated">
-        <hr/>
-        <RouterLink v-if="isAuthenticated" :to="`/new_ad`" class="text-decoration-none">
-          <button type="button" class="btn btn-outline-primary w-100">Add a new machine</button>
-        </RouterLink>
+        <div v-if="isAuthenticated">
+          <hr />
+          <RouterLink v-if="isAuthenticated" :to="`/new_ad`" class="text-decoration-none">
+            <button type="button" class="btn btn-outline-primary w-100">Add a new machine</button>
+          </RouterLink>
+        </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -73,7 +72,6 @@ const selectedType = ref("");
 const capacity = ref(10);
 
 const { filters } = useMachinesStore();
-
 
 function changePriceRange(priceRange) {
   filters.pgt = priceRange[0];

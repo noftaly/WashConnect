@@ -4,38 +4,54 @@
       <h1 class="text-center mb-4">Top Up Your Balance</h1>
 
       <div class="form-check mb-3">
-        <input class="form-check-input" type="radio" name="paymentMethod" id="savedCard" value="savedCard" v-model="paymentMethod">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="paymentMethod"
+          id="savedCard"
+          value="savedCard"
+          v-model="paymentMethod"
+        />
         <label class="form-check-label" for="savedCard">
-          <img src=" ../assets/visa.png" alt="Visa Logo" height="24px"> ****3456
+          <img src=" ../assets/visa.png" alt="Visa Logo" height="24px" /> ****3456
         </label>
       </div>
 
       <div class="form-check mb-3">
-        <input class="form-check-input" type="radio" name="paymentMethod" id="newCard" value="newCard" v-model="paymentMethod">
-        <label class="form-check-label" for="newCard">
-          Enter New Card Details
-        </label>
+        <input
+          class="form-check-input"
+          type="radio"
+          name="paymentMethod"
+          id="newCard"
+          value="newCard"
+          v-model="paymentMethod"
+        />
+        <label class="form-check-label" for="newCard"> Enter New Card Details </label>
       </div>
 
       <div v-if="paymentMethod === 'newCard'">
-
         <label for="card-type">Card Type:</label>
-        
-    <select id="card-type" v-model="cardType">
-      <option value="visa">Visa</option>
-      <option value="mastercard">Mastercard</option>
-      <option value="cb">Carte Bancaire</option>
-      
-    </select>
-        
+
+        <select id="card-type" v-model="cardType">
+          <option value="visa">Visa</option>
+          <option value="mastercard">Mastercard</option>
+          <option value="cb">Carte Bancaire</option>
+        </select>
+
         <label for="card-number" class="form-label">Card Number:</label>
-        <input type="text" id="card-number" v-model="cardNumber" placeholder="1234 5678 9012 3456" class="form-control mb-3">
+        <input
+          type="text"
+          id="card-number"
+          v-model="cardNumber"
+          placeholder="1234 5678 9012 3456"
+          class="form-control mb-3"
+        />
 
         <label for="expiry-date" class="form-label">Expiry Date:</label>
-        <input type="text" id="expiry-date" v-model="expiryDate" placeholder="MM/YY" class="form-control mb-3">
+        <input type="text" id="expiry-date" v-model="expiryDate" placeholder="MM/YY" class="form-control mb-3" />
 
         <label for="cvc" class="form-label">CVC:</label>
-        <input type="text" id="cvc" v-model="cvc" placeholder="123" class="form-control mb-3">
+        <input type="text" id="cvc" v-model="cvc" placeholder="123" class="form-control mb-3" />
 
         <label for="card-name">Name on Card:</label>
         <input type="text" id="card-name" v-model="cardName" placeholder="Name Surname" />
@@ -45,16 +61,15 @@
       </div>
 
       <label for="amount" class="form-label">Amount to Top Up:</label>
-      <input type="number" id="amount" v-model.number="amount" class="form-control mb-3">
+      <input type="number" id="amount" v-model.number="amount" class="form-control mb-3" />
 
       <button @click="topUpAndRedirect(amount)" class="btn btn-primary w-100">Top Up</button>
     </div>
   </div>
 </template>
 
-
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import router from "../router/index.js";
 import { useAuth } from "../utils/useAuthHook.js";
@@ -65,22 +80,22 @@ if (!isAuthenticated.value) {
   router.push({ name: "login" });
 }
 
-let cardType = ref('');
-let cardNumber = ref('');
-let expiryDate = ref('');
-let cvc = ref('');
-let cardName = ref('');
-let country = ref('');
+let cardType = ref("");
+let cardNumber = ref("");
+let expiryDate = ref("");
+let cvc = ref("");
+let cardName = ref("");
+let country = ref("");
 let amount = ref(0);
-let paymentMethod = ref('');
+let paymentMethod = ref("");
 
-const { topUpBalance } = useAuthStore(); 
+const { topUpBalance } = useAuthStore();
 
-const topUpAndRedirect = async (amount) => {  
+const topUpAndRedirect = async (amount) => {
   await topUpBalance(amount);
-  router.push({ name: 'profile' }).then(() => {
-        window.location.reload();
-      });  // Redirection vers la page de profil.
+  router.push({ name: "profile" }).then(() => {
+    window.location.reload();
+  }); // Redirection vers la page de profil.
 };
 </script>
 
@@ -107,5 +122,4 @@ button {
   display: block;
   margin: 20px auto;
 }
-
 </style>

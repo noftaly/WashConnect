@@ -42,11 +42,11 @@
               </div>
             </div>
 
-            <hr/>
+            <hr />
 
             <!-- Machines Check boxes -->
             <div class="forms-check mb-4">
-              <span>Which type of machine do you have ?</span><br/>
+              <span>Which type of machine do you have ?</span><br />
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -159,7 +159,7 @@
               <label class="form-check-label" for="detergentIncluded"> Is the detergent included ? </label>
             </div>
 
-            <hr/>
+            <hr />
             <!-- Address Selection -->
             <div>
               <span class="mx-2">Select your address: </span>
@@ -260,26 +260,28 @@
                 </div>
               </div>
 
-              <hr/>
+              <hr />
               <!-- Time Slot Selector -->
               <div class="forms-inputs mb-4">
                 <label for="time-slot" class="font-weight-bold mb-2">Choose a time slot:</label>
-                <div style="display: flex; flex-direction: column;">
+                <div style="display: flex; flex-direction: column">
                   <TimeSlotSelector id="time-slot" @update="handleDateTimeUpdate" />
                 </div>
                 <small class="form-text text-muted">Select a first time slot of availability for your machine.</small>
                 <div class="invalid-feedback">A valid date/time, in the future, is required!</div>
               </div>
-    
+
               <div class="mb-3">
-                  <button @click.prevent="submit" class="btn btn-outline-primary w-100" style="font-size: 20px;">Post the ad</button>
-                  <span class="text-muted">Please make sure to fill up all the informations before posting yout ad!</span>
-              </div>
+                <button @click.prevent="submit" class="btn btn-outline-primary w-100" style="font-size: 20px">
+                  Post the ad
+                </button>
+                <span class="text-muted">Please make sure to fill up all the informations before posting your ad!</span>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
   </main>
 </template>
 
@@ -303,7 +305,7 @@ const { createPersonalAddress } = useAddressesStore();
 const { createTimeSlot } = useTimeSlotsStore();
 
 if (!isAuthenticated.value) {
-  router.push({ name: "login"})
+  router.push({ name: "login" });
 }
 
 const title = ref("");
@@ -350,8 +352,6 @@ const valid = ref(false);
 const validAddress = ref(false);
 const submitted = ref(false);
 
-
-
 function toggleBoolean(value) {
   return !value;
 }
@@ -388,8 +388,6 @@ function validDuration(duration) {
 function validCapacity(capacity) {
   return capacity > 0;
 }
-
-
 
 async function getPersonalAddresses() {
   try {
@@ -432,24 +430,22 @@ function validCountry(country) {
 }
 
 function validateAddress() {
-    if (createAddress.value == false) {
-      if (selectedAddress.value != "") {
-        validAddress.value = true;
-      }
-    } else if (createAddress.value == true) {
-      if (validStreet(streetL1.value) && validZip(zip.value) && validCity(city.value) && validCountry(country.value)) {
-        validAddress.value = true;
-      }
+  if (createAddress.value == false) {
+    if (selectedAddress.value != "") {
+      validAddress.value = true;
     }
-    else {
-      validAddress.value = false;
+  } else if (createAddress.value == true) {
+    if (validStreet(streetL1.value) && validZip(zip.value) && validCity(city.value) && validCountry(country.value)) {
+      validAddress.value = true;
     }
-    return validAddress.value;
+  } else {
+    validAddress.value = false;
   }
-
+  return validAddress.value;
+}
 
 function handleDateTimeUpdate(dateTime) {
-    firstTimeSlot.value = dateTime;
+  firstTimeSlot.value = dateTime;
 }
 
 function validDateTime(dateTime) {
@@ -458,11 +454,9 @@ function validDateTime(dateTime) {
   if (dateTime != null && dateTime > now) {
     return true;
   }
-  
+
   return false;
 }
-
-
 
 function validate() {
   titleBlured.value = true;
@@ -484,19 +478,11 @@ function validate() {
     (hasWasher.value == true || hasDryer.value == true) && // if one machine is at least selected
     validTitle(title.value) &&
     validDescription(description.value) &&
-
     // if washer is selected
-    ((hasWasher.value == true &&
-    validPrice(priceWashing.value) &&
-    validDuration(cycle_wash_duration.value)) ||
-
-    // if dryer is selected
-    (hasDryer.value == true &&
-    validPrice(priceDrying.value) &&
-    validDuration(cycle_dry_duration.value))) &&
-
+    ((hasWasher.value == true && validPrice(priceWashing.value) && validDuration(cycle_wash_duration.value)) ||
+      // if dryer is selected
+      (hasDryer.value == true && validPrice(priceDrying.value) && validDuration(cycle_dry_duration.value))) &&
     validCapacity(max_capacity.value) &&
-
     validateAddress() &&
     validDateTime(firstTimeSlot.value)
   )
@@ -553,7 +539,6 @@ async function submit() {
         window.location.reload();
       });
       useToast().success("Ad created successfully!");
-
     } catch (error) {
       console.log("An error has occured");
       console.error(error);
@@ -568,8 +553,7 @@ async function submit() {
 @import "../../assets/auth.scss";
 
 .form-check-label {
-    padding-right: 10px;
-    padding-left: 5px;
+  padding-right: 10px;
+  padding-left: 5px;
 }
-
 </style>

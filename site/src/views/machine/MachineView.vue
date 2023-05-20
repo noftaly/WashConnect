@@ -48,7 +48,6 @@
         <MachineDetailsCharacteristics :characteristic="machineCharacteristics" />
       </div>
     </div>
-
   </main>
 </template>
 
@@ -89,11 +88,11 @@ const MachineDetailsPayment = defineAsyncComponent(() => import("../../component
 
   .large-screen {
     display: none;
-  } 
+  }
 
   .small-screen {
     display: block;
-  } 
+  }
 
   .small-screen-details {
     margin-top: 20px;

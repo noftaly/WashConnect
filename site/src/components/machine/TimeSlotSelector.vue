@@ -2,12 +2,12 @@
   <div class="d-flex flex-column align-items-center mt-3">
     <div class="mb-2">
       <label for="date-picker" class="font-weight-bold">Date:</label>
-      <input type="date" id="date-picker" v-model="selectedDate" :min="minDate" @input="updateDateTime" required/>
+      <input type="date" id="date-picker" v-model="selectedDate" :min="minDate" @input="updateDateTime" required />
     </div>
-              
-    <div>        
+
+    <div>
       <label for="time-picker" class="font-weight-bold">Time:</label>
-      <input type="time" id="time-picker" v-model="selectedTime" @input="updateDateTime"/>
+      <input type="time" id="time-picker" v-model="selectedTime" @input="updateDateTime" />
     </div>
   </div>
 </template>
@@ -16,18 +16,18 @@
 export default {
   data() {
     return {
-      minDate: new Date().toISOString().split('T')[0],
-      selectedDate: '',
-      selectedTime: ''
-    }
+      minDate: new Date().toISOString().split("T")[0],
+      selectedDate: "",
+      selectedTime: "",
+    };
   },
   methods: {
     updateDateTime() {
-      const dateTime = new Date(`${this.selectedDate}T${this.selectedTime}:00`)
-      this.$emit('update', dateTime)
-    }
-  }
-}
+      const dateTime = new Date(`${this.selectedDate}T${this.selectedTime}:00`);
+      this.$emit("update", dateTime);
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -40,4 +40,3 @@ export default {
   margin-left: 0.5rem;
 }
 </style>
-

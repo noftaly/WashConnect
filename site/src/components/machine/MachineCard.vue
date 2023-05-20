@@ -28,7 +28,8 @@
           </p>
 
           <p class="card-text">
-            <small class="text-muted">Posted by : {{ username }}</small><br/>
+            <small class="text-muted">Posted by : {{ username }}</small
+            ><br />
             <small class="text-muted">Located at : {{ addressStr }}</small>
           </p>
         </div>
@@ -43,7 +44,6 @@ import { defineProps } from "vue";
 
 import { useUsersStore } from "../../stores/users";
 import { useMachinesStore } from "../../stores/machines.js";
-import { useAddressesStore } from "../../stores/addresses";
 import PriceFormatted from "../formatters/PriceFormatted.vue";
 
 const props = defineProps({
@@ -95,7 +95,6 @@ const getMachine = async () => {
   }
 };
 
-
 const getUsername = async () => {
   try {
     const user = await getUser(props.userId);
@@ -105,12 +104,10 @@ const getUsername = async () => {
   }
 };
 
-
 const addressStr = computed(() => {
   const { line1, zip, city, country } = props.address;
   return `${line1}, ${zip} ${city}, ${country}`;
 });
-
 
 getMachine();
 getUsername();

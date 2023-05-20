@@ -27,7 +27,6 @@ export const useAuthStore = defineStore("auth", {
         }
       }
     },
-    
 
     async login(user) {
       const response = await axios.post("/auth/login", {
@@ -59,6 +58,6 @@ export const useAuthStore = defineStore("auth", {
         amount: amount,
       });
       this.user = response.data;
-    }
+    },
   },
 });

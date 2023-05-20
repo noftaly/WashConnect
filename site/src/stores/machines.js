@@ -11,7 +11,7 @@ export const useMachinesStore = defineStore("machines", {
       plt: 20,
       type: 0,
       capacity: 10,
-    }
+    },
   }),
   actions: {
     clearMachine() {

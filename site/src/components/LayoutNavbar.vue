@@ -104,7 +104,6 @@ async function search() {
   searchMachine(searchQuery.value);
   router.push({ name: "search", force: true });
 }
-
 </script>
 
 <style scoped>
