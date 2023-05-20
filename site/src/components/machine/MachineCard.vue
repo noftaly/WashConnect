@@ -39,10 +39,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { defineProps } from "vue";
-
-import { useMachinesStore } from "../../stores/machines.js";
 import PriceFormatted from "../formatters/PriceFormatted.vue";
 
 const props = defineProps({
@@ -80,21 +78,8 @@ const props = defineProps({
   },
 });
 
-const { getMachineById } = useMachinesStore();
-const displayedMachine = ref(null);
-
-const getMachine = async () => {
-  try {
-    displayedMachine.value = getMachineById(props.id);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 const addressStr = computed(() => {
   const { line1, zip, city, country } = props.address;
   return `${line1}, ${zip} ${city}, ${country}`;
 });
-
-getMachine();
 </script>
