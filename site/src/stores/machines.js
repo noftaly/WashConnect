@@ -7,6 +7,7 @@ export const useMachinesStore = defineStore("machines", {
     searchedMachines: [],
     machine: null,
     filters: {
+      around: 0,
       pgt: 1,
       plt: 20,
       type: 0,

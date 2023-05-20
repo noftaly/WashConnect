@@ -47,6 +47,9 @@
             >
               Make a reservation
             </button>
+            <p v-if="disabled" class="alert alert-warning mt-3 justify-content-center" role="alert">
+              You cannot reserve your own machine!
+            </p>
           </div>
         </div>
       </div>

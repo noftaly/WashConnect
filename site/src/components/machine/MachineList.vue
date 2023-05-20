@@ -14,7 +14,7 @@
             </RouterLink>
           </div>
           <div v-if="shownItems.length === 0">
-            <h5 class="text-center mt-6 my-auto">No machines matching your filters was found</h5>
+            <h5 class="lead text-center mt-6 my-auto">No machines matching your filters was found.</h5>
           </div>
         </div>
       </div>
