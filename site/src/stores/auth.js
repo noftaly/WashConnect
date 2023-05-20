@@ -8,11 +8,26 @@ export const useAuthStore = defineStore("auth", {
   }),
   actions: {
     async fetchUser() {
-      const response = await axios.get("/auth/me");
-      this.user = response.data;
-      this.isAuthenticated = true;
-      return response.data;
+      try {
+        const response = await axios.get("/auth/me");
+        this.user = response.data;
+        this.isAuthenticated = true;
+        return response.data;
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          // Handle the case when no user is logged in
+          this.user = {};
+          this.isAuthenticated = false;
+          return null; // Or any other value to indicate no user
+        } else {
+          // Handle other errors
+          console.log("An error has occurred");
+          console.error(error);
+          throw error; // Re-throw the error to be handled by the caller
+        }
+      }
     },
+    
 
     async login(user) {
       const response = await axios.post("/auth/login", {

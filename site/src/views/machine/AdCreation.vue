@@ -303,9 +303,8 @@ const { createPersonalAddress } = useAddressesStore();
 const { createTimeSlot } = useTimeSlotsStore();
 
 if (!isAuthenticated.value) {
-  router.push({ title: "login" });
+  router.push({ name: "login"})
 }
-
 
 const title = ref("");
 const titleBlured = ref(false);

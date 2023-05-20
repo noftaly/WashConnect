@@ -18,8 +18,7 @@ import { useMachinesStore } from "./stores/machines.js";
 const { fetchMachines } = useMachinesStore();
 const { isAuthenticated } = useAuth();
 
-fetchMachines();
 if (isAuthenticated) {
-  fetchItems();
+  fetchMachines();
 }
 </script>

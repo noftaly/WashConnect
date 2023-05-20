@@ -55,8 +55,15 @@
 
 <script setup>
 import { ref } from 'vue';
+import { storeToRefs } from "pinia";
+import router from "../router/index.js";
+import { useAuth } from "../utils/useAuthHook.js";
 import { useAuthStore } from "../stores/auth.js";
-import { useRouter } from 'vue-router';
+
+const { isAuthenticated } = storeToRefs(useAuth());
+if (!isAuthenticated.value) {
+  router.push({ name: "login" });
+}
 
 let cardType = ref('');
 let cardNumber = ref('');
@@ -67,12 +74,13 @@ let country = ref('');
 let amount = ref(0);
 let paymentMethod = ref('');
 
-const { topUpBalance } = useAuthStore();
-const router = useRouter();  
+const { topUpBalance } = useAuthStore(); 
 
 const topUpAndRedirect = async (amount) => {  
   await topUpBalance(amount);
-  router.push({ name: 'profile' });  // Redirection vers la page de profil.
+  router.push({ name: 'profile' }).then(() => {
+        window.location.reload();
+      });  // Redirection vers la page de profil.
 };
 </script>
 

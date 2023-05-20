@@ -12,19 +12,16 @@
 
 <script setup>
 import { storeToRefs } from "pinia";
-import { ref, onMounted } from "vue";
-import { useToast } from "vue-toastification";
+import { ref } from "vue";
 import axios from "../../utils/axios.js";
 
 import router from "../../router/index.js";
 import { useAuth } from "../../utils/useAuthHook.js";
-import { useMachinesStore } from "../../stores/machines.js";
-import MachineCard from "../../components/machine/MachineCard.vue";
 import MachineReservedCard from "../../components/machine/MachineReservedCard.vue";
 
 const { isAuthenticated } = storeToRefs(useAuth());
 if (!isAuthenticated.value) {
-  router.push({ title: "login" });
+  router.push({ name: "login" });
 }
 
 const id = parseInt(router.currentRoute.value.params.id);
