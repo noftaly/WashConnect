@@ -66,7 +66,10 @@ export async function findAll(req, res, next) {
 
   const machines = await db.machine.findMany({
     where: { AND: queries },
-    include: { address: true },
+    include: {
+      address: true,
+      user: { select: { username: true } },
+    },
   });
 
   res.json(machines);
@@ -99,7 +102,10 @@ export async function getOne(req, res) {
 
   const machine = await db.machine.findUnique({
     where: { id: Number(req.params.machineId) },
-    include: { address: true },
+    include: {
+      address: true,
+      user: { select: { username: true } },
+    },
   });
   if (!machine) {
     res.status(404).json({ message: 'Machine not found' });

@@ -9,11 +9,7 @@
           </div>
         </div>
         <div class="col-5">
-          <MachineDetailsHeader
-            :description="machine.adDescription"
-            :user-id="machine.userId"
-            :address="machine.address"
-          />
+          <MachineDetailsHeader :description="machine.adDescription" :user="machine.user" :address="machine.address" />
           <hr />
           <h6>About this machine:</h6>
           <MachineDetailsCharacteristics :characteristic="machineCharacteristics" />
@@ -35,7 +31,7 @@
           <div>
             <MachineDetailsHeader
               :description="machine.adDescription"
-              :user-id="machine.userId"
+              :user="machine.user"
               :address="machine.address"
             />
           </div>
