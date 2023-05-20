@@ -17,7 +17,7 @@ const app = express();
 app.use(helmet()); // Secure the app against common web vulnerabilities
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(session({
   secret: "rreRIftSh6MdPkZMFGeQcxZLkIqPKjpW", // process.env.SESSION_SECRET,
   resave: false,
