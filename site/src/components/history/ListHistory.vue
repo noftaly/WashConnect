@@ -6,14 +6,14 @@
     <div class="d-flex justify-content-center mt-4 mb-4 mx-4 gap-2">
       <div class="btn-group d-flex gap-4">
         <button
-          @click="showRdvBecome"
+          @click="showFuture"
           type="button"
           :class="defaultHistory ? 'btn btn-outline-primary w-100 active' : 'btn btn-outline-primary w-100'"
         >
           Upcoming appointments
         </button>
         <button
-          @click="showRdvPassed"
+          @click="showPast"
           type="button"
           :class="!defaultHistory ? 'btn btn-outline-primary w-100 active' : 'btn btn-outline-primary w-100'"
         >
@@ -21,19 +21,16 @@
         </button>
       </div>
     </div>
-    <div
-      class="d-flex flex-column align-items-center justify-content-center"
-      v-if="listHistory.length > 0 && isPageLoaded === true"
-    >
+    <div v-if="listHistory.length > 0" class="d-flex flex-column align-items-center justify-content-center">
       <div class="w-75" v-for="(history, index) in listHistory" :key="index">
         <HistoryCard :history="history" />
       </div>
     </div>
-    <div v-else-if="listHistory.length === 0 && isPageLoaded === true">
+    <div v-else>
       <div v-if="defaultHistory">
         <NoAppointment />
       </div>
-      <div v-else-if="!defaultHistory">
+      <div v-else>
         <NoPastAppointment />
       </div>
     </div>
@@ -41,38 +38,33 @@
 </template>
 
 <script setup>
-import { useHistoryStore } from "../../stores/history";
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, ref } from "vue";
+import { storeToRefs } from "pinia";
 import HistoryCard from "./HistoryCard.vue";
 import NoAppointment from "./NoAppointment.vue";
 import NoPastAppointment from "./NoPastAppointment.vue";
+import { useReservationsStore } from "../../stores/reservations";
 
-const historyStore = useHistoryStore();
+const { getReservations } = useReservationsStore();
+const { reservations } = storeToRefs(useReservationsStore());
+getReservations();
 
 const date = new Date();
 const defaultHistory = ref(true);
-const isPageLoaded = ref(false);
 
 const listHistory = computed(() =>
-  historyStore.machineHistory.filter((value) =>
+  reservations.value.filter((value) =>
     defaultHistory.value === true
       ? new Date(value.timeSlot).getTime() > date.getTime()
       : new Date(value.timeSlot).getTime() < date.getTime()
   )
 );
 
-const showRdvBecome = () => {
+const showFuture = () => {
   defaultHistory.value = true;
 };
 
-onBeforeMount(async () => {
-  const isFetchedDone = await historyStore.getMachineHistory();
-  if (isFetchedDone) {
-    isPageLoaded.value = true;
-  }
-});
-
-const showRdvPassed = () => {
+const showPast = () => {
   defaultHistory.value = false;
 };
 </script>

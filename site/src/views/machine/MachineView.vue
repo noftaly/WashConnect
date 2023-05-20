@@ -52,32 +52,39 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref } from "vue";
+import { ref } from "vue";
 import { useRoute } from "vue-router";
-import axios from "../../utils/axios.js";
+import MachineDetailsHeader from "../../components/machine/MachineDetailsHeader.vue";
+import MachineDetailsCharacteristics from "../../components/machine/MachineDetailsCharacteristics.vue";
+import MachineDetailsPayment from "../../components/machine/MachineDetailsPayment.vue";
+import { useMachinesStore } from "../../stores/machines";
+import { storeToRefs } from "pinia";
+import { watch } from "vue";
 
 const id = Number(useRoute().params.id);
 
-const machine = ref(null);
 const machineCharacteristics = ref(null);
 
-axios.get(`/machines/${id}`).then((response) => {
-  machine.value = response.data;
-  machineCharacteristics.value = {
-    hasWasher: machine.value.hasWasher,
-    hasDryer: machine.value.hasDryer,
-    maxCapacity: machine.value.maxCapacity,
-    washDuration: machine.value.washDuration,
-    dryDuration: machine.value.dryDuration,
-    detergentIncluded: machine.value.detergentIncluded,
-  };
-});
+const { fetchMachine } = useMachinesStore();
+const { machine } = storeToRefs(useMachinesStore());
+if (machine.value) {
+  setCharacteristics(machine.value);
+} else {
+  fetchMachine(id);
+}
 
-const MachineDetailsHeader = defineAsyncComponent(() => import("../../components/machine/MachineDetailsHeader.vue"));
-const MachineDetailsCharacteristics = defineAsyncComponent(() =>
-  import("../../components/machine/MachineDetailsCharacteristics.vue")
-);
-const MachineDetailsPayment = defineAsyncComponent(() => import("../../components/machine/MachineDetailsPayment.vue"));
+watch(machine, setCharacteristics);
+
+function setCharacteristics(machine) {
+  machineCharacteristics.value = {
+    hasWasher: machine.hasWasher,
+    hasDryer: machine.hasDryer,
+    maxCapacity: machine.maxCapacity,
+    washDuration: machine.washDuration,
+    dryDuration: machine.dryDuration,
+    detergentIncluded: machine.detergentIncluded,
+  };
+}
 </script>
 
 <style scoped>

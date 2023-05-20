@@ -1,5 +1,5 @@
 <template>
-  <div class="card border-0 mb-3">
+  <div v-if="machineSelected" class="card border-0 mb-3">
     <div class="row g-0">
       <div class="col-md-4">
         <img :src="AdCover" class="img-fluid rounded-start h-100" style="object-fit: cover" alt="Machine" />
@@ -55,6 +55,9 @@
       <FormMachineReserved :machineSelected="machineSelected" :addressMachine="addressStr" @closeModal="closeModal" />
     </TransitionOverlay>
   </div>
+  <div v-else>
+    <p>Loading...</p>
+  </div>
 </template>
 
 <script setup>
@@ -63,30 +66,20 @@ import TransitionOverlay from "../utils/TransitionOverlay.vue";
 
 import { ref, computed } from "vue";
 import FormMachineReserved from "./FormMachineReserved.vue";
-import axios from "../../utils/axios.js";
 
 import { useAddressesStore } from "../../stores/addresses";
 import PriceFormatted from "../formatters/PriceFormatted.vue";
+import { storeToRefs } from "pinia";
+import { useAuth } from "../../utils/useAuthHook";
 
-const authUser = ref(fetchUser());
-
-async function fetchUser() {
-  try {
-    const response = await axios.get("/auth/me");
-    authUser.value = response.data;
-  } catch (error) {
-    console.log("An error has occured");
-    console.error(error);
-    authUser.value = {};
-  }
-  return authUser.value;
-}
+const { user } = storeToRefs(useAuth());
 
 const { getPersonalAddresses } = useAddressesStore();
-const addresses = ref([]);
+const { addresses } = storeToRefs(useAddressesStore());
+getPersonalAddresses();
 
 const props = defineProps({
-  machineSelected: { type: Object, required: true },
+  machineSelected: { type: Object, required: false },
 });
 
 const addressObj = computed(() => {
@@ -101,16 +94,6 @@ const addressStr = computed(() => {
   return `${streetL1}, ${zip} ${city}, ${country}`;
 });
 
-const getAddresses = async () => {
-  try {
-    addresses.value = await getPersonalAddresses();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-getAddresses();
-
 const active = ref(false);
 
 const seeReservation = () => {
@@ -121,5 +104,5 @@ const closeModal = () => {
   active.value = false;
 };
 
-const disabled = computed(() => (authUser.value.id === props.machineSelected.userId ? true : false));
+const disabled = computed(() => (user.value.id === props.machineSelected.userId ? true : false));
 </script>

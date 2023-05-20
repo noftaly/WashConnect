@@ -89,15 +89,20 @@ import SvgTime from "../../svg/SvgTime.vue";
 import SvgWeightLaundry from "../../svg/SvgWeightLaundry.vue";
 import SvgLocation from "../../svg/SvgLocation.vue";
 
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useAddressesStore } from "../../stores/addresses";
+import { storeToRefs } from "pinia";
 
 const props = defineProps({
   history: { type: Object, required: true },
 });
 
 const { getPersonalAddresses } = useAddressesStore();
-const addresses = ref([]);
+const { addresses } = storeToRefs(useAddressesStore());
+if (addresses.value.length === 0) {
+  getPersonalAddresses();
+}
+
 const historyMachine = computed(() => props.history);
 
 const dayAppointment = computed(() => new Date(historyMachine.value.timeSlot));
@@ -117,14 +122,4 @@ const machineAddressStr = computed(() => {
   const { streetL1, zip, city, country } = addressObj.value;
   return `${streetL1}, ${zip} ${city}, ${country}`;
 });
-
-const getAddresses = async () => {
-  try {
-    addresses.value = await getPersonalAddresses();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-getAddresses();
 </script>

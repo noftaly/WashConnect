@@ -12,31 +12,18 @@
 
 <script setup>
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
-import axios from "../../utils/axios.js";
 
 import router from "../../router/index.js";
 import { useAuth } from "../../utils/useAuthHook.js";
 import MachineReservedCard from "../../components/machine/MachineReservedCard.vue";
+import { useMachinesStore } from "../../stores/machines";
 
 const { isAuthenticated } = storeToRefs(useAuth());
 if (!isAuthenticated.value) {
   router.push({ name: "login" });
 }
 
-const id = parseInt(router.currentRoute.value.params.id);
-const machine = ref({});
-
-async function getMachineById() {
-  try {
-    const response = await axios.get(`/machines/${id}`);
-    machine.value = response.data;
-  } catch (error) {
-    console.log("An error has occurred");
-    console.error(error);
-    machine.value = {};
-  }
-}
-
-getMachineById();
+const { machine } = storeToRefs(useMachinesStore());
+const { fetchMachine } = useMachinesStore();
+fetchMachine(Number(router.currentRoute.value.params.id));
 </script>

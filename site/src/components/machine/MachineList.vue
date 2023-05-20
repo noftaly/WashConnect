@@ -35,7 +35,7 @@ const { fetchMachines, filters } = useMachinesStore();
 
 fetchMachines();
 
-const shownItems = ref(fetchMachines());
+const shownItems = ref(machines);
 
 watch(machines, () => {
   shownItems.value = [...machines.value];

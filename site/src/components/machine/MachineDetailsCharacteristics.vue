@@ -30,7 +30,7 @@ const props = defineProps({
   },
 });
 
-const machineCharacteristics = Object.entries(props.characteristic).filter(([name]) =>
+const machineCharacteristics = Object.entries(props.characteristic ?? {}).filter(([name]) =>
   Object.keys(characteristicsMap).includes(name)
 );
 

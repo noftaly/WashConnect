@@ -64,15 +64,12 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import router from "../router/index.js";
-// import { useAuthStore } from "../stores/auth.js";
 import { useAuth } from "../utils/useAuthHook.js";
 
 const { user, isAuthenticated } = storeToRefs(useAuth());
 if (!isAuthenticated.value) {
   router.push({ name: "login" });
 }
-
-// const { user } = storeToRefs(useAuthStore());
 </script>
 
 <style scoped>

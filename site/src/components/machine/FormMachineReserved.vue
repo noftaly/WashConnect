@@ -1,11 +1,8 @@
 <template>
   <div class="w-100">
-    <div class="row g-0 justify-content-center">
+    <div v-if="machineSelected" class="row g-0 justify-content-center">
       <div class="card-body d-flex flex-column w-100">
         <h5 class="card-title">{{ machineSelected.adTitle }}</h5>
-        <!-- <p class="card-text">
-					{{ usersMachine.username }}
-				</p> -->
         <p class="card-text">
           {{ addressMachine }}
         </p>
@@ -50,7 +47,7 @@
           >
             <a
               class="dropdown-item"
-              v-for="timeSlot in getAvailableSlots(timeSlots)"
+              v-for="timeSlot in availableSlots"
               :key="timeSlot.id"
               @click="selectTimeSlot(timeSlot.timeSlot)"
             >
@@ -59,12 +56,7 @@
           </div>
 
           <div>
-            <div
-              class="alert alert-warning"
-              v-if="!canPay && selectedOption !== '' && selectedDate !== '' && selectedTime !== ''"
-            >
-              You don't have enough money to pay
-            </div>
+            <div class="alert alert-warning" v-if="!canPay && selectedOption">You don't have enough money to pay</div>
 
             <button
               :disabled="disabled"
@@ -80,23 +72,29 @@
         </form>
       </div>
     </div>
+    <div v-else>
+      <p>Loading...</p>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, watch, onMounted } from "vue";
 import router from "../../router/index.js";
-import axios from "../../utils/axios.js";
 import { useToast } from "vue-toastification";
 
-import { useAuthStore } from "../../stores/auth";
 import { useReservationsStore } from "../../stores/reservations";
 import PriceFormatted from "../formatters/PriceFormatted.vue";
+import { useTimeSlotsStore } from "../../stores/timeslots";
+import { storeToRefs } from "pinia";
+import { useAuth } from "../../utils/useAuthHook";
 
-const authStore = useAuthStore();
+const { user } = useAuth();
 const { createReservation } = useReservationsStore();
 
-const user = authStore.user;
+const { getTimeSlots } = useTimeSlotsStore();
+const { timeSlots } = storeToRefs(useTimeSlotsStore());
+getTimeSlots(props.machineSelected.id);
 
 const props = defineProps({
   machineSelected: { type: Object, required: true },
@@ -105,9 +103,8 @@ const props = defineProps({
 const emits = defineEmits(["closeModal"]);
 
 const selectedOption = ref("");
-const timeSlots = ref(getTimeSlots(props.machineSelected.id));
 const selectedTimeSlot = ref("");
-const availableSlots = ref([]);
+const availableSlots = computed(() => timeSlots.value.filter((slot) => slot.isAvailable));
 const timeSlotId = ref(0);
 
 const canPay = ref(false);
@@ -155,24 +152,8 @@ const disabled = computed(() => {
 });
 
 watch(pricePaiement, (value) => {
-  if (user.balance - value >= 0) {
-    canPay.value = true;
-  } else {
-    canPay.value = false;
-  }
+  canPay.value = user.balance - value >= 0;
 });
-
-async function getTimeSlots(machineId) {
-  try {
-    const response = await axios.get(`/timeslots/${machineId}`);
-    timeSlots.value = response.data;
-  } catch (error) {
-    console.log("An error has occured");
-    console.error(error);
-    timeSlots.value = [];
-  }
-  return timeSlots.value;
-}
 
 function selectTimeSlot(slot) {
   const slotDate = new Date(slot);
@@ -189,23 +170,12 @@ function getTimeSlotId(timeSlot, timeSlots) {
   return null; // Return null if no matching time slot is found
 }
 
-function getAvailableSlots(timeSlots) {
-  for (let i = 0; i < timeSlots.length; i++) {
-    if (timeSlots[i].isAvailable === true && !availableSlots.value.includes(timeSlots[i])) {
-      availableSlots.value.push(timeSlots[i]);
-    }
-  }
-  return availableSlots.value;
-}
-
 onMounted(() => {});
 
 async function reserve() {
   await createReservation(translateSelectedOption(selectedOption.value), timeSlotId.value);
   emits("closeModal");
-  router.push({ name: "history" }).then(() => {
-    window.location.reload();
-  });
+  router.push({ name: "history" });
   useToast().success("Machine reserved successfully !");
 }
 </script>

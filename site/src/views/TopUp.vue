@@ -73,7 +73,6 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import router from "../router/index.js";
 import { useAuth } from "../utils/useAuthHook.js";
-import { useAuthStore } from "../stores/auth.js";
 
 const { isAuthenticated } = storeToRefs(useAuth());
 if (!isAuthenticated.value) {
@@ -89,7 +88,7 @@ let country = ref("");
 let amount = ref(0);
 let paymentMethod = ref("");
 
-const { topUpBalance } = useAuthStore();
+const { topUpBalance } = useAuth();
 
 const topUpAndRedirect = async (amount) => {
   await topUpBalance(amount);

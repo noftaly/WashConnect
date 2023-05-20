@@ -290,7 +290,6 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { useToast } from "vue-toastification";
 import router from "../../router/index.js";
-import axios from "../../utils/axios.js";
 
 import TimeSlotSelector from "../../components/machine/timeSlotSelector.vue";
 
@@ -301,8 +300,11 @@ import { useTimeSlotsStore } from "../../stores/timeslots.js";
 
 const { isAuthenticated } = storeToRefs(useAuth());
 const { createMachine } = useMachinesStore();
-const { createPersonalAddress } = useAddressesStore();
+const { createPersonalAddress, getPersonalAddresses } = useAddressesStore();
+const { addresses } = storeToRefs(useAddressesStore());
 const { createTimeSlot } = useTimeSlotsStore();
+
+getPersonalAddresses();
 
 if (!isAuthenticated.value) {
   router.push({ name: "login" });
@@ -334,7 +336,6 @@ const priceWashingDrying = ref(1);
 const createAddress = ref(false);
 const selectedAddress = ref("");
 const adAddress = ref(null);
-const addresses = ref(getPersonalAddresses());
 
 const streetL1 = ref("");
 const streetL1Blured = ref(false);
@@ -387,18 +388,6 @@ function validDuration(duration) {
 
 function validCapacity(capacity) {
   return capacity > 0;
-}
-
-async function getPersonalAddresses() {
-  try {
-    const response = await axios.get("/addresses");
-    addresses.value = response.data;
-  } catch (error) {
-    console.log("An error has occured");
-    console.error(error);
-    addresses.value = [];
-  }
-  return addresses.value;
 }
 
 function stringifyAddress(address) {
