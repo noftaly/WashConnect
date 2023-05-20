@@ -5,13 +5,13 @@ import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from "@fort
 import {
   faWallet,
   faCalendarCheck,
-  faCheck,
-  faFileInvoice,
-  faGift,
   faRightFromBracket,
   faRightToBracket,
   faUser,
-  faUsers,
+  faEuroSign,
+  faClock,
+  faWeightScale,
+  faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import Toast from "vue-toastification";
@@ -27,13 +27,13 @@ library.add(
   faWallet,
   faCalendarCheck,
   faCircleUser,
-  faCheck,
   faUser,
   faRightToBracket,
   faRightFromBracket,
-  faGift,
-  faFileInvoice,
-  faUsers
+  faEuroSign,
+  faClock,
+  faWeightScale,
+  faLocationDot,
 );
 
 const pinia = createPinia();

@@ -49,20 +49,6 @@
 
         <br/>
         <div class="d-flex justify-content-between align-items-baseline">
-          <span>Zip Code:</span>
-          <input
-            type="number"
-            class="form-control form-control-sm"
-            style="width: 240px"
-            placeholder="Zip Code"
-            v-model="zipCode"
-            @change="changeZipCode(zipCode)"
-          />
-        </div>
-
-        <br/>
-        <!-- 2 dates selector to select the machine before / after a certain date -->
-        <div class="d-flex justify-content-between align-items-baseline">
           <span>Available from:</span>
           <input
             type="date"
@@ -109,7 +95,6 @@ const { isAuthenticated } = storeToRefs(useAuth());
 const priceRange = ref([1, 20]);
 const selectedType = ref("");
 const capacity = ref(10);
-const zipCode = ref(75000);
 const availableFrom = ref(new Date().toISOString().slice(0, 10));
 const availableUntil = ref(new Date().toISOString().slice(0, 10));
 
@@ -134,25 +119,6 @@ function updateFiltersType(selectedType) {
 
 function changeCapacity(capacity) {
   filters.capacity = capacity;
-}
-
-async function changeZipCode(zipCode) {
-  const url = `https://api.zippopotam.us/FR/${zipCode}`;
-  
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch coordinates for zip code ${zipCode}`);
-    }
-    
-    const data = await response.json();
-    const { latitude, longitude } = data.places[0];
-    filters.around = `${latitude},${longitude},100`;
-    console.log(filters.around);
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
 }
 
 function changeAvailableFrom(availableFrom) {

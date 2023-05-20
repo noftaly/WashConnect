@@ -25,7 +25,7 @@
               <li class="list-group-item d-flex align-items-center gap-2">
                 <span class="d-flex">
                   <span>
-                    <SvgEuro />
+                    <font-awesome-icon icon="fa-solid fa-euro-sign" />
                   </span>
                 </span>
                 <span v-if="historyMachine.machineType === 'WASHING_MACHINE'">
@@ -55,19 +55,19 @@
               </li>
               <li class="list-group-item d-flex align-items-center gap-2">
                 <span>
-                  <SvgTime />
+                  <font-awesome-icon icon="fa-solid fa-clock" />
                 </span>
                 {{ machineAppointment.washDuration }} min
               </li>
               <li class="list-group-item d-flex align-items-center gap-2">
                 <span>
-                  <SvgWeightLaundry />
+                  <font-awesome-icon icon="fa-solid fa-weight-scale" />
                 </span>
                 {{ machineAppointment.maxCapacity }} kg
               </li>
               <li class="list-group-item d-flex align-items-center gap-2">
                 <span>
-                  <SvgLocation />
+                  <font-awesome-icon icon="fa-solid fa-location-dot" />
                 </span>
                 {{ machineAddressStr }}
               </li>
@@ -83,11 +83,7 @@
 import AdCover from "../../assets/mocked_ad_img.jpg";
 import SvgWash from "../../svg/SvgWash.vue";
 import SvgDry from "../../svg/SvgDry.vue";
-import SvgEuro from "../../svg/SvgEuro.vue";
 import SvgDetergent from "../../svg/SvgDetergent.vue";
-import SvgTime from "../../svg/SvgTime.vue";
-import SvgWeightLaundry from "../../svg/SvgWeightLaundry.vue";
-import SvgLocation from "../../svg/SvgLocation.vue";
 
 import { computed } from "vue";
 import { useAddressesStore } from "../../stores/addresses";
