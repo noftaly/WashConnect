@@ -91,7 +91,7 @@ import { useMachinesStore } from "../stores/machines.js";
 
 const { isAuthenticated, user } = storeToRefs(useAuth());
 const { logout } = useAuth();
-const { searchMachine } = useMachinesStore();
+const { searchMachines } = useMachinesStore();
 
 const searchQuery = ref("");
 
@@ -101,7 +101,7 @@ async function doLogout() {
 }
 
 async function search() {
-  searchMachine(searchQuery.value);
+  searchMachines(searchQuery.value);
   router.push({ name: "search", force: true });
 }
 </script>

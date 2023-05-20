@@ -9,7 +9,7 @@ export async function findAll(req, res, next) {
     return;
   }
 
-  const { around, pgt, plt, type, capacity, before, after } = data;
+  const { q, pgt, plt, type, capacity, before, after } = data;
 
   if (plt && pgt && plt < pgt) {
     next(new ZodError({ message: 'plt must be greater than pgt' }));
@@ -56,6 +56,13 @@ export async function findAll(req, res, next) {
   // Capacity query
   if (capacity)
     queries.push({ maxCapacity: { gte: capacity } });
+
+  // Search query
+  if (q)
+    queries.push({ OR: [
+      { adTitle: { contains: q } },
+      { adDescription: { contains: q } },
+    ] });
 
   const machines = await db.machine.findMany({
     where: { AND: queries },

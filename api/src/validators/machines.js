@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const findMachine = z.object({
-  around: z.string().min(1),
+  q: z.string().min(1),
   pgt: z.coerce.number().int().gt(0).lt(100),
   plt: z.coerce.number().int().gt(0).lt(100),
   type: z.coerce.number().int().gte(0).lt(3), // 0: washer, 1: dryer, 2: both

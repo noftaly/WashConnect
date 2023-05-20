@@ -32,7 +32,7 @@ export const useMachinesStore = defineStore("machines", {
     },
 
     async searchMachines(searchQuery) {
-      const response = await axios.get(`/machines/search?q=${searchQuery}`);
+      const response = await axios.get(`/machines?q=${searchQuery}`);
       this.searchedMachines = response.data;
     },
 
