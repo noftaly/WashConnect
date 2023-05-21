@@ -3,22 +3,26 @@
     <div class="card mb-3">
       <div class="row g-0">
         <div class="col-md-4">
-          <img 
-            :src="AdCover" 
-            class="img-fluid rounded-start" 
+          <img
+            :src="AdCover"
+            class="img-fluid rounded-start"
             style="object-fit: cover; width=100%; height=100%;"
-            alt="Machine" />
+            alt="Machine"
+          />
         </div>
         <div class="col-md-8">
           <div class="card-body">
             <div class="d-flex justify-content-between">
-
               <div>
                 <h5 v-if="historyMachine.machineType === 'WASHING_MACHINE'" class="card-title">
-                  <span> <SvgWash /> </span>{{ dayAppointment.toDateString() }} at {{ hourAppointment }}:{{ minuteAppointment }}
+                  <span> <SvgWash /> </span>{{ dayAppointment.toDateString() }} at {{ hourAppointment }}:{{
+                    minuteAppointment
+                  }}
                 </h5>
                 <h5 v-else class="card-title">
-                  <span> <SvgDry /> </span>{{ dayAppointment.toDateString() }} at {{ hourAppointment }}:{{ minuteAppointment }}
+                  <span> <SvgDry /> </span>{{ dayAppointment.toDateString() }} at {{ hourAppointment }}:{{
+                    minuteAppointment
+                  }}
                 </h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary">{{ machineAppointment.adTitle }}</h6>
                 <p class="card-text mb-2">

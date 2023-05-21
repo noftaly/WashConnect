@@ -12,6 +12,9 @@ import {
   faClock,
   faWeightScale,
   faLocationDot,
+  faPhone,
+  faEnvelope,
+  faIdCard,
 } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import Toast from "vue-toastification";
@@ -34,6 +37,9 @@ library.add(
   faClock,
   faWeightScale,
   faLocationDot,
+  faPhone,
+  faEnvelope,
+  faIdCard
 );
 
 const pinia = createPinia();

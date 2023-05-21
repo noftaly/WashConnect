@@ -69,8 +69,6 @@ const { isAuthenticated } = storeToRefs(useAuth());
 const priceRange = ref([1, 20]);
 const selectedType = ref("");
 const capacity = ref(10);
-const availableFrom = ref(new Date().toISOString().slice(0, 10));
-const availableUntil = ref(new Date().toISOString().slice(0, 10));
 
 const { filters } = useMachinesStore();
 
@@ -93,14 +91,6 @@ function updateFiltersType(selectedType) {
 
 function changeCapacity(capacity) {
   filters.capacity = capacity;
-}
-
-function changeAvailableFrom(availableFrom) {
-  filters.before = availableFrom;
-}
-
-function changeAvailableUntil(availableUntil) {
-  filters.after = availableUntil;
 }
 </script>
 

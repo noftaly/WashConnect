@@ -40,8 +40,7 @@
           </select>
         </div>
 
-
-        <br/>
+        <br />
         <label for="card-number" class="form-label mt-2">Card Number:</label>
         <input
           type="text"
@@ -66,7 +65,6 @@
           <label for="country">Country:</label>
           <input type="text" id="country" class="form-control mb-3" v-model="country" placeholder="Country" />
         </div>
-
       </div>
 
       <label for="amount" class="form-label">Amount to Top Up:</label>
@@ -81,6 +79,7 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import router from "../router/index.js";
+import { useToast } from "vue-toastification";
 import { useAuth } from "../utils/useAuthHook.js";
 
 const { isAuthenticated } = storeToRefs(useAuth());
@@ -104,6 +103,7 @@ const topUpAndRedirect = async (amount) => {
   router.push({ name: "profile" }).then(() => {
     window.location.reload();
   }); // Redirection vers la page de profil.
+  useToast().success("Your balance has been topped up!");
 };
 </script>
 

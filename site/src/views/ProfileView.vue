@@ -9,10 +9,9 @@
           </div>
           <div class="card-body">
             <div v-if="user && user.balance >= 0" class="d-flex justify-content-center align-items-center">
-              <h3>{{ user.balance }}€</h3>
-              <img src="../assets/piece.png" alt="piece" class="icon ml-2" />
+              <h3 style="font-size: 60px">{{ user.balance }}€</h3>
             </div>
-            <p v-else class="text-danger text-center">Une erreur est survenue lors du chargement de votre solde.</p>
+            <p v-else class="text-danger text-center">An error occured, your balance could not be loaded.</p>
           </div>
           <div class="card-footer text-center">
             <router-link to="/topup">
@@ -31,25 +30,23 @@
             <table class="table table-striped">
               <tbody>
                 <tr>
-                  <th scope="row"><img src="../assets/username.png" alt="username" class="icon" /> Username</th>
+                  <th scope="row"><font-awesome-icon icon="fa-solid fa-user" /> Username</th>
                   <td>{{ user.username }}</td>
                 </tr>
                 <tr>
-                  <th scope="row">
-                    <img src="../assets/phonenumber.png" alt="phone number" class="icon" /> Phone Number
-                  </th>
+                  <th scope="row"><font-awesome-icon icon="fa-solid fa-phone" /> Phone Number</th>
                   <td>{{ user.phoneNumber }}</td>
                 </tr>
                 <tr>
-                  <th scope="row"><img src="../assets/email.png" alt="email" class="icon" /> Email</th>
+                  <th scope="row"><font-awesome-icon icon="fa-solid fa-envelope" /> Email</th>
                   <td>{{ user.email }}</td>
                 </tr>
                 <tr>
-                  <th scope="row"><img src="../assets/name.png" alt="name" class="icon" /> First Name</th>
+                  <th scope="row"><font-awesome-icon icon="fa-solid fa-id-card" /> First Name</th>
                   <td>{{ user.firstName }}</td>
                 </tr>
                 <tr>
-                  <th scope="row"><img src="../assets/name.png" alt="name" class="icon" /> Last Name</th>
+                  <th scope="row"><font-awesome-icon icon="fa-solid fa-id-card" /> Last Name</th>
                   <td>{{ user.lastName }}</td>
                 </tr>
               </tbody>

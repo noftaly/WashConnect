@@ -177,7 +177,7 @@ async function reserve() {
   emits("closeModal");
   router.push({ name: "history" }).then(() => {
     window.location.reload();
-  })
+  });
   useToast().success("Machine reserved successfully !");
 }
 </script>
