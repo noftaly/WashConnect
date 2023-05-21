@@ -78,31 +78,19 @@ import TransitionOverlay from "../utils/TransitionOverlay.vue";
 import { ref, computed } from "vue";
 import FormMachineReserved from "./FormMachineReserved.vue";
 
-import { useAddressesStore } from "../../stores/addresses";
 import PriceFormatted from "../formatters/PriceFormatted.vue";
 import { storeToRefs } from "pinia";
 import { useAuth } from "../../utils/useAuthHook";
 
 const { user } = storeToRefs(useAuth());
 
-const { getPersonalAddresses } = useAddressesStore();
-const { addresses } = storeToRefs(useAddressesStore());
-getPersonalAddresses();
-
 const props = defineProps({
   machineSelected: { type: Object, required: false },
 });
 
-const addressObj = computed(() => {
-  if (addresses.value.length === 0) {
-    return {};
-  }
-  return addresses.value.find((addr) => addr.id === props.machineSelected.addressId) || {};
-});
-
 const addressStr = computed(() => {
-  const { streetL1, zip, city, country } = addressObj.value;
-  return `${streetL1}, ${zip} ${city}, ${country}`;
+  const { line1, zip, city, country } = props.machineSelected.address;
+  return `${line1}, ${zip} ${city}, ${country}`;
 });
 
 const active = ref(false);
@@ -115,5 +103,5 @@ const closeModal = () => {
   active.value = false;
 };
 
-const disabled = computed(() => (user.value.id === props.machineSelected.userId ? true : false));
+const disabled = computed(() => user.value.id === props.machineSelected.userId);
 </script>

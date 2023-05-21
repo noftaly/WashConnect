@@ -180,7 +180,7 @@
                   :key="address.id"
                   @click="stringifyAddress(address)"
                 >
-                  {{ "Address " + address.id }}
+                  {{ address.streetL1 + ", " + address.city + ", " + address.country }}
                 </a>
               </div>
               <div class="invalid-feedback">Please select an address</div>

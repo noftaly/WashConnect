@@ -97,20 +97,12 @@ import SvgDry from "../../svg/SvgDry.vue";
 import SvgDetergent from "../../svg/SvgDetergent.vue";
 
 import { computed } from "vue";
-import { useAddressesStore } from "../../stores/addresses";
 import { useReservationsStore } from "../../stores/reservations";
-import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 
 const props = defineProps({
   history: { type: Object, required: true },
 });
-
-const { getPersonalAddresses } = useAddressesStore();
-const { addresses } = storeToRefs(useAddressesStore());
-if (addresses.value.length === 0) {
-  getPersonalAddresses();
-}
 
 const historyMachine = computed(() => props.history);
 
@@ -120,16 +112,9 @@ const minuteAppointment = computed(() => dayAppointment.value.getMinutes());
 
 const machineAppointment = computed(() => historyMachine.value.machine);
 
-const addressObj = computed(() => {
-  if (addresses.value.length === 0) {
-    return {};
-  }
-  return addresses.value.find((addr) => addr.id === machineAppointment.value.addressId) || {};
-});
-
 const machineAddressStr = computed(() => {
-  const { streetL1, zip, city, country } = addressObj.value;
-  return `${streetL1}, ${zip} ${city}, ${country}`;
+  const { line1, zip, city, country } = historyMachine.value.machine.address;
+  return `${line1}, ${zip} ${city}, ${country}`;
 });
 
 const { removeReservation } = useReservationsStore();
