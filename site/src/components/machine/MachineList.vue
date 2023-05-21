@@ -8,12 +8,12 @@
       </div>
       <div class="col-md-9">
         <div class="mx-4 me-md-5">
-          <div v-for="item in shownItems" :key="item.id">
+          <div v-for="item in machines" :key="item.id">
             <RouterLink :to="`/machines/${item.id}`" class="text-decoration-none">
               <MachineCard v-bind="item" />
             </RouterLink>
           </div>
-          <div v-if="shownItems.length === 0">
+          <div v-if="machines.length === 0">
             <h5 class="lead text-center mt-6 my-auto">No machines matching your filters was found.</h5>
           </div>
         </div>
@@ -24,7 +24,6 @@
 
 <script setup>
 import { storeToRefs } from "pinia";
-import { ref, watch } from "vue";
 import axios from "../../utils/axios.js";
 import { useMachinesStore } from "../../stores/machines.js";
 import MachineFilters from "./MachineFilters.vue";
@@ -34,12 +33,6 @@ const { machines } = storeToRefs(useMachinesStore());
 const { fetchMachines, filters } = useMachinesStore();
 
 fetchMachines();
-
-const shownItems = ref(machines);
-
-watch(machines, () => {
-  shownItems.value = [...machines.value];
-});
 
 async function filterMachines() {
   await axios
@@ -54,9 +47,7 @@ async function filterMachines() {
     .then((response) => {
       machines.value = response.data;
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch(console.error);
 }
 </script>
 
