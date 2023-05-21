@@ -40,7 +40,6 @@
 
 <script setup>
 import { computed } from "vue";
-import { defineProps } from "vue";
 import PriceFormatted from "../formatters/PriceFormatted.vue";
 
 const props = defineProps({
