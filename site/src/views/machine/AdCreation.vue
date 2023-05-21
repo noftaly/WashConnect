@@ -524,15 +524,12 @@ async function submit() {
 
       await createTimeSlot(newAd.id, firstTimeSlot.value.toISOString(), machineType.value);
 
-      router.push({ name: "machine", params: { id: newAd.id } }).then(() => {
-        window.location.reload();
-      });
+      router.push({ name: "machine", params: { id: newAd.id } });
       useToast().success("Ad created successfully!");
     } catch (error) {
       console.log("An error has occured");
       console.error(error);
       useToast().error("An error has occured while creating the ad!");
-      window.location.reload();
     }
   }
 }

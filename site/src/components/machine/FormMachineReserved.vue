@@ -175,9 +175,7 @@ onMounted(() => {});
 async function reserve() {
   await createReservation(translateSelectedOption(selectedOption.value), timeSlotId.value);
   emits("closeModal");
-  router.push({ name: "history" }).then(() => {
-    window.location.reload();
-  });
+  router.push({ name: "history" });
   useToast().success("Machine reserved successfully !");
 }
 </script>

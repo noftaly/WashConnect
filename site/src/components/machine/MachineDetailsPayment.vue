@@ -173,8 +173,8 @@ async function createNewTimeSlot(machine) {
 
     await createTimeSlot(machine.id, timeSlot.toISOString(), machineType.value);
     newTimeSlot.value = new Date();
-    window.location.reload();
     useToast().success("Time Slot added successfully!");
+    await getTimeSlots(props.id);
   } else {
     alert("Please select a future date and time.");
   }

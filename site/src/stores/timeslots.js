@@ -18,10 +18,12 @@ export const useTimeSlotsStore = defineStore("timeSlots", {
     async createTimeSlot(machineId, timeSlot, machineType) {
       // Creates a time slot for a given machine
       const response = await axios.post(`/timeslots/${machineId}`, {
-        timeSlot: timeSlot,
-        machineType: machineType,
+        timeSlot,
+        machineType,
       });
       this.timeSlot = response.data;
+      this.timeSlots.push(response.data);
+      return response.data;
     },
 
     async removeTimeSlot(timeSlotId) {
