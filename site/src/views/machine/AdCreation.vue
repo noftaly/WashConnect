@@ -291,7 +291,7 @@ import { ref } from "vue";
 import { useToast } from "vue-toastification";
 import router from "../../router/index.js";
 
-import TimeSlotSelector from "../../components/machine/timeSlotSelector.vue";
+import TimeSlotSelector from "../../components/machine/TimeSlotSelector.vue";
 
 import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";

@@ -113,7 +113,7 @@ import { ref, computed } from "vue";
 import { useToast } from "vue-toastification";
 
 import PriceFormatted from "../formatters/PriceFormatted.vue";
-import TimeSlotSelector from "../machine/timeSlotSelector.vue";
+import TimeSlotSelector from "./TimeSlotSelector.vue";
 
 import { useAuth } from "../../utils/useAuthHook.js";
 import { useMachinesStore } from "../../stores/machines.js";
