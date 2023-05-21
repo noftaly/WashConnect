@@ -78,8 +78,7 @@ export async function remove(req, res) {
   }
 
   if (!agenda.userId
-    || agenda.userId !== req.user.id
-    || agenda.machine.userId !== req.user.id
+    || (agenda.userId !== req.user.id && agenda.machine.userId !== req.user.id)
     || new Date(agenda.timeSlot) < new Date()) {
     return res.status(400).json({ message: 'You cannot cancel this reservation' });
   }
