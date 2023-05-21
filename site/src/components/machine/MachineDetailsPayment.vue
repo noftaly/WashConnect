@@ -34,7 +34,7 @@
             <button class="btn btn-primary w-100 mb-1" @click="createNewTimeSlot(machine)">Add time slot</button>
           </div>
 
-          <button
+          <!-- <button
             class="btn btn-secondary dropright dropdown-toggle mb-4 justify-content-center w-100"
             type="button"
             id="timeslotDropdown"
@@ -43,9 +43,20 @@
             aria-expanded="false"
           >
             Current Time Slots
-          </button>
+          </button> -->
 
-          <div
+          <ul class="list-group">
+            <li
+              class="list-group-item d-flex align-items-center gap-2"
+              v-for="timeSlot in timeSlots"
+              :key="timeSlot.id"
+            >
+              <span>{{ new Date(timeSlot.timeSlot).toLocaleString() }}</span>
+              <span v-if="timeSlot.isAvailable" class="badge bg-success">Available</span>
+              <span v-else class="badge bg-danger">Not Available</span>
+            </li>
+          </ul>
+          <!-- <div
             class="dropdown-menu"
             aria-labelledby="timeslotDropdown"
             style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center"
@@ -53,7 +64,7 @@
             <a class="dropdown-item" v-for="timeSlot in availableSlots" :key="timeSlot.id">
               {{ new Date(timeSlot.timeSlot).toLocaleString() }}
             </a>
-          </div>
+          </div> -->
         </div>
 
         <div v-else>
@@ -62,31 +73,20 @@
           </div>
 
           <div v-else>
-            <span class="text-muted">You will be able to choose a time slot when confirming your reservation.</span
-            ><br />
-            <button
-              class="btn btn-secondary dropright dropdown-toggle mt-2 mb-4 justify-content-center w-100"
-              type="button"
-              id="timeslotDropdown"
-              data-bs-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Consult available Time Slots
-            </button>
+            <span class="text-muted"> You will be able to choose a time slot when confirming your reservation. </span>
 
-            <div
-              class="dropdown-menu"
-              aria-labelledby="timeslotDropdown"
-              style="max-height: 280px; overflow-y: auto; width: 90%; text-align: center"
-            >
-              <a class="dropdown-item" v-for="timeSlot in availableSlots" :key="timeSlot.id">
-                {{ new Date(timeSlot.timeSlot).toLocaleString() }}
-              </a>
-            </div>
+            <ul class="list-group my-4">
+              <li
+                class="list-group-item d-flex align-items-center gap-2"
+                v-for="timeSlot in availableSlots"
+                :key="timeSlot.id"
+              >
+                <span>{{ new Date(timeSlot.timeSlot).toLocaleString() }}</span>
+                <span v-if="timeSlot.isAvailable" class="badge bg-success">Available</span>
+                <span v-else class="badge bg-danger">Not Available</span>
+              </li>
+            </ul>
 
-            <br />
-            <br />
             <RouterLink :to="`/reservations/${id}`">
               <button class="btn btn-outline-primary w-100 mb-1" style="font-size: 20px">Go to reservation</button>
             </RouterLink>

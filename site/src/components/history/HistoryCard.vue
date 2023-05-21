@@ -2,15 +2,15 @@
   <div class="card-body">
     <div class="card mb-3">
       <div class="row g-0">
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <img
             :src="AdCover"
             class="img-fluid rounded-start"
             style="object-fit: cover; width=100%; height=100%;"
             alt="Machine"
           />
-        </div>
-        <div class="col-md-8">
+        </div> -->
+        <div class="col-md-10">
           <div class="card-body">
             <div class="d-flex justify-content-between">
               <div>
@@ -29,7 +29,6 @@
                   {{ machineAppointment.adDescription }}
                 </p>
               </div>
-              <button class="btn btn-outline-danger mb-4" @click="cancelReservation">Cancel</button>
             </div>
 
             <ul class="list-group">
@@ -84,6 +83,9 @@
               </li>
             </ul>
           </div>
+        </div>
+        <div class="col-md-2 text-center my-auto">
+          <button class="btn btn-outline-danger mb-4" @click="cancelReservation">Cancel</button>
         </div>
       </div>
     </div>

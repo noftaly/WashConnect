@@ -4,7 +4,7 @@
       <h5 class="card-title">History</h5>
     </div>
     <div class="d-flex justify-content-center mt-4 mb-4 mx-4 gap-2">
-      <div class="btn-group d-flex gap-4">
+      <div class="btn-group d-flex">
         <button
           @click="showFuture"
           type="button"
