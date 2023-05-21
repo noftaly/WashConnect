@@ -68,6 +68,10 @@ export async function findAllForSelf(req, res) {
 }
 
 export async function remove(req, res) {
+  if (Number.isNaN(Number(req.params.agendaId))) {
+    return res.status(400).json({ message: 'Invalid time slot' });
+  }
+
   const agenda = await db.agenda.findUnique({
     where: { id: Number(req.params.agendaId) },
     include: { machine: true },
@@ -95,13 +99,13 @@ export async function remove(req, res) {
     db.user.update({
       where: { id: agenda.userId },
       data: {
-        balance: { decrement: price },
+        balance: { increment: price },
       }
     }),
     db.user.update({
       where: { id: agenda.machine.userId },
       data: {
-        balance: { increment: price },
+        balance: { decrement: price },
       }
     }),
   ]);
