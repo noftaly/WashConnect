@@ -109,11 +109,19 @@ async function search() {
 </script>
 
 <style scoped>
+* {
+  --bs-navbar-color: #232323;
+  --bs-navbar-hover-color: #111111;
+}
+
 .fa-2x5 {
   transform: scale(0.6);
 }
+
 .navbar-blue {
-  background-color: rgb(132, 177, 240);
+  background-color: #48a0ff;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  margin-bottom: 1rem;
 }
 
 .nav-link:not(.discreet) {
