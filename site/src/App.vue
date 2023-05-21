@@ -1,5 +1,6 @@
 <template>
   <header>
+    <meta name="theme-color" content="#84B1F0">
     <LayoutNavbar />
   </header>
 
