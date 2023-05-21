@@ -26,6 +26,8 @@ export const useReservationsStore = defineStore("reservations", {
     async removeReservation(timeSlotId) {
       // Deletes a reservation
       await axios.delete(`/reservations/${timeSlotId}`);
+      // updates reservations state
+      this.reservations = this.reservations.filter( (reservation) => reservation.id !== timeSlotId);
     },
   },
 });

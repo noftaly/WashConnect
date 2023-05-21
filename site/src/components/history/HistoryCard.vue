@@ -3,29 +3,31 @@
     <div class="card mb-3">
       <div class="row g-0">
         <div class="col-md-4">
-          <img
-            :src="AdCover"
-            class="img-fluid rounded-start"
-            style="object-fit: cover; width: 100%; height: 100%"
-            alt="Machine"
-          />
+          <img 
+            :src="AdCover" 
+            class="img-fluid rounded-start" 
+            style="object-fit: cover; width=100%; height=100%;"
+            alt="Machine" />
         </div>
         <div class="col-md-8">
           <div class="card-body">
-            <h5 v-if="historyMachine.machineType === 'WASHING_MACHINE'" class="card-title">
-              <span> <SvgWash /> </span>{{ dayAppointment.toDateString() }} at {{ hourAppointment }}:{{
-                minuteAppointment
-              }}
-            </h5>
-            <h5 v-else class="card-title">
-              <span> <SvgDry /> </span>{{ dayAppointment.toDateString() }} at {{ hourAppointment }}:{{
-                minuteAppointment
-              }}
-            </h5>
-            <h6 class="card-subtitle mb-2 text-body-secondary">{{ machineAppointment.adTitle }}</h6>
-            <p class="card-text">
-              {{ machineAppointment.adDescription }}
-            </p>
+            <div class="d-flex justify-content-between">
+
+              <div>
+                <h5 v-if="historyMachine.machineType === 'WASHING_MACHINE'" class="card-title">
+                  <span> <SvgWash /> </span>{{ dayAppointment.toDateString() }} at {{ hourAppointment }}:{{ minuteAppointment }}
+                </h5>
+                <h5 v-else class="card-title">
+                  <span> <SvgDry /> </span>{{ dayAppointment.toDateString() }} at {{ hourAppointment }}:{{ minuteAppointment }}
+                </h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">{{ machineAppointment.adTitle }}</h6>
+                <p class="card-text mb-2">
+                  {{ machineAppointment.adDescription }}
+                </p>
+              </div>
+              <button class="btn btn-outline-danger mb-4" @click="cancelReservation">Cancel</button>
+            </div>
+
             <ul class="list-group">
               <li class="list-group-item d-flex align-items-center gap-2">
                 <span class="d-flex">
@@ -92,7 +94,9 @@ import SvgDetergent from "../../svg/SvgDetergent.vue";
 
 import { computed } from "vue";
 import { useAddressesStore } from "../../stores/addresses";
+import { useReservationsStore } from "../../stores/reservations";
 import { storeToRefs } from "pinia";
+import { useToast } from "vue-toastification";
 
 const props = defineProps({
   history: { type: Object, required: true },
@@ -123,4 +127,10 @@ const machineAddressStr = computed(() => {
   const { streetL1, zip, city, country } = addressObj.value;
   return `${streetL1}, ${zip} ${city}, ${country}`;
 });
+
+const { removeReservation } = useReservationsStore();
+const cancelReservation = () => {
+  removeReservation(historyMachine.value.id);
+  useToast().success("Reservation canceled");
+};
 </script>
