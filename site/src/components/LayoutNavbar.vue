@@ -87,9 +87,11 @@ import { ref } from "vue";
 import router from "../router";
 
 import { useAuth } from "../utils/useAuthHook.js";
+import { useAuthStore } from "../stores/auth.js";
 import { useMachinesStore } from "../stores/machines.js";
 
-const { isAuthenticated, user } = storeToRefs(useAuth());
+const { isAuthenticated } = storeToRefs(useAuth());
+const { user } = storeToRefs(useAuthStore());
 const { logout } = useAuth();
 const { searchMachines } = useMachinesStore();
 

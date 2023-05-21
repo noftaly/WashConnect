@@ -135,6 +135,6 @@ const machineAddressStr = computed(() => {
 const { removeReservation } = useReservationsStore();
 const cancelReservation = () => {
   removeReservation(historyMachine.value.id);
-  useToast().success("Reservation canceled");
+  useToast().success("Reservation canceled and refunded!");
 };
 </script>
