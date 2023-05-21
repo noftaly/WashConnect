@@ -8,6 +8,7 @@ import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
+import morgan from 'morgan';
 import passport from 'passport';
 import { ZodError } from 'zod';
 import { router } from './routes.js';
@@ -15,6 +16,7 @@ import { db } from './database.js';
 
 const app = express();
 app.use(helmet()); // Secure the app against common web vulnerabilities
+app.use(morgan('tiny'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
@@ -31,12 +33,6 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-// Logger middleware
-app.use((req, _res, next) => {
-  console.log(`New request: ${req.method} ${req.url}`);
-  next();
-});
 
 // Register all our routes (defined in the routes.js file)
 app.use('/', router);
