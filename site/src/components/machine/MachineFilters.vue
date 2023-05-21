@@ -47,32 +47,6 @@
           />
         </div>
 
-        <br />
-        <div class="d-flex justify-content-between align-items-baseline">
-          <span>Available from:</span>
-          <input
-            type="date"
-            class="form-control form-control-sm"
-            style="width: 240px"
-            placeholder="Available from"
-            v-model="availableFrom"
-            @change="changeAvailableFrom(availableFrom)"
-          />
-        </div>
-
-        <br />
-        <div class="d-flex justify-content-between align-items-baseline">
-          <span>Available until:</span>
-          <input
-            type="date"
-            class="form-control form-control-sm"
-            style="width: 240px"
-            placeholder="Available until"
-            v-model="availableUntil"
-            @change="changeAvailableUntil(availableUntil)"
-          />
-        </div>
-
         <div v-if="isAuthenticated">
           <hr />
           <RouterLink v-if="isAuthenticated" :to="`/new_ad`" class="text-decoration-none">
