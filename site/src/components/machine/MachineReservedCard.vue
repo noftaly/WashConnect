@@ -2,7 +2,12 @@
   <div v-if="machineSelected" class="card border-0 mb-3">
     <div class="row g-0">
       <div class="col-md-4">
-        <img :src="AdCover" class="img-fluid rounded-start h-100" style="object-fit: cover" alt="Machine" />
+        <img
+          :src="AdCover"
+          class="img-fluid rounded-start"
+          style="object-fit: cover; width: 100%; height: 100%"
+          alt="Machine"
+        />
       </div>
       <div class="col-md-8">
         <div class="card-body border-0">

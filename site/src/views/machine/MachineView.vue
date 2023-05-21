@@ -3,18 +3,18 @@
     <div v-if="machine" class="large-screen">
       <h1 class="text-center my-5">{{ machine.adTitle }}</h1>
       <div class="row">
-        <div class="col-5">
+        <div class="col-3">
           <div class="d-flex flex-column">
             <img src="../../assets/mocked_ad_img.jpg" class="img-fluid" />
           </div>
         </div>
-        <div class="col-5">
+        <div class="col-6">
           <MachineDetailsHeader :description="machine.adDescription" :user="machine.user" :address="machine.address" />
           <hr />
           <h6>About this machine:</h6>
           <MachineDetailsCharacteristics :characteristic="machineCharacteristics" />
         </div>
-        <div class="col-2">
+        <div class="col-3">
           <div class="sticky">
             <MachineDetailsPayment :id="id" />
           </div>

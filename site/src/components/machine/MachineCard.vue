@@ -4,8 +4,8 @@
       <div class="col-md-4">
         <img
           src="../../assets/mocked_ad_img.jpg"
-          class="img-fluid rounded-start h-100"
-          style="object-fit: cover"
+          class="img-fluid rounded-start"
+          style="object-fit: cover; height: 100%; width: 100%"
           alt="Machine"
         />
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="filter-card p-4">
+  <div class="filter-card">
     <div class="filter-sticky">
       <h4 class="text-center fw-bold mt-2">Filters</h4>
 
@@ -47,7 +47,7 @@
           />
         </div>
 
-        <br/>
+        <br />
         <div class="d-flex justify-content-between align-items-baseline">
           <span>Available from:</span>
           <input
@@ -60,16 +60,16 @@
           />
         </div>
 
-        <br/>
+        <br />
         <div class="d-flex justify-content-between align-items-baseline">
           <span>Available until:</span>
           <input
-          type="date"
-          class="form-control form-control-sm"
-          style="width: 240px"
-          placeholder="Available until"
-          v-model="availableUntil"
-          @change="changeAvailableUntil(availableUntil)"
+            type="date"
+            class="form-control form-control-sm"
+            style="width: 240px"
+            placeholder="Available until"
+            v-model="availableUntil"
+            @change="changeAvailableUntil(availableUntil)"
           />
         </div>
 
@@ -128,7 +128,6 @@ function changeAvailableFrom(availableFrom) {
 function changeAvailableUntil(availableUntil) {
   filters.after = availableUntil;
 }
-
 </script>
 
 <style scoped>
