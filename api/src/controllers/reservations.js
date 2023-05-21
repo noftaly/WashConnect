@@ -60,7 +60,7 @@ export async function findAllForSelf(req, res) {
       userId: req.user.id,
       timeSlot: { gt: new Date() }
     },
-    include: { machine: true },
+    include: { machine: { include: { address: true } } },
     orderBy: { timeSlot: 'asc' }
   });
 
