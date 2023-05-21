@@ -180,7 +180,7 @@
                   :key="address.id"
                   @click="stringifyAddress(address)"
                 >
-                  {{ address.streetL1 + ", " + address.city + ", " + address.country }}
+                  {{ address.line1 + ", " + address.city + ", " + address.country }}
                 </a>
               </div>
               <div class="invalid-feedback">Please select an address</div>
@@ -204,9 +204,9 @@
                     <input
                       autocomplete="off"
                       type="text"
-                      v-model="streetL1"
-                      :class="{ 'form-control': true, 'is-invalid': !validStreet(streetL1) && streetL1Blured }"
-                      @blur="streetL1Blured = true"
+                      v-model="line1"
+                      :class="{ 'form-control': true, 'is-invalid': !validStreet(line1) && line1Blured }"
+                      @blur="line1Blured = true"
                       @keyup.enter="submit"
                     />
                     <div class="invalid-feedback">A valid address is required!</div>
@@ -337,8 +337,8 @@ const createAddress = ref(false);
 const selectedAddress = ref("");
 const adAddress = ref(null);
 
-const streetL1 = ref("");
-const streetL1Blured = ref(false);
+const line1 = ref("");
+const line1Blured = ref(false);
 const zip = ref(0);
 const zipBlured = ref(false);
 const city = ref("");
@@ -391,13 +391,13 @@ function validCapacity(capacity) {
 }
 
 function stringifyAddress(address) {
-  selectedAddress.value = address.streetL1 + ", " + address.zip + " " + address.city + ", " + address.country;
+  selectedAddress.value = address.line1 + ", " + address.zip + " " + address.city + ", " + address.country;
 }
 
 function selectAddress(selectedAddress) {
   adAddress.value = addresses.value.find(
     (address) =>
-      address.streetL1 + ", " + address.zip + " " + address.city + ", " + address.country == selectedAddress.value
+      address.line1 + ", " + address.zip + " " + address.city + ", " + address.country == selectedAddress.value
   );
   return adAddress.value;
 }
@@ -424,7 +424,7 @@ function validateAddress() {
       validAddress.value = true;
     }
   } else if (createAddress.value == true) {
-    if (validStreet(streetL1.value) && validZip(zip.value) && validCity(city.value) && validCountry(country.value)) {
+    if (validStreet(line1.value) && validZip(zip.value) && validCity(city.value) && validCountry(country.value)) {
       validAddress.value = true;
     }
   } else {
@@ -457,7 +457,7 @@ function validate() {
   cycle_dry_duration_blured.value = true;
   max_capacity_blured.value = true;
 
-  streetL1Blured.value = true;
+  line1Blured.value = true;
   zipBlured.value = true;
   cityBlured.value = true;
   countryBlured.value = true;
@@ -488,7 +488,7 @@ async function submit() {
         adAddress.value = selectAddress(selectedAddress);
       } else {
         adAddress.value = await createPersonalAddress({
-          streetL1: streetL1.value,
+          line1: line1.value,
           zip: zip.value,
           city: city.value,
           country: country.value,

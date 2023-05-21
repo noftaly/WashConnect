@@ -15,7 +15,7 @@ export const useAddressesStore = defineStore("addresses", {
 
     async createPersonalAddress(address) {
       const response = await axios.post("/addresses", {
-        streetL1: address.streetL1,
+        line1: address.line1,
         city: address.city,
         zip: address.zip,
         country: address.country,

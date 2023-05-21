@@ -4,11 +4,11 @@ import axios from 'axios';
 export async function getPersonalAddresses(req, res) {
   // I request the set of addresses that belong to the user
   // I perform a query to the database
-  const addresses = await db.Address.findMany({ where: { userId: req.user.id}, })
+  const addresses = await db.address.findMany({ where: { userId: req.user.id}, })
     // I send the addresses back to the client but remove the userId and createdAt fields from the response
     res.json(addresses.map(address => ({id: address.id,
-        streetL1: address.line1,
-        streetL2: address.line2,
+        line1: address.line1,
+        line2: address.line2,
         city: address.city,
         country: address.country,
         zip: address.zip,
@@ -16,19 +16,21 @@ export async function getPersonalAddresses(req, res) {
 }
 
 export async function getPersonalAddressById(req, res) {
-    const address = await db.Address.findUnique({ where: { id: Number(req.params.addressId) }, });
-    res.json({
-        streetL1: address.line1,
-        streetL2: address.line2,
-        city: address.city,
-        country: address.country,
-        zip: address.zip,
-        createdAt: address.createdAt});
+    if (isNaN(Number(req.params.addressId))) {
+        return res.status(400).json({ message: 'Invalid address ID' });
     }
+
+    const address = await db.address.findUnique({ where: { id: Number(req.params.addressId) } });
+    if (!address) {
+        return res.status(404).json({ message: 'Address not found' });
+    }
+
+    res.json(address);
+}
 
 export async function createPersonalAddress(req, res) {
     // We verify that the user has provided all the required fields
-    if (!req.body.streetL1 || !req.body.city || !req.body.country || !req.body.zip) {
+    if (!req.body.line1 || !req.body.city || !req.body.country || !req.body.zip) {
         return res.status(400).json({ message: 'Missing required fields' });
     }
     // The country API is of course down the day before the demo, so we do an ad-hoc fix
@@ -66,10 +68,10 @@ export async function createPersonalAddress(req, res) {
     // }
 
     // I create the address in the database
-    const address = await db.Address.create({
+    const address = await db.address.create({
         data: {
-            line1: req.body.streetL1,
-            line2: req.body.streetL2,
+            line1: req.body.line1,
+            line2: req.body.line2,
             city: req.body.city,
             country: alpha2code,
             zip: req.body.zip,
@@ -77,15 +79,7 @@ export async function createPersonalAddress(req, res) {
         }
     });
     // I send the address back to the client
-    res.json({
-        id: address.id,
-        streetL1: address.line1,
-        streetL2: address.line2,
-        city: address.city,
-        country: address.country,
-        zip: address.zip,
-        createdAt: address.createdAt,
-    });
+    res.json(address);
 }
 
 export async function removePersonalAddress(req, res) {
@@ -98,7 +92,7 @@ export async function removePersonalAddress(req, res) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
     // We verify that the request address does exist
-    const address = await db.Address.findUnique({ where: { id: Number(req.params.addressId) }, });
+    const address = await db.address.findUnique({ where: { id: Number(req.params.addressId) }, });
     if (!address) {
         return res.status(404).json({ message: 'Address not found' });
     }
@@ -107,6 +101,6 @@ export async function removePersonalAddress(req, res) {
         return res.status(403).json({ message: 'Forbidden' });
     }
     // We delete the address
-    await db.Address.delete({ where: { id: Number(req.params.addressId) }, });
+    await db.address.delete({ where: { id: Number(req.params.addressId) }, });
     res.json({ message: 'Address deleted' });
 }
